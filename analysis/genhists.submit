@@ -1,0 +1,15 @@
+Universe = Vanilla
+Executable   = genLevelHists.sh
+Arguments = /work/rosep8/TauRecoDev/simulation/tauSample_100k.slcio $(Process) 100000 genHists_$(Process) /work/rosep8/TauRecoDev/analysis/AnaProcessors/share/genhists.xml
+transfer_input_files = /work/rosep8/TauRecoDev/simulation/tauSample_100k.slcio, /work/rosep8/TauRecoDev/analysis/AnaProcessors/share/genhists.xml
+Requirements = ( ( HAS_SINGULARITY == TRUE ) && ( HAS_CVMFS_unpacked_cern_ch ) )
++SingularityImage = "/cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8"
+Error   = log/output.err.$(Cluster)-$(Process)
+Output  = log/output.out.$(Cluster)-$(Process)
+Log     = log/output.log.$(Cluster)
+should_transfer_files = YES
+WhenToTransferOutput = ON_EXIT
+request_cpus = 1
+request_memory = 5 GB
++ProjectName="snowmass21.energy"
+Queue 4

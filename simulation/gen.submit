@@ -1,0 +1,15 @@
+Universe = Vanilla
+Executable   = genTaus.sh
+Arguments = steer_sim_tauGun.py taugenNew_100k.slcio taugunNew_100k_$(Process).slcio 5000
+transfer_input_files = /work/rosep8/MuC-Tutorial/simulation/advanced/steer_sim_tauGun.py, /work/rosep8/MuC-Tutorial/simulation/advanced/taugenNew_100k.slcio
+Requirements = ( ( HAS_SINGULARITY == TRUE ) && ( HAS_CVMFS_unpacked_cern_ch ) )
++SingularityImage = "/cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8"
+Error   = log/output.err.$(Cluster)-$(Process)
+Output  = log/output.out.$(Cluster)-$(Process)
+Log     = log/output.log.$(Cluster)
+should_transfer_files = YES
+WhenToTransferOutput = ON_EXIT
+request_cpus = 1
+request_memory = 5 GB
++ProjectName="snowmass21.energy"
+Queue 20

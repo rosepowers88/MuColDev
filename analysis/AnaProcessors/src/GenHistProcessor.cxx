@@ -1,4 +1,4 @@
-#include "TemplatePackage/GenHistProcessor.hxx"
+#include "AnaProcessors/GenHistProcessor.hxx"
 
 #include <EVENT/LCCollection.h>
 #include <EVENT/MCParticle.h>
@@ -69,6 +69,10 @@ void GenHistProcessor::processEvent( LCEvent * evt ) {
   // Get object required collections and create lists
   // to keep track of unsaved objects.
   // Loop over MCParticles
+
+  //map from pdg entry to actual pdg number for submitting in batch mode
+  int pdgs[4]={0,15,211,111};
+  
   LCCollection* inputCol = evt->getCollection(_inputCollectionName);
 
 
@@ -90,20 +94,20 @@ void GenHistProcessor::processEvent( LCEvent * evt ) {
     
     //get pdgid, continue if not desired pdg
     double pdg = mcp->getPDG();
-    if(abs(pdg) !=_PDG && _PDG !=0 ){
+    if(abs(pdg) !=pdgs[_PDG] && _PDG !=0 ){
       continue;
     }
 
     //Get the parent ID if we are not examining taus only or all
-    if(_PDG != 15 && _PDG !=0){
-    const EVENT::MCParticleVec parentvec = mcp -> getParents();
-       int parentID = parentvec.back()->getPDG();
+    if(pdgs[_PDG] != 15 && _PDG !=0){
+      const EVENT::MCParticleVec parentvec = mcp -> getParents();
+      int parentID = parentvec.back()->getPDG();
 
-    //If not direct tau decay, skip
-    if(parentID != 15){
-      continue;
+      //If not direct tau decay, skip
+      if(parentID != 15){
+	continue;
       }
-    _h_MID->Fill(parentID);
+      _h_MID->Fill(parentID);
     }
 
     //Fill charge and type

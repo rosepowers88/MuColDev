@@ -53,8 +53,12 @@
 
   <processor name="HistMaker" type="RecoHistProcessor" >
     <parameter name="MinPt" type="double">-10</parameter>
-    <parameter name="InputCollectionName" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
-    <parameter name="OutputCollectionName" type="string" lcioOutType="ReconstructedParticle"> PandoraPFOs </parameter>
+    <parameter name="InputCollectionNames" type="stringvec" >
+      PandoraClusters
+      SiTracks
+      PandoraPFOs
+    </parameter>
+    <!--parameter name="OutputCollectionName" type="string" lcioOutType="ReconstructedParticle"> PandoraPFOs </parameter-->
   </processor>
 
 </marlin>

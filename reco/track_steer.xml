@@ -47,7 +47,7 @@
   </execute>
 
   <global>
-    <parameter name = "LCIOInputFiles" > taugun_100k.slcio </parameter>
+    <parameter name = "LCIOInputFiles" > ../simulation/taugunNew_100k_0.slcio </parameter>
     <parameter name = "MaxRecordNumber" value = "10" />
     <!--<parameter name = "SkipNEvents" value = "3" />-->
     <parameter name = "Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MARLINDEBUG1 </parameter>

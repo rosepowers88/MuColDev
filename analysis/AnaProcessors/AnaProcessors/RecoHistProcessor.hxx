@@ -24,6 +24,9 @@ public:
   /** Called at the begin of the job before anything is read.
    * Use to initialize the processor, e.g. book histograms.
    */
+  //virtual void book_pfo_histograms();
+  // virtual void book_cluster_histograms();
+  //virtual void book_track_histograms();
   virtual void init() ;
 
   /** Called for every run.
@@ -52,25 +55,33 @@ private:
 
   //! Output histogram
   // declare all histograms
-  TH1 *_h_pt = nullptr;
-  TH1 *_h_p = nullptr;
-  TH1 *_h_N = nullptr;
-  TH1 *_h_pdg = nullptr;
-  TH1 *_h_E = nullptr;
 
-  TH1 *_h_phi = nullptr;
-  TH1 *_h_tanLam = nullptr;
-  //pis only
-  TH1 *_h_p_pi= nullptr;
-  TH1 *_h_pt_pi= nullptr;
-  TH1 *_h_N_pi = nullptr;
-  TH1 *_h_pdg_pi = nullptr;
-  TH1 *_h_theta = nullptr;
-  TH1 *_h_E_pi  = nullptr;
-  TH1 *_h_x_pi = nullptr;
-  TH1 *_h_y_pi = nullptr;
-  TH1 *_h_z_pi = nullptr;
-  TH1 *_h_r_pi = nullptr;
+  //pfo histograms
+  TH1 *_h_ptpf = nullptr;
+  TH1 *_h_ppf = nullptr;
+  TH1 *_h_Npf = nullptr;
+  TH1 *_h_pdgpf = nullptr;
+  TH1 *_h_Epf = nullptr;
+
+  //cluster histograms
+  TH1 *_h_Ecl = nullptr;
+  TH1 *_h_Xcl = nullptr;
+  TH1 *_h_Ycl = nullptr;
+  TH1 *_h_Zcl = nullptr;
+  TH1 *_h_iPhicl = nullptr;
+  TH1 *_h_iThetacl = nullptr;
+  TH1 *_h_PIDcl = nullptr;
+  TH1 *_h_Ncl   = nullptr;
+
+  //track histograms
+  TH1 *_h_D0trk = nullptr;
+  TH1 *_h_phitrk = nullptr;
+  TH1 *_h_omegatrk = nullptr;
+  TH1 *_h_Z0trk = nullptr;
+  TH1 *_h_lamtrk = nullptr;
+  TH1 *_h_dEdxtrk = nullptr;
+  TH1 *_h_Ntrk     = nullptr;
+
   
 
 };

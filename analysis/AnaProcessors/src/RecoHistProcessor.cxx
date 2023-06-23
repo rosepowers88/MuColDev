@@ -25,20 +25,20 @@ RecoHistProcessor::RecoHistProcessor()
   registerInputCollection(LCIO::RECONSTRUCTEDPARTICLE,
 			  "InputCollectionNameReco",
 			  "Name of RecoParticle collection.",
-			  _inputCollectionName,
-			  _inputCollectionName
+			  _inputCollectionNameR,
+			  _inputCollectionNameR
 			  );
   registerInputCollection(LCIO::CLUSTER,
 			  "InputCollectionNameCluster",
 			  "Name of cluster collection.",
-			  _inputCollectionName,
-			  _inputCollectionName
+			  _inputCollectionNameC,
+			  _inputCollectionNameC
 			  );
   registerInputCollection(LCIO::TRACK,
 			  "InputCollectionNameTrack",
 			  "Name of track collection.",
-			  _inputCollectionName,
-			  _inputCollectionName
+			  _inputCollectionNameT,
+			  _inputCollectionNameT
 			  ); 
 
 }
@@ -46,16 +46,16 @@ RecoHistProcessor::RecoHistProcessor()
 
 void RecoHistProcessor::book_pfo_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);  
-  _h_ptpf   = new TH1F("pT", ";pT [GeV]", 100,0., 20);
-  _h_ppf    = new TH1F("p", ";p [GeV]", 100, 0, 20);
+  _h_ptpf   = new TH1F("pT", ";pT [GeV]", 1000,0., 200);
+  _h_ppf    = new TH1F("p", ";p [GeV]", 1000, 0, 200);
   _h_pdgpf  = new TH1F("PDG_ID", ";PDG ID", 10000, -500, 2500);
   _h_Npf    = new TH1F("nObjectsFound", ";N", 50, 0, 10);
-  _h_Epf    = new TH1F("Energy", ";E [GeV]", 100,0,20);
+  _h_Epf    = new TH1F("Energy", ";E [GeV]", 1000,0,200);
 
 }
 void RecoHistProcessor::book_cluster_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);
-  _h_Ecl = new TH1F("Energy", ";E [GeV]", 100,0,200);
+  _h_Ecl = new TH1F("Cluster Energy", ";E [GeV]", 1000,0,200);
   _h_Xcl = new TH1F("X-position", ";x [mm]", 4000,-2000,2000);
   _h_Ycl = new TH1F("Y-position", ";y [mm]", 4000,-2000,2000);
   _h_Zcl = new TH1F("Z-position", ";z [mm]", 8000,-4000,4000);
@@ -126,11 +126,9 @@ void RecoHistProcessor::fill_cluster_histograms(LCCollection* inputCol){
 
   for(uint32_t i=0;i<nEl;i++) {
     const EVENT::Cluster *cl=static_cast<const EVENT::Cluster*>(inputCol->getElementAt(i));
-
     //get energy and position
     double E = cl->getEnergy();
     _h_Ecl->Fill(E);
-
     const float* pos = cl->getPosition();
     double x = pos[0];
     double y = pos[1];
@@ -147,8 +145,11 @@ void RecoHistProcessor::fill_cluster_histograms(LCCollection* inputCol){
 
     //Get most likely particle ID
     const ParticleIDVec& PID = cl->getParticleIDs();
+    if(PID.size()!=0){
     double pid_pdg = PID[0]->getPDG();
     _h_PIDcl->Fill(pid_pdg);
+    }
+
 
 
   }
@@ -195,8 +196,11 @@ void RecoHistProcessor::processEvent( LCEvent * evt ) {
   //
   // Get object required collections and create lists
   // to keep track of unsaved objects.
-
-  LCCollection* inputCol = evt->getCollection(_inputCollectionName);
+  std::vector<std::string> inputnames {_inputCollectionNameR, _inputCollectionNameC, _inputCollectionNameT};
+  for(int i=0; i<inputnames.size(); i++){
+  
+  LCCollection* inputCol = evt->getCollection(inputnames[i]);
+  
   if( inputCol->getTypeName() == lcio::LCIO::RECONSTRUCTEDPARTICLE ) {
     //fill the histograms for PFOs
     fill_pfo_histograms(inputCol);
@@ -212,7 +216,7 @@ void RecoHistProcessor::processEvent( LCEvent * evt ) {
   else{
     throw EVENT::Exception( "Invalid collection type: " + inputCol->getTypeName() ) ;
   }
-   
+  }
 }
 
 void RecoHistProcessor::check( LCEvent * /*evt*/ )

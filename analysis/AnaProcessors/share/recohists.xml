@@ -53,11 +53,9 @@
 
   <processor name="HistMaker" type="RecoHistProcessor" >
     <parameter name="MinPt" type="double">-10</parameter>
-    <parameter name="InputCollectionNames" type="stringvec" >
-      PandoraClusters
-      SiTracks
-      PandoraPFOs
-    </parameter>
+    <parameter name="InputCollectionNameReco" type="string" lcioInType="ReconstructedParticle" value="PandoraPFOs" />
+    <parameter name="InputCollectionNameCluster" type="string" lcioInType="Cluster" value = "PandoraClusters" />
+    <parameter name="InputCollectionNameTrack" type="string" lcioInType="Track" value = "SiTracks" />
     <!--parameter name="OutputCollectionName" type="string" lcioOutType="ReconstructedParticle"> PandoraPFOs </parameter-->
   </processor>
 

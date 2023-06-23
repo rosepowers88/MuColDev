@@ -51,7 +51,9 @@ public:
 
 private:
   //! Input Collection
-  std::string _inputCollectionName {};
+  std::string _inputCollectionNameR {};
+  std::string _inputCollectionNameC {};
+  std::string _inputCollectionNameT {};
 
   
 

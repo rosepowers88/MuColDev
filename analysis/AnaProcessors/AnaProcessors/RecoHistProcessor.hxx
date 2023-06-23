@@ -24,13 +24,19 @@ public:
   /** Called at the begin of the job before anything is read.
    * Use to initialize the processor, e.g. book histograms.
    */
-  //virtual void book_pfo_histograms();
-  // virtual void book_cluster_histograms();
-  //virtual void book_track_histograms();
+  virtual void book_pfo_histograms();
+  virtual void book_cluster_histograms();
+  virtual void book_track_histograms();
+
+  virtual void fill_pfo_histograms(LCCollection* inputCol);
+  virtual void fill_cluster_histograms(LCCollection* inputCol);
+  virtual void fill_track_histograms(LCCollection* inputCol);
+  
   virtual void init() ;
 
   /** Called for every run.
    */
+
   virtual void processRunHeader( LCRunHeader* run ) ;
 
   /** Called for every event - the working horse.
@@ -47,8 +53,10 @@ private:
   //! Input Collection
   std::string _inputCollectionName {};
 
+  
+
   //! Output Collection
-  std::string _outputCollectionName {};
+  //std::string _outputCollectionName {};
 
   //! Minimum pT for particle filter
   float _minPt = 1;

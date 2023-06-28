@@ -20,7 +20,7 @@ from pyLCIO import UTIL, EVENT, IMPL, IO, IOIMPL
 #---- number of events per momentum bin -----
 nevt = 100
 
-outfile = "taugenNew_100k.slcio"
+outfile = "muSample_100k.slcio"
 
 #--------------------------------------------
 
@@ -41,10 +41,11 @@ for i in range(1000):
     momenta.append(random.random()*170.+20.)
 
 genstat  = 1
-pdg = 15
+pdg = 13
 #pdg = 211
 #mass = 0.105
-mass =  1.77686 #tau mass 
+#mass =  1.77686 #tau mass
+mass = 0.105
 charge = -1.
 #theta = 85./180. * math.pi 
 #theta = 20./180. * math.pi 

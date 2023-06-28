@@ -1,0 +1,27 @@
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinDD4hep/v00-06/lib/libMarlinDD4hep.so.0.6.0 (libMarlinDD4hep.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/DDMarlinPandora/v00-13-MC/lib/libDDMarlinPandora.so.0.13.0 (libDDMarlinPandora.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinReco/v01-31/lib/libMarlinReco.so.1.31.0 (libMarlinReco.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/PandoraAnalysis/v02-00-01/lib/libPandoraAnalysis.so.2.0.1 (libPandoraAnalysis.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCFIVertex/v00-08/lib/libLCFIVertexProcessors.so.0.8.0 (libLCFIVertexProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/CEDViewer/v01-18/lib/libCEDViewer.so.1.18.0 (libCEDViewer.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Overlay/v00-23-MC/lib/libOverlay.so.0.23.0 (libOverlay.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinFastJet/v00-05-02/lib/libMarlinFastJet.so.0.5.2 (libMarlinFastJet.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCTuple/v01-14-MC/lib/libLCTuple.so.1.14.0 (libLCTuple.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinKinfit/v00-06/lib/libMarlinKinfit.so.0.6.0 (libMarlinKinfit.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinTrkProcessors/v02-13-MC/lib/libMarlinTrkProcessors.so.2.13.0 (libMarlinTrkProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinKinfitProcessors/v00-04-02/lib/libMarlinKinfitProcessors.so.0.4.2 (libMarlinKinfitProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ILDPerformance/v01-08/lib/libILDPerformance.so.1.8.0 (libILDPerformance.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ClicPerformance/HEAD/lib/libClicPerformance.so.2.4.1 (libClicPerformance.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Clupatra/v01-03/lib/libClupatra.so.1.3.0 (libClupatra.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Physsim/v00-04-01/lib/libPhyssim.so.0.4.1 (libPhyssim.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCFIPlus/v00-09/lib/libLCFIPlus.so.0.8.0 (libLCFIPlus.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/FCalClusterer/v01-00-01/lib/libFCalClusterer.so (libFCalClusterer.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ForwardTracking/v01-14-MC/lib/libForwardTracking.so.1.14.0 (libForwardTracking.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ConformalTracking/v01-12-MC/lib/libConformalTracking.so.1.12.0 (libConformalTracking.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LICH/v00-01/lib/libLICH.so.0.1.0 (libLICH.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Garlic/v03-01/lib/libGarlic.so.3.1.0 (libGarlic.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ACTSTracking/v1.0.0/lib/libACTSTracking.so (libACTSTracking.so)-->
+<!-- steering file parameter: [ global.LCIOInputFiles ] will be OVERWRITTEN with value: ["/work/rosep8/TauRecoDev/simulation/taugunNew_100k_12.slcio"] -->
+<!-- steering file parameter: [ global.MaxRecordNumber ] will be OVERWRITTEN with value: ["-1"] -->
+<!-- steering file parameter: [ Output_REC.LCIOOutputFile ] will be OVERWRITTEN with value: ["tauReco_100k_12.slcio"] -->
+

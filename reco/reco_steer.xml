@@ -30,7 +30,7 @@
     <processor name="DDMarlinPandora"/>
 
     <!--===========PFO=============-->
-    <group name = "PfOSelector"/>
+    <group name = "PfoSelector"/>
 
     <!--===========VertexJet======-->
     <processor name = "FastJetProcessor"/>
@@ -47,10 +47,10 @@
   </execute>
 
   <global>
-    <parameter name = "LCIOInputFiles" > ../simulation/taugunNew_100k_0.slcio </parameter>
-    <parameter name = "MaxRecordNumber" value = "10" />
+    <parameter name = "LCIOInputFiles" > ../simulation/tauSample_100k.slcio </parameter>
+    <parameter name = "MaxRecordNumber" value = "20000" />
     <!--<parameter name = "SkipNEvents" value = "3" />-->
-    <parameter name = "Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MARLINDEBUG1 </parameter>
+    <parameter name = "Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> ERROR </parameter>
   </global>
 
   <include ref="subconfigs/InitDD4hep.xml"/>
@@ -59,14 +59,13 @@
 
   <processor name="Output_REC" type="LCIOOutputProcessor">
     <!--   standard output: keep all collections -->
-    <parameter name="LCIOOutputFile" type="string"> 10evtsreco.slcio </parameter>
+    <parameter name="LCIOOutputFile" type="string"> 1000evtsreco.slcio </parameter>
     <parameter name="FullSubsetCollections" type="StringVec"> </parameter>
     <parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
     <!--<parameter name="SplitFileSizekB" type="int">996147 </parameter> we don't want to split-->
-    <parameter name="Verbosity" type="string">DEBUG4 </parameter>
+    <parameter name="Verbosity" type="string">ERROR </parameter>
     <parameter name="DropCollectionNames" type="StringVec">  </parameter>
     <parameter name="DropCollectionTypes" type="StringVec">
-      MCParticles
       VertexBarrelCollection
       VertexEndcapCollection
       InnerTrackerBarrelCollection
@@ -84,12 +83,13 @@
       SiTracks
       JetOut
       TauRec_PFO
+      MCParticle
     </parameter>
   </processor>
 
-    <processor name="EventNumber" type="Statusmonitor">
-    <parameter name="HowOften" type="int">1 </parameter>
-    <parameter name="Verbosity" type="string"> MESSAGE </parameter>
+  <processor name="EventNumber" type="Statusmonitor">
+    <parameter name="HowOften" type="int">1000 </parameter>
+    <!--parameter name="Verbosity" type="string"> ERROR </parameter-->
   </processor>
 
   <!--=============TRACKING CONFIGS=============-->
@@ -121,7 +121,7 @@
     <!--Upper bound of the time window [ns]-->
     <parameter name="TimeWindowMax" type="float"> 0.15 </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-    <parameter name="Verbosity" type="string"> WARNING </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
   </processor>
 
   <processor name="VXDEndcapDigitiser" type="DDPlanarDigiProcessor">
@@ -150,7 +150,7 @@
     <!--Upper bound of the time window [ns]-->
     <parameter name="TimeWindowMax" type="float"> 0.15 </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-    <parameter name="Verbosity" type="string"> WARNING </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
   </processor>
 
   <processor name="FilterDL_VXDB" type="FilterDoubleLayerHits">
@@ -168,7 +168,7 @@
       4 5 1.0 0.27
       6 7 1.0 0.21
     </parameter>
-    <parameter name="Verbosity" type="string"> MESSAGE5 </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
   </processor>
 
   <processor name="FilterDL_VXDE" type="FilterDoubleLayerHits">
@@ -186,7 +186,7 @@
       4 5 0.8 0.12
       6 7 0.6 0.12
     </parameter>
-    <parameter name="Verbosity" type="string"> MESSAGE5 </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
   </processor>
 
   <processor name="InnerPlanarDigiProcessor" type="DDPlanarDigiProcessor">
@@ -215,7 +215,7 @@
     <!--Upper bound of the time window [ns]-->
     <parameter name="TimeWindowMax" type="float"> 0.3 </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-    <parameter name="Verbosity" type="string"> WARNING </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
   </processor>
 
   <processor name="InnerEndcapPlanarDigiProcessor" type="DDPlanarDigiProcessor">
@@ -244,7 +244,7 @@
     <!--Upper bound of the time window [ns]-->
     <parameter name="TimeWindowMax" type="float"> 0.3 </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-    <parameter name="Verbosity" type="string"> WARNING </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
   </processor>
 
   <processor name="OuterPlanarDigiProcessor" type="DDPlanarDigiProcessor">
@@ -273,7 +273,7 @@
     <!--Upper bound of the time window [ns]-->
     <parameter name="TimeWindowMax" type="float"> 0.3 </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-    <parameter name="Verbosity" type="string"> WARNING </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
   </processor>
 
   <processor name="OuterEndcapPlanarDigiProcessor" type="DDPlanarDigiProcessor">
@@ -302,7 +302,7 @@
     <!--Upper bound of the time window [ns]-->
     <parameter name="TimeWindowMax" type="float"> 1 </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-    <parameter name="Verbosity" type="string"> WARNING </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
   </processor>
 
   <processor name="CKFTracking" type="ACTSSeededCKFTrackingProc">
@@ -351,7 +351,7 @@
     <!--Track Collection Names-->
     <parameter name="RunCKF" type="bool">True</parameter>
     <parameter name="TrackCollectionName" type="string" lcioOutType="Track">AllTracks</parameter>
-    <parameter name="Verbosity" type="string">DEBUG </parameter>
+    <parameter name="Verbosity" type="string">ERROR </parameter>
   </processor>
 
   <processor name="TrackDeduper" type="ACTSDuplicateRemoval">
@@ -397,7 +397,7 @@
     <!--Smooth All Mesurement Sites in Fit-->
     <parameter name="SmoothOn" type="bool"> false </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-    <parameter name="Verbosity" type="string"> MESSAGE </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
     <!--if true extrapolation in the forward direction (in-out), otherwise backward (out-in)-->
     <parameter name="extrapolateForward" type="bool"> true </parameter>
     <!--Final minimum number of track clusters-->
@@ -773,7 +773,7 @@
     <!--Whether to calculate track states manually, rather than copy stored fitter values-->
     <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
     <parameter name="NEventsToSkip" type="int">0</parameter>
-    <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> WARNING</parameter>
+    <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> ERROR</parameter>
     <!--Energy Corrections in Marlin Pandora-->
     <!--parameter name="InputEnergyCorrectionPoints" type="FloatVec">InputEnergyCorrectionPoints_XXXX</parameter-->
     <!--parameter name="OutputEnergyCorrectionPoints" type="FloatVec">OutputEnergyCorrectionPoints_XXXX</parameter-->
@@ -1036,7 +1036,7 @@
     <!--UseNeutronTiming-->
     <parameter name="UseNeutronTiming" type="int">0 </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-    <parameter name="Verbosity" type="string">MESSAGE </parameter>
+    <parameter name="Verbosity" type="string">ERROR </parameter>
 
     <processor name="CLICPfoSelectorDefault_HE" type="CLICPfoSelector">
       <parameter name="SelectedPfoCollection" type="string" lcioOutType="ReconstructedParticle"> SelectedPandoraPFOs </parameter>
@@ -1215,7 +1215,7 @@
   <!--Collection of Particles in Rest Group not in Tau Candidates-->
   <parameter name="TauRecRestCollection" type="string" lcioOutType="ReconstructedParticle">TauRecRest_PFO </parameter>
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-  <parameter name="Verbosity" type="string">DEBUG </parameter>
+  <parameter name="Verbosity" type="string">ERROR </parameter>
   <!--Cut on cosT to suppress background-->
   <parameter name="cosT_cut" type="float">0.99 </parameter>
   <!--Upper limit on invariant mass of tau candidate-->
@@ -1263,7 +1263,7 @@
   <!--Tau mass for tau clustering [GeV]-->
   <parameter name="TauMass" type="double">2 </parameter>
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-  <parameter name="Verbosity" type="string">DEBUG4 </parameter>
+  <parameter name="Verbosity" type="string">ERROR </parameter>
 </processor>
 
 <!--=========AIDA========-->

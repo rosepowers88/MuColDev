@@ -9,5 +9,5 @@
   <!--If given, the Compact File parameter of that name will be used as argument to LCTrackerCellID::set_encoding_string()-->
   <parameter name="EncodingStringParameterName" type="string"> GlobalTrackerReadoutID  </parameter>
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
-  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+  <parameter name="Verbosity" type="string">ERROR </parameter>
 </processor>

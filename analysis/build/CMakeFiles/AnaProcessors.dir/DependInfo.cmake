@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/work/rosep8/TauRecoDev/analysis/AnaProcessors/src/BranchingProcessor.cxx" "/work/rosep8/TauRecoDev/analysis/build/CMakeFiles/AnaProcessors.dir/src/BranchingProcessor.cxx.o"
   "/work/rosep8/TauRecoDev/analysis/AnaProcessors/src/GenHistProcessor.cxx" "/work/rosep8/TauRecoDev/analysis/build/CMakeFiles/AnaProcessors.dir/src/GenHistProcessor.cxx.o"
   "/work/rosep8/TauRecoDev/analysis/AnaProcessors/src/RecoHistProcessor.cxx" "/work/rosep8/TauRecoDev/analysis/build/CMakeFiles/AnaProcessors.dir/src/RecoHistProcessor.cxx.o"
+  "/work/rosep8/TauRecoDev/analysis/AnaProcessors/src/RecoPerformance.cxx" "/work/rosep8/TauRecoDev/analysis/build/CMakeFiles/AnaProcessors.dir/src/RecoPerformance.cxx.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

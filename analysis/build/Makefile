@@ -223,6 +223,33 @@ src/RecoHistProcessor.cxx.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AnaProcessors.dir/build.make CMakeFiles/AnaProcessors.dir/src/RecoHistProcessor.cxx.s
 .PHONY : src/RecoHistProcessor.cxx.s
 
+src/RecoPerformance.o: src/RecoPerformance.cxx.o
+
+.PHONY : src/RecoPerformance.o
+
+# target to build an object file
+src/RecoPerformance.cxx.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AnaProcessors.dir/build.make CMakeFiles/AnaProcessors.dir/src/RecoPerformance.cxx.o
+.PHONY : src/RecoPerformance.cxx.o
+
+src/RecoPerformance.i: src/RecoPerformance.cxx.i
+
+.PHONY : src/RecoPerformance.i
+
+# target to preprocess a source file
+src/RecoPerformance.cxx.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AnaProcessors.dir/build.make CMakeFiles/AnaProcessors.dir/src/RecoPerformance.cxx.i
+.PHONY : src/RecoPerformance.cxx.i
+
+src/RecoPerformance.s: src/RecoPerformance.cxx.s
+
+.PHONY : src/RecoPerformance.s
+
+# target to generate assembly for a file
+src/RecoPerformance.cxx.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AnaProcessors.dir/build.make CMakeFiles/AnaProcessors.dir/src/RecoPerformance.cxx.s
+.PHONY : src/RecoPerformance.cxx.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -241,6 +268,9 @@ help:
 	@echo "... src/RecoHistProcessor.o"
 	@echo "... src/RecoHistProcessor.i"
 	@echo "... src/RecoHistProcessor.s"
+	@echo "... src/RecoPerformance.o"
+	@echo "... src/RecoPerformance.i"
+	@echo "... src/RecoPerformance.s"
 .PHONY : help
 
 

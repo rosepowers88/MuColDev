@@ -1,0 +1,37 @@
+000 (220987.000.000) 2023-06-26 11:04:36 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+040 (220987.000.000) 2023-06-26 11:05:38 Started transferring input files
+	Transferring to host: <10.125.1.120:41093?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector4#21236299%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector2#4687650&PrivNet=node0120.palmetto.clemson.edu&addrs=10.125.1.120-41093&alias=node0120.palmetto.clemson.edu&noUDP>
+...
+040 (220987.000.000) 2023-06-26 12:23:38 Finished transferring input files
+...
+021 (220987.000.000) 2023-06-26 12:23:41 Warning from starter on slot1_1@glidein_3092312_93485667@node0120.palmetto.clemson.edu:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220987.000.000) 2023-06-26 12:23:41 Job executing on host: <10.125.1.120:43929?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector5#22096377%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector3#4673170&PrivNet=node0120.palmetto.clemson.edu&addrs=10.125.1.120-43929&alias=node0120.palmetto.clemson.edu&noUDP>
+...
+006 (220987.000.000) 2023-06-26 12:23:45 Image size of job updated: 1
+	5  -  MemoryUsage of job (MB)
+	4932  -  ResidentSetSize of job (KB)
+...
+040 (220987.000.000) 2023-06-26 12:23:45 Started transferring output files
+...
+040 (220987.000.000) 2023-06-26 12:23:45 Finished transferring output files
+...
+005 (220987.000.000) 2023-06-26 12:23:45 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	343  -  Run Bytes Sent By Job
+	110857969664  -  Run Bytes Received By Job
+	343  -  Total Bytes Sent By Job
+	110857969664  -  Total Bytes Received By Job
+	Partitionable Resources :        Usage   Request Allocated 
+	   Cpus                 :         0.28         1         1 
+	   Disk (KB)            : 108259849    125000000 185505989 
+	   Memory (MB)          :         5         5120      5120 
+
+	Job terminated of its own accord at 2023-06-26T17:23:45Z.
+...

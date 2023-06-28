@@ -43,6 +43,7 @@ ADD_LIBRARY(AnaProcessors SHARED
   ./src/RecoHistProcessor.cxx
   ./src/GenHistProcessor.cxx
   ./src/BranchingProcessor.cxx
+  ./src/RecoPerformance.cxx
   )
 TARGET_INCLUDE_DIRECTORIES(AnaProcessors
   PUBLIC

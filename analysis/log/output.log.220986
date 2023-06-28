@@ -1,0 +1,41 @@
+000 (220986.000.000) 2023-06-26 10:36:42 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+040 (220986.000.000) 2023-06-26 10:37:43 Started transferring input files
+	Transferring to host: <10.125.8.26:41247?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector5#22097504%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector5#4675591&PrivNet=node1811.palmetto.clemson.edu&addrs=10.125.8.26-41247&alias=node1811.palmetto.clemson.edu&noUDP>
+...
+040 (220986.000.000) 2023-06-26 10:52:44 Finished transferring input files
+...
+021 (220986.000.000) 2023-06-26 10:52:48 Warning from starter on slot1_3@glidein_2210752_519143352@node1811.palmetto.clemson.edu:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220986.000.000) 2023-06-26 10:52:48 Job executing on host: <10.125.8.26:37067?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector5#22097304%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector1#4680417&PrivNet=node1811.palmetto.clemson.edu&addrs=10.125.8.26-37067&alias=node1811.palmetto.clemson.edu&noUDP>
+...
+006 (220986.000.000) 2023-06-26 10:53:01 Image size of job updated: 63016
+	6  -  MemoryUsage of job (MB)
+	5568  -  ResidentSetSize of job (KB)
+...
+006 (220986.000.000) 2023-06-26 10:53:24 Image size of job updated: 2939548
+	243  -  MemoryUsage of job (MB)
+	248208  -  ResidentSetSize of job (KB)
+...
+040 (220986.000.000) 2023-06-26 10:53:24 Started transferring output files
+...
+040 (220986.000.000) 2023-06-26 10:53:24 Finished transferring output files
+...
+005 (220986.000.000) 2023-06-26 10:53:24 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	4420  -  Run Bytes Sent By Job
+	110857969664  -  Run Bytes Received By Job
+	4420  -  Total Bytes Sent By Job
+	110857969664  -  Total Bytes Received By Job
+	Partitionable Resources :        Usage   Request Allocated 
+	   Cpus                 :         0.46         1         1 
+	   Disk (KB)            : 108259852    125000000 184757899 
+	   Memory (MB)          :       243         5120      5120 
+
+	Job terminated of its own accord at 2023-06-26T15:53:23Z.
+...

@@ -65,7 +65,7 @@
   </execute>
 
   <global>
-    <parameter name="LCIOInputFiles">taugun_100k.slcio</parameter>
+    <parameter name="LCIOInputFiles">../simulation/tauSample_100k.slcio</parameter>
     <!-- Limit the number of processed records (run+evt): -->
     <parameter name="MaxRecordNumber" value="10" />
     <parameter name="SkipNEvents" value="0" />
@@ -132,15 +132,11 @@
     <parameter name="LCIOOutputFile" type="string"> Output_DST.slcio </parameter>
     <parameter name="FullSubsetCollections" type="StringVec"> </parameter>
     <parameter name="DropCollectionTypes" type="StringVec">
-      SimTrackerHit
-      Track
-      LCRelation
-      MCParticle
     </parameter>
     <parameter name="KeepCollectionNames" type="StringVec">
       SiTracks_Refitted
     </parameter>
-    <parameter name="DropCollectionNames" type="StringVec"> MCParticle </parameter>
+    <parameter name="DropCollectionNames" type="StringVec">  </parameter>
     <parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
     <!-- <parameter name="SplitFileSizekB" type="int">996147 </parameter> -->
     <parameter name="Verbosity" type="string">WARNING </parameter>

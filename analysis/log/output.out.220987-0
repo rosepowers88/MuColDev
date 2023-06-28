@@ -1,0 +1,5 @@
+<!-- Loading shared library : /work/rosep8/TauRecoDev/analysis/build/libAnaProcessors.so (libAnaProcessors.so)-->
+
+<!-- ERROR loading shared library : /work/rosep8/TauRecoDev/analysis/build/libAnaProcessors.so
+    ->    /work/rosep8/TauRecoDev/analysis/build/libAnaProcessors.so: cannot open shared object file: No such file or directory -->
+

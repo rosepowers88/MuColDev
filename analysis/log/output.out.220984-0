@@ -1,0 +1,48 @@
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinDD4hep/v00-06/lib/libMarlinDD4hep.so.0.6.0 (libMarlinDD4hep.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/DDMarlinPandora/v00-13-MC/lib/libDDMarlinPandora.so.0.13.0 (libDDMarlinPandora.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinReco/v01-31/lib/libMarlinReco.so.1.31.0 (libMarlinReco.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/PandoraAnalysis/v02-00-01/lib/libPandoraAnalysis.so.2.0.1 (libPandoraAnalysis.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCFIVertex/v00-08/lib/libLCFIVertexProcessors.so.0.8.0 (libLCFIVertexProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/CEDViewer/v01-18/lib/libCEDViewer.so.1.18.0 (libCEDViewer.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Overlay/v00-23-MC/lib/libOverlay.so.0.23.0 (libOverlay.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinFastJet/v00-05-02/lib/libMarlinFastJet.so.0.5.2 (libMarlinFastJet.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCTuple/v01-14-MC/lib/libLCTuple.so.1.14.0 (libLCTuple.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinKinfit/v00-06/lib/libMarlinKinfit.so.0.6.0 (libMarlinKinfit.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinTrkProcessors/v02-13-MC/lib/libMarlinTrkProcessors.so.2.13.0 (libMarlinTrkProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinKinfitProcessors/v00-04-02/lib/libMarlinKinfitProcessors.so.0.4.2 (libMarlinKinfitProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ILDPerformance/v01-08/lib/libILDPerformance.so.1.8.0 (libILDPerformance.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ClicPerformance/HEAD/lib/libClicPerformance.so.2.4.1 (libClicPerformance.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Clupatra/v01-03/lib/libClupatra.so.1.3.0 (libClupatra.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Physsim/v00-04-01/lib/libPhyssim.so.0.4.1 (libPhyssim.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCFIPlus/v00-09/lib/libLCFIPlus.so.0.8.0 (libLCFIPlus.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/FCalClusterer/v01-00-01/lib/libFCalClusterer.so (libFCalClusterer.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ForwardTracking/v01-14-MC/lib/libForwardTracking.so.1.14.0 (libForwardTracking.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ConformalTracking/v01-12-MC/lib/libConformalTracking.so.1.12.0 (libConformalTracking.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LICH/v00-01/lib/libLICH.so.0.1.0 (libLICH.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Garlic/v03-01/lib/libGarlic.so.3.1.0 (libGarlic.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ACTSTracking/v1.0.0/lib/libACTSTracking.so (libACTSTracking.so)-->
+ Usage: Marlin [OPTION] [FILE]...
+   runs a Marlin application 
+
+ Running the application with a given steering file:
+   Marlin steer.xml   
+
+   Marlin [-h/-?]             	 print this help information
+   Marlin -x                  	 print an example steering file to stdout
+   Marlin -c steer.xml        	 check the given steering file for consistency
+   Marlin -u old.xml new.xml  	 consistency check with update of xml file
+   Marlin -d steer.xml flow.dot	 create a program flow diagram (see: http://www.graphviz.org)
+
+ Example: 
+ To create a new default steering file from any Marlin application, run
+     Marlin -x > mysteer.xml
+ and then use either an editor or the MarlinGUI to modify the created steering file 
+ to configure your application and then run it. e.g. : 
+     Marlin mysteer.xml > marlin.out 2>&1 &
+
+ Dynamic command line options may be specified in order to overwrite individual steering file parameters, e.g.:
+     Marlin --global.LCIOInputFiles="input1.slcio input2.slcio" --global.GearXMLFile=mydetector.xml
+            --MyLCIOOutputProcessor.LCIOWriteMode=WRITE_APPEND --MyLCIOOutputProcessor.LCIOOutputFile=out.slcio steer.xml
+
+     NOTE: Dynamic options do NOT work together with Marlin options (-x, -f) nor with the MarlinGUI
+

@@ -1,0 +1,130 @@
+000 (220983.000.000) 2023-06-23 13:15:42 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+000 (220983.001.000) 2023-06-23 13:15:42 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+000 (220983.002.000) 2023-06-23 13:15:42 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+000 (220983.003.000) 2023-06-23 13:15:42 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+040 (220983.001.000) 2023-06-23 13:16:37 Started transferring input files
+	Transferring to host: <10.32.86.175:33890?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector3#21084988%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector2#4524181&PrivNet=d12chas590.crc.nd.edu&addrs=10.32.86.175-33890&alias=d12chas590.crc.nd.edu&noUDP>
+...
+040 (220983.000.000) 2023-06-23 13:18:54 Started transferring input files
+	Transferring to host: <10.125.1.211:33545?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector5#21935066%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector2#4524381&PrivNet=node0211.palmetto.clemson.edu&addrs=10.125.1.211-33545&alias=node0211.palmetto.clemson.edu&noUDP>
+...
+040 (220983.003.000) 2023-06-23 13:18:54 Started transferring input files
+	Transferring to host: <10.125.5.254:32861?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector5#21935067%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector3#4513734&PrivNet=node1274.palmetto.clemson.edu&addrs=10.125.5.254-32861&alias=node1274.palmetto.clemson.edu&noUDP>
+...
+040 (220983.002.000) 2023-06-23 13:20:05 Started transferring input files
+	Transferring to host: <10.32.86.95:45014?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector2#21055303%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector4#4548592&PrivNet=d12chas550.crc.nd.edu&addrs=10.32.86.95-45014&alias=d12chas550.crc.nd.edu&noUDP>
+...
+022 (220983.000.000) 2023-06-23 13:25:46 Job disconnected, attempting to reconnect
+    Socket between submit and execute hosts closed unexpectedly
+    Trying to reconnect to slot1_4@glidein_718686_491044875@node0211.palmetto.clemson.edu <10.125.1.211:45653?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector3#21070330%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector1#4502289&PrivNet=node0211.palmetto.clemson.edu&addrs=10.125.1.211-45653&alias=node0211.palmetto.clemson.edu&noUDP>
+...
+040 (220983.000.000) 2023-06-23 13:25:46 Finished transferring input files
+...
+022 (220983.003.000) 2023-06-23 13:48:29 Job disconnected, attempting to reconnect
+    Socket between submit and execute hosts closed unexpectedly
+    Trying to reconnect to slot1_4@glidein_533091_293712304@node1274.palmetto.clemson.edu <10.125.5.254:34961?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector1#20999509%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector3#4447260&PrivNet=node1274.palmetto.clemson.edu&addrs=10.125.5.254-34961&alias=node1274.palmetto.clemson.edu&noUDP>
+...
+040 (220983.003.000) 2023-06-23 13:48:29 Finished transferring input files
+...
+040 (220983.002.000) 2023-06-23 14:00:27 Finished transferring input files
+...
+021 (220983.002.000) 2023-06-23 14:00:29 Warning from starter on slot1_2@glidein_16040_725942373@d12chas550.crc.nd.edu:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220983.002.000) 2023-06-23 14:00:29 Job executing on host: <10.32.86.95:38098?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector3#21035381%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector4#4499047&PrivNet=d12chas550.crc.nd.edu&addrs=10.32.86.95-38098&alias=d12chas550.crc.nd.edu&noUDP>
+...
+006 (220983.002.000) 2023-06-23 14:00:41 Image size of job updated: 1
+	3  -  MemoryUsage of job (MB)
+	2956  -  ResidentSetSize of job (KB)
+...
+006 (220983.002.000) 2023-06-23 14:01:24 Image size of job updated: 2269552
+	112  -  MemoryUsage of job (MB)
+	113804  -  ResidentSetSize of job (KB)
+...
+040 (220983.002.000) 2023-06-23 14:01:24 Started transferring output files
+...
+040 (220983.002.000) 2023-06-23 14:01:24 Finished transferring output files
+...
+005 (220983.002.000) 2023-06-23 14:01:24 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	4307  -  Run Bytes Sent By Job
+	110857732096  -  Run Bytes Received By Job
+	4307  -  Total Bytes Sent By Job
+	110857732096  -  Total Bytes Received By Job
+	Partitionable Resources :        Usage   Request Allocated 
+	   Cpus                 :         0.13         1         1 
+	   Disk (KB)            : 108259625    125000000 127563007 
+	   Memory (MB)          :       112         5120      5120 
+
+	Job terminated of its own accord at 2023-06-23T19:01:24Z.
+...
+024 (220983.000.000) 2023-06-23 14:05:46 Job reconnection failed
+    Job disconnected too long: JobLeaseDuration (2400 seconds) expired
+    Can not reconnect to slot1_4@glidein_718686_491044875@node0211.palmetto.clemson.edu, rescheduling job
+...
+040 (220983.001.000) 2023-06-23 14:06:44 Finished transferring input files
+...
+021 (220983.001.000) 2023-06-23 14:06:46 Warning from starter on slot1_4@glidein_31459_967805300@d12chas590.crc.nd.edu:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220983.001.000) 2023-06-23 14:06:46 Job executing on host: <10.32.86.175:38991?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector3#21005839%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector3#4436117&PrivNet=d12chas590.crc.nd.edu&addrs=10.32.86.175-38991&alias=d12chas590.crc.nd.edu&noUDP>
+...
+006 (220983.001.000) 2023-06-23 14:06:53 Image size of job updated: 1
+	3  -  MemoryUsage of job (MB)
+	2960  -  ResidentSetSize of job (KB)
+...
+040 (220983.001.000) 2023-06-23 14:06:53 Started transferring output files
+...
+040 (220983.001.000) 2023-06-23 14:06:53 Finished transferring output files
+...
+005 (220983.001.000) 2023-06-23 14:06:53 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	4307  -  Run Bytes Sent By Job
+	110857732096  -  Run Bytes Received By Job
+	4307  -  Total Bytes Sent By Job
+	110857732096  -  Total Bytes Received By Job
+	Partitionable Resources :        Usage   Request Allocated 
+	   Cpus                 :         0.21         1         1 
+	   Disk (KB)            : 108259625    125000000 126686755 
+	   Memory (MB)          :         3         5120      5120 
+
+	Job terminated of its own accord at 2023-06-23T19:06:53Z.
+...
+040 (220983.000.000) 2023-06-23 14:07:07 Started transferring input files
+	Transferring to host: <10.32.86.175:41424?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector1#21071895%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-dcd5]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector3#4520088&PrivNet=d12chas590.crc.nd.edu&addrs=10.32.86.175-41424&alias=d12chas590.crc.nd.edu&noUDP>
+...
+040 (220983.000.000) 2023-06-23 14:20:40 Finished transferring input files
+...
+004 (220983.000.000) 2023-06-23 14:20:41 Job was evicted.
+	(0) CPU times
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	Partitionable Resources :       Usage   Request Allocated 
+	   Cpus                 :        0.21         1         1 
+	   Disk (KB)            : 43957047    125000000 126686755 
+	   Memory (MB)          :                  5120      5120 
+...
+009 (220983.000.000) 2023-06-23 14:20:41 Job was aborted.
+	via condor_rm (by user rosep8)
+...
+024 (220983.003.000) 2023-06-23 14:28:29 Job reconnection failed
+    Job disconnected too long: JobLeaseDuration (2400 seconds) expired
+    Can not reconnect to slot1_4@glidein_533091_293712304@node1274.palmetto.clemson.edu, rescheduling job
+...
+009 (220983.003.000) 2023-06-23 14:28:29 Job was aborted.
+	via condor_rm (by user rosep8)
+...

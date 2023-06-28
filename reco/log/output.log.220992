@@ -1,0 +1,189 @@
+000 (220992.000.000) 2023-06-26 15:22:28 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+000 (220992.001.000) 2023-06-26 15:22:28 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+000 (220992.002.000) 2023-06-26 15:22:28 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+000 (220992.003.000) 2023-06-26 15:22:28 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+000 (220992.004.000) 2023-06-26 15:22:28 Job submitted from host: <192.170.231.221:9618?addrs=192.170.231.221-9618+[2605-9a00-10-200b-b226-28ff-fedd-4db0]-9618&alias=login.snowmass21.io&noUDP&sock=schedd_1050713_4d4a>
+...
+040 (220992.003.000) 2023-06-26 15:23:47 Started transferring input files
+	Transferring to host: <10.125.8.104:38481?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector2#21233733%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector3#4689582&PrivNet=node1889.palmetto.clemson.edu&addrs=10.125.8.104-38481&alias=node1889.palmetto.clemson.edu&noUDP>
+...
+040 (220992.002.000) 2023-06-26 15:23:47 Started transferring input files
+	Transferring to host: <10.125.1.100:38449?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector4#21249986%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector4#4728547&PrivNet=node0100.palmetto.clemson.edu&addrs=10.125.1.100-38449&alias=node0100.palmetto.clemson.edu&noUDP>
+...
+040 (220992.001.000) 2023-06-26 15:23:48 Started transferring input files
+	Transferring to host: <192.168.3.174:37921?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector1#21241926%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector5#4690890&PrivNet=lnxfarm274.colorado.edu&addrs=192.168.3.174-37921&alias=lnxfarm274.colorado.edu&noUDP>
+...
+040 (220992.000.000) 2023-06-26 15:23:48 Started transferring input files
+	Transferring to host: <192.168.3.138:32896?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector2#21233734%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector2#4701498&PrivNet=lnxfarm238.colorado.edu&addrs=192.168.3.138-32896&alias=lnxfarm238.colorado.edu&noUDP>
+...
+040 (220992.004.000) 2023-06-26 15:23:52 Started transferring input files
+	Transferring to host: <10.5.252.231:46013?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector4#21249991%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector1#4695973&PrivNet=CRUSH-OSG-C7-10-5-252-231&addrs=10.5.252.231-46013&alias=CRUSH-OSG-C7-10-5-252-231&noUDP>
+...
+040 (220992.003.000) 2023-06-26 15:24:38 Finished transferring input files
+...
+021 (220992.003.000) 2023-06-26 15:24:41 Warning from starter on slot1_4@glidein_3612474_798157599@node1889.palmetto.clemson.edu:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220992.003.000) 2023-06-26 15:24:41 Job executing on host: <10.125.8.104:40853?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector2#21220272%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector3#4676082&PrivNet=node1889.palmetto.clemson.edu&addrs=10.125.8.104-40853&alias=node1889.palmetto.clemson.edu&noUDP>
+...
+006 (220992.003.000) 2023-06-26 15:24:50 Image size of job updated: 2842760
+	223  -  MemoryUsage of job (MB)
+	227420  -  ResidentSetSize of job (KB)
+...
+040 (220992.003.000) 2023-06-26 15:24:50 Started transferring output files
+...
+040 (220992.003.000) 2023-06-26 15:24:50 Finished transferring output files
+...
+005 (220992.003.000) 2023-06-26 15:24:51 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3548  -  Run Bytes Sent By Job
+	5528435712  -  Run Bytes Received By Job
+	3548  -  Total Bytes Sent By Job
+	5528435712  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :                 1         1 
+	   Disk (KB)            :  5398961  7500000  63325280 
+	   Memory (MB)          :      223     5120      5120 
+
+	Job terminated of its own accord at 2023-06-26T20:24:50Z.
+...
+040 (220992.002.000) 2023-06-26 15:27:07 Finished transferring input files
+...
+021 (220992.002.000) 2023-06-26 15:27:09 Warning from starter on slot1_3@glidein_2272043_7180002@node0100.palmetto.clemson.edu:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220992.002.000) 2023-06-26 15:27:09 Job executing on host: <10.125.1.100:38183?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector4#21235086%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector1#4681060&PrivNet=node0100.palmetto.clemson.edu&addrs=10.125.1.100-38183&alias=node0100.palmetto.clemson.edu&noUDP>
+...
+006 (220992.002.000) 2023-06-26 15:27:20 Image size of job updated: 1
+	6  -  MemoryUsage of job (MB)
+	5976  -  ResidentSetSize of job (KB)
+...
+040 (220992.002.000) 2023-06-26 15:27:22 Started transferring output files
+...
+040 (220992.002.000) 2023-06-26 15:27:22 Finished transferring output files
+...
+005 (220992.002.000) 2023-06-26 15:27:23 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3548  -  Run Bytes Sent By Job
+	5627460096  -  Run Bytes Received By Job
+	3548  -  Total Bytes Sent By Job
+	5627460096  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :                 1         1 
+	   Disk (KB)            :  5495665  7500000  62062098 
+	   Memory (MB)          :        6     5120      5120 
+
+	Job terminated of its own accord at 2023-06-26T20:27:22Z.
+...
+040 (220992.001.000) 2023-06-26 15:29:22 Finished transferring input files
+...
+021 (220992.001.000) 2023-06-26 15:29:23 Warning from starter on slot1_2@glidein_11227_49159942@lnxfarm274.colorado.edu:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220992.001.000) 2023-06-26 15:29:23 Job executing on host: <192.168.3.174:42005?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector3#21228402%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector2#4663762&PrivNet=lnxfarm274.colorado.edu&addrs=192.168.3.174-42005&alias=lnxfarm274.colorado.edu&noUDP>
+...
+006 (220992.001.000) 2023-06-26 15:29:34 Image size of job updated: 1
+	3  -  MemoryUsage of job (MB)
+	2700  -  ResidentSetSize of job (KB)
+...
+006 (220992.001.000) 2023-06-26 15:29:53 Image size of job updated: 2416120
+	71  -  MemoryUsage of job (MB)
+	72628  -  ResidentSetSize of job (KB)
+...
+040 (220992.001.000) 2023-06-26 15:29:53 Started transferring output files
+...
+040 (220992.001.000) 2023-06-26 15:29:53 Finished transferring output files
+...
+005 (220992.001.000) 2023-06-26 15:29:54 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3548  -  Run Bytes Sent By Job
+	5559273984  -  Run Bytes Received By Job
+	3548  -  Total Bytes Sent By Job
+	5559273984  -  Total Bytes Received By Job
+	Partitionable Resources :      Usage  Request Allocated 
+	   Cpus                 :       0.37        1         1 
+	   Disk (KB)            : 5429098     7500000   8416249 
+	   Memory (MB)          :      71        5120      5120 
+
+	Job terminated of its own accord at 2023-06-26T20:29:53Z.
+...
+040 (220992.000.000) 2023-06-26 15:29:58 Finished transferring input files
+...
+021 (220992.000.000) 2023-06-26 15:29:59 Warning from starter on slot1_1@glidein_929_452349020@lnxfarm238.colorado.edu:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220992.000.000) 2023-06-26 15:29:59 Job executing on host: <192.168.3.138:35180?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector1#21205865%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector1#4660027&PrivNet=lnxfarm238.colorado.edu&addrs=192.168.3.138-35180&alias=lnxfarm238.colorado.edu&noUDP>
+...
+006 (220992.000.000) 2023-06-26 15:30:11 Image size of job updated: 1781704
+	25  -  MemoryUsage of job (MB)
+	25092  -  ResidentSetSize of job (KB)
+...
+040 (220992.000.000) 2023-06-26 15:30:17 Started transferring output files
+...
+040 (220992.000.000) 2023-06-26 15:30:17 Finished transferring output files
+...
+005 (220992.000.000) 2023-06-26 15:30:18 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3548  -  Run Bytes Sent By Job
+	5480219648  -  Run Bytes Received By Job
+	3548  -  Total Bytes Sent By Job
+	5480219648  -  Total Bytes Received By Job
+	Partitionable Resources :      Usage  Request Allocated 
+	   Cpus                 :       0.12        1         1 
+	   Disk (KB)            : 5351897     7500000   8577248 
+	   Memory (MB)          :      25        5120      5120 
+
+	Job terminated of its own accord at 2023-06-26T20:30:17Z.
+...
+040 (220992.004.000) 2023-06-26 15:33:55 Finished transferring input files
+...
+021 (220992.004.000) 2023-06-26 15:33:57 Warning from starter on slot1_18@glidein_104938_25847695@CRUSH-OSG-C7-10-5-252-231:
+	PREPARE_JOB (prepare-hook) succeeded (reported status 000): Using Singularity image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/infnpd/mucoll-ilc-framework:1.6-centos8
+...
+001 (220992.004.000) 2023-06-26 15:33:57 Job executing on host: <10.5.252.231:38785?CCBID=128.104.103.162:9618%3faddrs%3d128.104.103.162-9618%26alias%3dospool-ccb.osg.chtc.io%26noUDP%26sock%3dcollector2#21211333%20192.170.231.9:9618%3faddrs%3d192.170.231.9-9618+[fd85-ee78-d8a6-8607--1-d54a]-9618%26alias%3dospool-ccb.osgprod.tempest.chtc.io%26noUDP%26sock%3dcollector3#4667285&PrivNet=CRUSH-OSG-C7-10-5-252-231&addrs=10.5.252.231-38785&alias=CRUSH-OSG-C7-10-5-252-231&noUDP>
+...
+006 (220992.004.000) 2023-06-26 15:34:09 Image size of job updated: 1112256
+	61  -  MemoryUsage of job (MB)
+	61540  -  ResidentSetSize of job (KB)
+...
+040 (220992.004.000) 2023-06-26 15:34:20 Started transferring output files
+...
+040 (220992.004.000) 2023-06-26 15:34:20 Finished transferring output files
+...
+005 (220992.004.000) 2023-06-26 15:34:20 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3548  -  Run Bytes Sent By Job
+	5601314304  -  Run Bytes Received By Job
+	3548  -  Total Bytes Sent By Job
+	5601314304  -  Total Bytes Received By Job
+	Partitionable Resources :      Usage  Request Allocated 
+	   Cpus                 :       0.14        1         1 
+	   Disk (KB)            : 5470160     7500000   7776958 
+	   Memory (MB)          :      61        5120      5120 
+
+	Job terminated of its own accord at 2023-06-26T20:34:20Z.
+...

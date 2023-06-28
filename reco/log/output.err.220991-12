@@ -1,0 +1,6 @@
+ ***********************************************
+ A runtime error occured - (uncaught exception):
+      marlin::ParseException: XMLParser::parse error in file [/work/rosep8/TauRecoDev/reco/track_steer.xml, row: 0, col: 0] : Failed to open file
+ Marlin will have to be terminated, sorry.
+ ***********************************************
+

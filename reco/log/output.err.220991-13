@@ -1,0 +1,14 @@
+INFO  Discarding path '/none'. File does not exist
+INFO  Discarding path '/hadoop'. File does not exist
+INFO  Discarding path '/ceph'. File does not exist
+INFO  Discarding path '/hdfs'. File does not exist
+INFO  Discarding path '/lizard'. File does not exist
+INFO  Discarding path '/mnt/hadoop'. File does not exist
+INFO  Discarding path '/mnt/hdfs'. File does not exist
+[34mINFO:   [0m Environment variable SINGULARITY_WORKDIR is set, but APPTAINER_WORKDIR is preferred
+ ***********************************************
+ A runtime error occured - (uncaught exception):
+      marlin::ParseException: XMLParser::parse error in file [/work/rosep8/TauRecoDev/reco/track_steer.xml, row: 0, col: 0] : Failed to open file
+ Marlin will have to be terminated, sorry.
+ ***********************************************
+

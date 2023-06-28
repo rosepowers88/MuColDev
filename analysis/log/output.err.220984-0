@@ -1,0 +1,5 @@
+realpath: build/libAnaProcessors.so: No such file or directory
+realpath: /work/rosep8/TauRecoDev/simulation/tauSample_100k: No such file or directory
+
+*** invalid command line option: --global.LCIOInputFiles=
+

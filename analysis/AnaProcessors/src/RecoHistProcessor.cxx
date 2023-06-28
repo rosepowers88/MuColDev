@@ -46,33 +46,33 @@ RecoHistProcessor::RecoHistProcessor()
 
 void RecoHistProcessor::book_pfo_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);  
-  _h_ptpf   = new TH1F("pT", ";pT [GeV]", 1000,0., 200);
-  _h_ppf    = new TH1F("p", ";p [GeV]", 1000, 0, 200);
-  _h_pdgpf  = new TH1F("PDG_ID", ";PDG ID", 10000, -500, 2500);
-  _h_Npf    = new TH1F("nObjectsFound", ";N", 50, 0, 10);
-  _h_Epf    = new TH1F("Energy", ";E [GeV]", 1000,0,200);
+  _h_ptpf   = new TH1F("PFO_pT", ";pT [GeV]", 1000,0., 200);
+  _h_ppf    = new TH1F("PFO_p", ";p [GeV]", 1000, 0, 200);
+  _h_pdgpf  = new TH1F("PFO_PDG_ID", ";PDG ID", 10000, -500, 2500);
+  _h_Npf    = new TH1F("PFO_nObjectsFound", ";N", 50, 0, 10);
+  _h_Epf    = new TH1F("PFO_Energy", ";E [GeV]", 1000,0,200);
 
 }
 void RecoHistProcessor::book_cluster_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);
   _h_Ecl = new TH1F("Cluster Energy", ";E [GeV]", 1000,0,200);
-  _h_Xcl = new TH1F("X-position", ";x [mm]", 4000,-2000,2000);
-  _h_Ycl = new TH1F("Y-position", ";y [mm]", 4000,-2000,2000);
-  _h_Zcl = new TH1F("Z-position", ";z [mm]", 8000,-4000,4000);
-  _h_iPhicl=new TH1F("Intrinsic Phi", ";#phi [rad]", 10,0,6.3);
-  _h_iThetacl=new TH1F("Intrinsic Theta", ";#theta [rad]",10,0,3.2);
-  _h_PIDcl = new TH1F("Most Likely PID", "; PID", 10000, -300, 2500);
+  _h_Xcl = new TH1F("Cluster X-position", ";x [mm]", 4000,-2000,2000);
+  _h_Ycl = new TH1F("Cluster Y-position", ";y [mm]", 4000,-2000,2000);
+  _h_Zcl = new TH1F("Cluster Z-position", ";z [mm]", 8000,-4000,4000);
+  _h_iPhicl=new TH1F("Cluster Intrinsic Phi", ";#phi [rad]", 10,-3.2,3.2);
+  _h_iThetacl=new TH1F("Cluster Intrinsic Theta", ";#theta [rad]",10,0,3.2);
+  _h_PIDcl = new TH1F("Cluster Most Likely PID", "; PID", 10000, -300, 2500);
   _h_Ncl    = new TH1F("nClustersFound", ";N", 50, 0, 10);
 
 }
 void RecoHistProcessor::book_track_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);
-  _h_D0trk = new TH1F("Impact Parameter (r-phi)", ";D0 [mm]", 100,0,200);
-  _h_phitrk = new TH1F("Phi", ";#phi [rad]", 10,0,6.3);
-  _h_omegatrk = new TH1F("Signed Curvature", ";#Omega [1/mm]", 1000,-200,200);
-  _h_Z0trk = new TH1F("Impact Parameter (r-z)", ";Z0 [mm]", 100,0,200);
-  _h_lamtrk =new TH1F("Dip Angle (r-z)", ";#lambda [rad]", 10,-3.2,3.2);
-  _h_dEdxtrk=new TH1F("dEdx", ";dEdx [Gev/mm]",100,0,50);
+  _h_D0trk = new TH1F("Track Impact Parameter (r-phi)", ";D0 [mm]", 100,0,200);
+  _h_phitrk = new TH1F("Track Phi", ";#phi [rad]", 10,-3.2,3.2);
+  _h_omegatrk = new TH1F("Track Signed Curvature", ";#Omega [1/mm]", 1000,-200,200);
+  _h_Z0trk = new TH1F("Track Impact Parameter (r-z)", ";Z0 [mm]", 100,0,200);
+  _h_lamtrk =new TH1F("Track Dip Angle (r-z)", ";#lambda [rad]", 10,-3.2,3.2);
+  _h_dEdxtrk=new TH1F("Track dEdx", ";dEdx [Gev/mm]",100,0,50);
   _h_Ntrk    = new TH1F("nTracksFound", ";N", 50, 0, 10);
 
 

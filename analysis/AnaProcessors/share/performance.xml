@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+
+  <constants>
+  </constants>
+  
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == List of processors to execute                                                                      == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <execute>
+    <processor name="MyAIDAProcessor"/>
+    <processor name="Performance"/>
+    <processor name="EventNumber" />
+  </execute>
+
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == Global setup                                                                                       == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <global>
+    <parameter name="LCIOInputFiles">
+      inputfile
+    </parameter>
+    <!-- Limit the number of processed records (run+evt): -->
+    <parameter name="MaxRecordNumber" value="-1" />
+    <parameter name="SkipNEvents" value="0" />
+    <parameter name="SupressCheck" value="false" />  
+    <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT">WARNING </parameter>
+    <parameter name="RandomSeed" value="1234567890" />
+  </global>
+
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == Processor configuration                                                                            == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <processor name="MyAIDAProcessor" type="AIDAProcessor">
+    <!--Processor that handles AIDA files. Creates on directory per processor.  Processors only need to create and fill the histograms, clouds and tuples. Needs to be the first ActiveProcessor-->
+    <!-- compression of output file 0: false >0: true (default) -->
+    <parameter name="Compress" type="int" value="10"/>
+    <!-- filename without extension-->
+    <parameter name="FileName" type="string" value="RecoPerformance"/>
+    <!-- type of output file xml (default) or root ( only OpenScientist)-->
+    <parameter name="FileType" type="string" value="root "/>
+  </processor>
+
+  <processor name="EventNumber" type = "Statusmonitor">
+    <parameter name="HowOften" type = "int">1000</parameter>
+    <parameter name = "Verbosity" type = "string"> MESSAGE </parameter>
+  </processor>
+  
+
+  <processor name="Performance" type="RecoPerformance" >
+    <parameter name="MinPt" type="double">-10</parameter>
+    <parameter name="InputCollectionNameReco" type="string" lcioInType="ReconstructedParticle" value="PandoraPFOs" />
+    <parameter name="InputCollectionNameCluster" type="string" lcioInType="Cluster" value = "PandoraClusters" />
+    <parameter name="InputCollectionNameTrack" type="string" lcioInType="Track" value = "AllTracks" />
+    <parameter name="InputCollectionNameMCP" type="string" lcioInType="MCParticle" value = "MCParticle" />
+  </processor>
+
+</marlin>

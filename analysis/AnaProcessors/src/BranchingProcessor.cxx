@@ -29,14 +29,14 @@ BranchingProcessor::BranchingProcessor()
 			     _PDG);
 
 
-  registerInputCollection( LCIO::MCPARTICLE,
+  registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			   "InputCollectionName" , 
 			   "Name of an input collection.",
 			   _inputCollectionName,
 			   _inputCollectionName
 			   );
 
-  registerOutputCollection( LCIO::MCPARTICLE,
+  registerOutputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			    "OutputCollectionName" ,
 			    "Name of the output collection" ,
 			    _outputCollectionName,
@@ -67,7 +67,7 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
   LCCollection* inputCol = evt->getCollection(_inputCollectionName);
 
 
-  if( inputCol->getTypeName() != lcio::LCIO::MCPARTICLE ) {
+  if( inputCol->getTypeName() != lcio::LCIO::RECONSTRUCTEDPARTICLE ) {
     throw EVENT::Exception( "Invalid collection type: " + inputCol->getTypeName() ) ;
   }
 
@@ -78,16 +78,17 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
   std::vector<int> pdglist = {0};
 
   for(uint32_t i=0;i<nEl;i++) {
-    const EVENT::MCParticle *mcp=static_cast<const EVENT::MCParticle*>(inputCol->getElementAt(i));
+    const EVENT::ReconstructedParticle *mcp=static_cast<const EVENT::ReconstructedParticle*>(inputCol->getElementAt(i));
     
     //get pdgid, continue if not desired pdg
-    double pdg = mcp->getPDG();
+    //double pdg = mcp->getPDG();
+    double pdg = mcp->getType();
     /*if(abs(pdg) !=_PDG && pdg!=0){
       continue;
       }*/
 
     //Get the parent ID
-    const EVENT::MCParticleVec parentvec = mcp -> getParents();
+    /* const EVENT::MCParticleVec parentvec = mcp -> getParents();
     if(parentvec.size()==0){
       continue;
     }
@@ -98,13 +99,13 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
     //If not direct tau decay, skip
     if(parentID != 15){
       continue;
-    }
+      }*/
     
 
     //Fill charge
     int q = mcp->getCharge();
     _h_q->Fill(q);
-    _h_MID->Fill(parentID);
+    //_h_MID->Fill(parentID);
     _h_pdg->Fill(pdg);
 
     //if pdg not already in list, add

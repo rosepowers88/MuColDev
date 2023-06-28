@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/AnaProcessors.dir/src/BranchingProcessor.cxx.o"
   "CMakeFiles/AnaProcessors.dir/src/GenHistProcessor.cxx.o"
   "CMakeFiles/AnaProcessors.dir/src/RecoHistProcessor.cxx.o"
+  "CMakeFiles/AnaProcessors.dir/src/RecoPerformance.cxx.o"
   "libAnaProcessors.pdb"
   "libAnaProcessors.so"
 )

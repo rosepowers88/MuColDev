@@ -104,11 +104,15 @@ std::vector<std::vector<int>> RecoPerformance::getSimTrackerHitIDs(LCCollection*
     int pdg=mcp->getPDG();
     const double *mom = mcp->getMomentum();
     double pT = std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
+    double p = std::sqrt(std::pow(pT,2)+std::pow(mom[2],2));
+    double phi = std::atan(mom[1]/mom[0]);
+    double theta = std::acos(mom[2]/p);
     const EVENT::MCParticleVec Mvec = mcp->getParents();
     int MID = Mvec.back()->getPDG();
     ID_PDG.push_back(ID);
     ID_PDG.push_back(pdg);
-    ID_PDG.push_back(pT);
+    //ID_PDG.push_back(pT);
+    ID_PDG.push_back(phi);
     ID_PDG.push_back(MID);
     simhitIDs.push_back(ID_PDG);
     
@@ -128,6 +132,7 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
 // get the track 
   const EVENT::Track *trk=static_cast<const EVENT::Track*>(inputTrk);
   double trkpT = 0;
+  double trkphi=0;
 
 // get the hit collection
   const EVENT::TrackerHitVec trkhits = trk->getTrackerHits();
@@ -136,8 +141,10 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
   const int ntrkhits = trkhits.size();
 // count how many of them came from a charged pion
   int pihits = 0;
-  double ptavg = 0;
-  double hitpT=0;
+  //double ptavg = 0;
+  //double hitpT=0;
+  double phiavg=0;
+  double hitphi=0;
   for(uint32_t t=0; t<ntrkhits; t++){
     const EVENT::TrackerHit* th =static_cast<const EVENT::TrackerHit*>( trkhits[t]);
     int ID=th->getCellID0();
@@ -147,7 +154,7 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
     for(uint32_t l=0; l<simHitRef.size(); l++){
       if(simHitRef[l][0]==ID){
 	hitPDG = simHitRef[l][1];
-	hitpT = simHitRef[l][2];
+	hitphi = simHitRef[l][2];
 	hitMID = simHitRef[l][3];
       }
     }
@@ -155,19 +162,19 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
     if(abs(hitPDG)==211 && abs(hitMID)==15){
       pihits++;
     }
-    ptavg+=hitpT;
+    phiavg+=hitphi;
   }
-  trkpT = ptavg/double(ntrkhits);
+  trkphi = phiavg/double(ntrkhits);
   //now we want to see what fraction of the hits that make up the track are pion-like
   double piFrac = double(pihits)/ntrkhits;
   if(piFrac >=0.5){
     isPion = true;
   }
   if(isPion==true){
-    return(trkpT);
+    return(trkphi);
   }
   else{
-    return(0);
+    return(-1000);
   }   
 
 
@@ -193,20 +200,22 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
   const int nTrk = inputColTrk->getNumberOfElements();
   const int nMCP = inputColMC->getNumberOfElements();
   std::vector<double> ptvec;
+  std::vector<double> phivec;
   int nPiTrks=0;
   
   for(uint32_t i=0; i<nTrk; i++){
     const EVENT::Track *trk=static_cast<const EVENT::Track*>(inputColTrk->getElementAt(i));
-    double pT = anaPiEff(trk,inputSimHits );
-    if(pT==0){
+    double phi = anaPiEff(trk,inputSimHits );
+    if(phi==-1000){
       continue;
     }
     nPiTrks++;
-    ptvec.push_back(pT);
+    phivec.push_back(phi);
   }
 
   int nPiMC=0;
   std::vector<double> MCptvec;
+  std::vector<double> MCphivec;
   for(uint32_t i=0; i<nMCP; i++){
     const EVENT::MCParticle *mcp=static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(i));
     int pdg = mcp->getPDG();
@@ -220,7 +229,11 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
     }
     const double* mom = mcp->getMomentum();
     double mcpt = std::sqrt(std::pow(mom[0], 2)+std::pow(mom[1], 2));
+    double mcP = std::sqrt(std::pow(mcpt,2)+std::pow(mom[2],2));
+    double mcphi = std::atan(mom[1]/mom[0]);
+    double mctheta=std::acos(mom[2]/mcP);
     MCptvec.push_back(mcpt);
+    MCphivec.push_back(mcphi);
     nPiMC++;
   }
     
@@ -289,7 +302,7 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
 
 
   int evtnum = evt->getEventNumber();
-  std::fstream EffFile;
+  /* std::fstream EffFile;
   EffFile.open("PTTrk.txt", std::ios::app);
   for(int i=0; i<ptvec.size(); i++){
     EffFile<<ptvec[i]<<',';
@@ -300,7 +313,7 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
   for(int i=0; i<MCptvec.size(); i++){
     EffFile2<<MCptvec[i]<<',';
   }
-  // EffFile<<"End of event"<<evtnum<<'\n';
+
   EffFile2.close();
   if(ptvec.size()>MCptvec.size()){
     std::cout<<"Track pTs: ";
@@ -313,7 +326,20 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
     }
     std::cout<<'\n';
   }
+  */
 
+  std::fstream MCFile;
+  MCFile.open("MCPhi.txt", std::ios::app);
+  for(int i=0; i<MCphivec.size(); i++){
+    MCFile<<MCphivec[i]<<',';
+  }
+  MCFile.close();
+  std::fstream TrkFile;
+  TrkFile.open("TrkPhi.txt",std::ios::app);
+  for(int i=0; i<phivec.size(); i++){
+    TrkFile<<phivec[i]<<',';
+  }
+  TrkFile.close();
   
   
 }

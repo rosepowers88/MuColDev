@@ -12,13 +12,14 @@
 #include <marlin/Statusmonitor.h>
 
 #include <cmath>
+#include <algorithm>
 
 BranchingProcessor aBranchingProcessor ;
 
 BranchingProcessor::BranchingProcessor()
   : Processor("BranchingProcessor") {
   // modify processor description
-  _description = "BranchingProcessor makes histograms at the gen level." ;
+  _description = "BranchingProcessor finds decay fractions." ;
 
   // register steering parameters: name, description, class-variable, default value
 
@@ -29,14 +30,14 @@ BranchingProcessor::BranchingProcessor()
 			     _PDG);
 
 
-  registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
+  registerInputCollection( LCIO::MCPARTICLE,
 			   "InputCollectionName" , 
 			   "Name of an input collection.",
 			   _inputCollectionName,
 			   _inputCollectionName
 			   );
 
-  registerOutputCollection( LCIO::RECONSTRUCTEDPARTICLE,
+  registerOutputCollection( LCIO::MCPARTICLE,
 			    "OutputCollectionName" ,
 			    "Name of the output collection" ,
 			    _outputCollectionName,
@@ -64,10 +65,33 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
   // Get object required collections and create lists
   // to keep track of unsaved objects.
   // Loop over MCParticles
+
+  /********************************************************
+   *Decay modes for tau:
+   *0: -211,16, 111 (pi-, pi0, nu-tau) (25.49%)
+   *1: -211, 16 (pi- nu-tau) (10.82%)
+   *2: -211, 16, 111, 111 (pi-, pi0x2, nu-tau) (9.26%)
+   *3: -211, -211, 16, 211 (3-prong plus nu-tau) (8.99%)
+   *4: -211, -211, 16, 111, 211 (3-prong plus pi0 and nu-tau) (2.74%)
+   *5: -211, 16, 111, 111, 111 (3 pi0, pi-, nu-tau) (1.04%)
+   *6: -12, 11, 16 (nu-tau, e, nu-e-bar) (17.82%)
+   *7: -14, 13, 16 (nu-tau, e, nu-mu-bar) (17.39%)
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   ********************************************************/
+  
   LCCollection* inputCol = evt->getCollection(_inputCollectionName);
 
-
-  if( inputCol->getTypeName() != lcio::LCIO::RECONSTRUCTEDPARTICLE ) {
+  std::vector<int>decaymodes={};
+  
+  if( inputCol->getTypeName() != lcio::LCIO::MCPARTICLE ) {
     throw EVENT::Exception( "Invalid collection type: " + inputCol->getTypeName() ) ;
   }
 
@@ -75,20 +99,75 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
   const int nEl = inputCol->getNumberOfElements();
   //_h_N->Fill(nEl);
   
-  std::vector<int> pdglist = {0};
+  std::vector<int> pdglist={0};
 
   for(uint32_t i=0;i<nEl;i++) {
-    const EVENT::ReconstructedParticle *mcp=static_cast<const EVENT::ReconstructedParticle*>(inputCol->getElementAt(i));
+    const EVENT::MCParticle *mcp=static_cast<const EVENT::MCParticle*>(inputCol->getElementAt(i));
     
     //get pdgid, continue if not desired pdg
-    //double pdg = mcp->getPDG();
-    double pdg = mcp->getType();
-    /*if(abs(pdg) !=_PDG && pdg!=0){
+    double pdg = mcp->getPDG();
+    //double pdg = mcp->getType();
+    if(abs(pdg) != 15){
       continue;
-      }*/
+      }
 
+    //get the daughter particles
+    const EVENT::MCParticleVec daughtervec = mcp->getDaughters();
+    std::vector<int> daughterpdgs={0};
+    if(daughtervec.size()==0){continue;}
+    for(int n=0; n<daughtervec.size(); n++){
+      daughterpdgs.push_back(daughtervec[n]->getPDG());
+    }
+    std::sort(daughterpdgs.begin(), daughterpdgs.end());
+    daughterpdgs.erase(std::remove(daughterpdgs.begin(), daughterpdgs.end(), 0), daughterpdgs.end());
+    for(int o=0; o<daughterpdgs.size(); o++){
+      //std::cout<<daughterpdgs[o]<<std::endl;
+    }
+    if(daughterpdgs[0]==-211){
+      //hadronic decays
+      if(daughterpdgs[1]==-211){
+	//3-prongs
+	if(daughterpdgs[3]==211){
+	  // 3-prong, no neutral pion
+	  decaymodes.push_back(3);
+	}
+	else if(daughterpdgs[3]==111){
+	  //3-prong with neutral pion
+	  decaymodes.push_back(4);
+	}
+      }
+      else if(daughterpdgs[1]==16){
+	//
+	if(daughterpdgs.size()==2){
+	  decaymodes.push_back(1);
+	}
+	else if(daughterpdgs[2]==111){
+	  if(daughterpdgs.size()==3){
+	    decaymodes.push_back(0);
+	  }
+	  else if(daughterpdgs.size()==4){
+	    decaymodes.push_back(2);
+	  }
+	  else if(daughterpdgs.size()==5){
+	    decaymodes.push_back(5);
+	  }
+	}
+      }
+    }
+    else if(daughterpdgs[0]==-12){
+      decaymodes.push_back(6);
+    }
+    else if(daughterpdgs[0]==-14){
+      decaymodes.push_back(7);
+    }
+       
+	
+	
+	
+    
     //Get the parent ID
-    /* const EVENT::MCParticleVec parentvec = mcp -> getParents();
+    /*
+    const EVENT::MCParticleVec parentvec = mcp -> getParents();
     if(parentvec.size()==0){
       continue;
     }
@@ -99,8 +178,8 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
     //If not direct tau decay, skip
     if(parentID != 15){
       continue;
-      }*/
-    
+      }
+    */
 
     //Fill charge
     int q = mcp->getCharge();
@@ -120,6 +199,7 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
       pdglist.push_back(pdg);
       }
 
+
     
     
   }
@@ -129,7 +209,13 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
     pdgFile<<pdglist[i+1]<<'\n';
   }
   pdgFile.close();
-  
+
+  std::fstream decayFile;
+  decayFile.open("decayFile.txt", std::ios::app);
+  for(int i=0; i<decaymodes.size();i++){
+    decayFile<<decaymodes[i]<<'\n';
+  }
+  decayFile.close();
   
   
   

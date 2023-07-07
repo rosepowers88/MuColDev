@@ -7,6 +7,8 @@
 #include <EVENT/MCParticle.h>
 #include <EVENT/ReconstructedParticle.h>
 #include <EVENT/Track.h>
+#include <EVENT/SimTrackerHit.h>
+#include <EVENT/TrackerHit.h>
 
 #include <marlin/AIDAProcessor.h>
 #include <marlin/Statusmonitor.h>
@@ -27,9 +29,17 @@ RecoPerformance::RecoPerformance()
 			     "PDG code of particle type",
 			     _PDG,
 			     _PDG);
+  registerProcessorParameter("MinPt",
+			     "Minimum transverse momentum",
+			     _minPt,
+			     _minPt);
+  registerProcessorParameter("MinTheta",
+			     "Minimum polar angle",
+			     _minTheta,
+			     _minTheta);
 
 
-registerInputCollection(LCIO::RECONSTRUCTEDPARTICLE,
+  registerInputCollection(LCIO::RECONSTRUCTEDPARTICLE,
 			  "InputCollectionNameReco",
 			  "Name of RecoParticle collection.",
 			  _inputCollectionNameR,
@@ -53,6 +63,12 @@ registerInputCollection(LCIO::RECONSTRUCTEDPARTICLE,
 			  _inputCollectionNameMCP,
 			  _inputCollectionNameMCP
 			  );
+  registerInputCollection(LCIO::SIMTRACKERHIT,
+			  "InputCollectionSimHits",
+			  "Name of STH Collection",
+			  _inputCollectionSimHits,
+			  _inputCollectionSimHits
+			  );
   
 }
 
@@ -74,13 +90,91 @@ void RecoPerformance::init() {
   _h_effPFO_n = new TH1F("PFO Efficiency for Neutrons", ";nPFO/nN", 100,0,1);
   _h_effPFO_gam = new TH1F("PFO Efficiency for Photons", ";nPFO/nGam", 100, 0 ,1);
 
-  //Graphs
-  _gr_PFO_Eff = new TGraph();
-  _gr_PFO_Eff->SetTitle("PFO Efficiency;Energy [GeV]; nPFO/nMCP");
-  _gr_Cl_Eff = new TGraph();
-  _gr_Trk_Eff = new TGraph();
-  
 }
+
+std::vector<std::vector<int>> RecoPerformance::getSimTrackerHitIDs(LCCollection* trackhitCol){
+  std::vector<std::vector<int>> simhitIDs;
+  const int nHits = trackhitCol->getNumberOfElements();
+  for(int i=0; i<nHits; i++){
+    //get PDG, cell ID, and pT of MCP (useful for efficiency)
+    std::vector<int> ID_PDG;
+    const EVENT::SimTrackerHit *sth = static_cast<const EVENT::SimTrackerHit*>(trackhitCol->getElementAt(i));
+    int ID=sth->getCellID0();
+    const EVENT::MCParticle *mcp = static_cast<const EVENT::MCParticle*>(sth->getMCParticle());
+    int pdg=mcp->getPDG();
+    const double *mom = mcp->getMomentum();
+    double pT = std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
+    const EVENT::MCParticleVec Mvec = mcp->getParents();
+    int MID = Mvec.back()->getPDG();
+    ID_PDG.push_back(ID);
+    ID_PDG.push_back(pdg);
+    ID_PDG.push_back(pT);
+    ID_PDG.push_back(MID);
+    simhitIDs.push_back(ID_PDG);
+    
+  }
+  return(simhitIDs);
+}
+double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHitCol){
+  //find the efficiency for charged pion FROM TAU reconstruction
+  //trk part
+  //first get the simhits and make a reference structure
+  std::vector<std::vector<int>> simHitRef = getSimTrackerHitIDs(trkHitCol);
+  
+  int npi = 0; //how many pions
+  bool isPion = false; //the bool determining whether a track came from a tau-generated charged pi
+  std::vector<std::vector<int>> usedHits; //for de-doubling fake tracks
+
+// get the track 
+  const EVENT::Track *trk=static_cast<const EVENT::Track*>(inputTrk);
+  double trkpT = 0;
+
+// get the hit collection
+  const EVENT::TrackerHitVec trkhits = trk->getTrackerHits();
+
+// get number of tracker hits in the track
+  const int ntrkhits = trkhits.size();
+// count how many of them came from a charged pion
+  int pihits = 0;
+  double ptavg = 0;
+  double hitpT=0;
+  for(uint32_t t=0; t<ntrkhits; t++){
+    const EVENT::TrackerHit* th =static_cast<const EVENT::TrackerHit*>( trkhits[t]);
+    int ID=th->getCellID0();
+    int hitPDG = 0;
+    int hitMID = 0;
+    //now see if it matches any cell ID's in the reference, record PDG and pT
+    for(uint32_t l=0; l<simHitRef.size(); l++){
+      if(simHitRef[l][0]==ID){
+	hitPDG = simHitRef[l][1];
+	hitpT = simHitRef[l][2];
+	hitMID = simHitRef[l][3];
+      }
+    }
+    //check if it came from pion from tau
+    if(abs(hitPDG)==211 && abs(hitMID)==15){
+      pihits++;
+    }
+    ptavg+=hitpT;
+  }
+  trkpT = ptavg/double(ntrkhits);
+  //now we want to see what fraction of the hits that make up the track are pion-like
+  double piFrac = double(pihits)/ntrkhits;
+  if(piFrac >=0.5){
+    isPion = true;
+  }
+  if(isPion==true){
+    return(trkpT);
+  }
+  else{
+    return(0);
+  }   
+
+
+}
+//maybe we can de-double the tracks. Like maybe if they share the same hits? cuz that is a sure sign that they are fake doubles
+//basically, after isPion is declared true, loop over the rest of the hits and make sure we are not sharing hits
+
 
 void RecoPerformance::processRunHeader( LCRunHeader* /*run*/) {
 }
@@ -93,131 +187,133 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
   LCCollection* inputColMC = evt->getCollection(_inputCollectionNameMCP);
   LCCollection* inputColPFO = evt->getCollection(_inputCollectionNameR);
   LCCollection* inputColCl = evt->getCollection(_inputCollectionNameC);
-  LCCollection* inputColTrk = evt->getCollection(_inputCollectionNameT);
+  LCCollection* inputColTrk = evt->getCollection("SiTracks");
+  LCCollection* inputSimHits = evt->getCollection(_inputCollectionSimHits);
+  
+  const int nTrk = inputColTrk->getNumberOfElements();
+  const int nMCP = inputColMC->getNumberOfElements();
+  std::vector<double> ptvec;
+  int nPiTrks=0;
+  
+  for(uint32_t i=0; i<nTrk; i++){
+    const EVENT::Track *trk=static_cast<const EVENT::Track*>(inputColTrk->getElementAt(i));
+    double pT = anaPiEff(trk,inputSimHits );
+    if(pT==0){
+      continue;
+    }
+    nPiTrks++;
+    ptvec.push_back(pT);
+  }
+
+  int nPiMC=0;
+  std::vector<double> MCptvec;
+  for(uint32_t i=0; i<nMCP; i++){
+    const EVENT::MCParticle *mcp=static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(i));
+    int pdg = mcp->getPDG();
+    if(abs(pdg)!=211){
+      continue;
+    }
+    const EVENT::MCParticleVec mvec = mcp->getParents();
+    int MID = mvec.back()->getPDG();
+    if(MID != 15){
+      continue;
+    }
+    const double* mom = mcp->getMomentum();
+    double mcpt = std::sqrt(std::pow(mom[0], 2)+std::pow(mom[1], 2));
+    MCptvec.push_back(mcpt);
+    nPiMC++;
+  }
+    
+  
+
+  LCCollection* inputColTaus = evt->getCollection("TauRec_PFO");
+  LCCollection* simTrkHits = evt->getCollection(_inputCollectionSimHits);
 
 
   if( inputColMC->getTypeName() != lcio::LCIO::MCPARTICLE ) {
     throw EVENT::Exception( "Invalid collection type: " + inputColMC->getTypeName() ) ;
   }
-    if( inputColPFO->getTypeName() != lcio::LCIO::RECONSTRUCTEDPARTICLE ) {
+  if( inputColPFO->getTypeName() != lcio::LCIO::RECONSTRUCTEDPARTICLE ) {
     throw EVENT::Exception( "Invalid collection type: " + inputColPFO->getTypeName() ) ;
   }
-      if( inputColCl->getTypeName() != lcio::LCIO::CLUSTER ) {
+  if( inputColCl->getTypeName() != lcio::LCIO::CLUSTER ) {
     throw EVENT::Exception( "Invalid collection type: " + inputColCl->getTypeName() ) ;
   }
-        if( inputColTrk->getTypeName() != lcio::LCIO::TRACK ) {
+  if( inputColTrk->getTypeName() != lcio::LCIO::TRACK ) {
     throw EVENT::Exception( "Invalid collection type: " + inputColTrk->getTypeName() ) ;
   }
 
   //find how many particles in the event
-  const int nMCP = inputColMC->getNumberOfElements();
+  //const int nMCP = inputColMC->getNumberOfElements();
   const int nPFO = inputColPFO->getNumberOfElements();
   const int nCl = inputColCl->getNumberOfElements();
-  const int nTrk = inputColTrk->getNumberOfElements();
+  //const int nTrk = inputColTrk->getNumberOfElements();
+  const int nTau = inputColTaus->getNumberOfElements();
+
+
+  double nMCTau=0;
+
+  for(uint32_t i=0; i<nMCP; i++){
+    const EVENT::MCParticle *tau=static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(i));
+    int pdg = tau->getPDG();
+    if(abs(pdg)!=15){
+      continue;
+    }
+    
+    nMCTau++;
+
+    //get pT of the tau
+    const double* mom = tau->getMomentum();
+    double pt = std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
+    //ptvec.push_back(pt);
+  }
+
+  
+
+  double tauEff = nTau/nMCTau;
+    
+  
 
   //basic efficiencies (not PDG specific)
   double PFO_eff = double(nPFO)/nMCP;
   double Cl_eff = double(nCl)/nMCP;
   double Trk_eff = double(nTrk)/nMCP;
 
+  
+
   _h_effPFO->Fill(PFO_eff);
   _h_effCl->Fill(Cl_eff);
   _h_effTrk->Fill(Trk_eff);
-
   
-  
-  std::vector<int> pdglist = {0};
-  //lets start off by getting particle-by-particle efficiency for just charged pions and neutral pions
-  int nChargedPi = 0;
-  int nNeutralPi = 0;
-  int nNeutron = 0;
-  int nGam = 0;
-  std::vector<double> MCCPenergies;
-  std::vector<double> MCNPenergies;
 
-  double chargedEnergy = 0;
-  double neutralEnergy = 0;
 
-  for(uint32_t i=0;i<nMCP;i++) {
-    const EVENT::MCParticle *mcp=static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(i));
-    
-    //get pdgid, continue if not desired pdg
-    double pdg = mcp->getPDG();
-    if(abs(pdg)==211){
-      nChargedPi++;
-      MCCPenergies.push_back(mcp->getEnergy());
-    }
 
-    if(abs(pdg)==111){
-      nNeutralPi++;
-      MCNPenergies.push_back(mcp->getEnergy());
+  int evtnum = evt->getEventNumber();
+  std::fstream EffFile;
+  EffFile.open("PTTrk.txt", std::ios::app);
+  for(int i=0; i<ptvec.size(); i++){
+    EffFile<<ptvec[i]<<',';
+  }
+  EffFile.close();
+  std::fstream EffFile2;
+  EffFile2.open("PTMC.txt", std::ios::app);
+  for(int i=0; i<MCptvec.size(); i++){
+    EffFile2<<MCptvec[i]<<',';
+  }
+  // EffFile<<"End of event"<<evtnum<<'\n';
+  EffFile2.close();
+  if(ptvec.size()>MCptvec.size()){
+    std::cout<<"Track pTs: ";
+    for(int i=0; i<ptvec.size();i++){
+      std::cout<<ptvec[i]<<' ';
     }
-    else{ continue; }
-    if(pdg==2112){
-      nNeutron++;
+    std::cout<<'\n'<<"MC pTs: ";
+    for(int i=0; i<MCptvec.size();i++){
+      std::cout<<ptvec[i]<<' ';
     }
-    if(pdg==22){
-      nGam++;
-    }
+    std::cout<<'\n';
   }
 
-  if(MCCPenergies.size()!=0){
-    //chargedEnergy = std::reduce(MCCPenergies.begin(), MCCPenergies.end())/MCCPenergies.size();
-  }
-  if(MCNPenergies.size()!=0){
-    //neutralEnergy = std::reduce(MCNPenergies.begin(), MCNPenergies.end())/MNCPenergies.size();
-  }
-
-  int n211PFOs = 0;
-  int n111PFOs = 0;
-  int n2112PFOs = 0;
-  int n22PFOs = 0;
-
-   for(uint32_t i=0;i<nPFO;i++) {
-    const EVENT::ReconstructedParticle *pfo=static_cast<const EVENT::ReconstructedParticle*>(inputColPFO->getElementAt(i));
-
-    double PFO_pdg = pfo->getType();
-    if(abs(PFO_pdg)==211){
-      n211PFOs++;
-    }
-    if(abs(PFO_pdg)==111){
-      n111PFOs++;
-    }
-    if(abs(PFO_pdg)==2112){
-      n2112PFOs++;
-    }
-    if(abs(PFO_pdg)==22){
-      n22PFOs++;
-    }
-    
-    else{continue;}
-   }
-   double effCP = 0;
-   double effNP = 0;
-   double effN = 0;
-   double effGam = 0;
-
-   if(nChargedPi!=0){
-     effCP = double(n211PFOs)/nChargedPi;
-     _h_effPFO_cp->Fill(effCP);
-   }
-   if(nNeutralPi!=0){
-     effNP = double(n111PFOs)/nNeutralPi;
-     _h_effPFO_np->Fill(effNP);
-   }
-   if(nNeutron!=0){
-     effN = double(n2112PFOs)/nNeutron;
-     _h_effPFO_n->Fill(effN);
-   }
-   if(nGam!=0){
-     effGam = double(n22PFOs)/nGam;
-     _h_effPFO_gam -> Fill(effGam);
-   }
-
-   //Fill efficiency and energy information to graphs (not perfect but a first go)
-   //_gr_PFO_Eff->SetPoint(_gr_PFO_Eff->getN(),chargedEnergy, effC);
- 
-  
   
   
 }

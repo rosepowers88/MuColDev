@@ -53,17 +53,18 @@
   </processor>
 
   <processor name="EventNumber" type = "Statusmonitor">
-    <parameter name="HowOften" type = "int">1000</parameter>
+    <parameter name="HowOften" type = "int">10000</parameter>
     <parameter name = "Verbosity" type = "string"> MESSAGE </parameter>
   </processor>
   
 
   <processor name="Performance" type="RecoPerformance" >
-    <parameter name="MinPt" type="double">-10</parameter>
+    <parameter name="MinPt" type="double">2</parameter>
     <parameter name="InputCollectionNameReco" type="string" lcioInType="ReconstructedParticle" value="PandoraPFOs" />
     <parameter name="InputCollectionNameCluster" type="string" lcioInType="Cluster" value = "PandoraClusters" />
-    <parameter name="InputCollectionNameTrack" type="string" lcioInType="Track" value = "AllTracks" />
+    <parameter name="InputCollectionNameTrack" type="string" lcioInType="Track" value = "SiTracks_Refitted" />
     <parameter name="InputCollectionNameMCP" type="string" lcioInType="MCParticle" value = "MCParticle" />
+    <parameter name="InputCollectionSimHits" type="string" lcioInType="SimTrackerHit" value = "AllSTH" />
   </processor>
 
 </marlin>

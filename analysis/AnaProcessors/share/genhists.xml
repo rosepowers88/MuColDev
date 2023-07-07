@@ -28,7 +28,7 @@
       inputfile
     </parameter>
     <!-- Limit the number of processed records (run+evt): -->
-    <parameter name="MaxRecordNumber" value="-1" />
+    <parameter name="MaxRecordNumber" value="50" />
     <parameter name="SkipNEvents" value="0" />
     <parameter name="SupressCheck" value="false" />  
     <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT">WARNING </parameter>
@@ -47,20 +47,20 @@
     <!-- compression of output file 0: false >0: true (default) -->
     <parameter name="Compress" type="int" value="1"/>
     <!-- filename without extension-->
-    <parameter name="FileName" type="string" value="neutralPionsFromTaus"/>
+    <parameter name="FileName" type="string" value="pTTaus"/>
     <!-- type of output file xml (default) or root ( only OpenScientist)-->
     <parameter name="FileType" type="string" value="root "/>
   </processor>
 
   <processor name="EventNumber" type = "Statusmonitor">
-    <parameter name="HowOften" type = "int">10000</parameter>
+    <parameter name="HowOften" type = "int">1</parameter>
     <parameter name = "Verbosity" type = "string"> MESSAGE </parameter>
   </processor>
  
 
   <processor name="GenHistMaker" type="GenHistProcessor" >
     <!--=========== mapping to pdg code of the particles you want to examine. If you want to look at all, put 0 =====-->
-    <parameter name="PDG" type = "int" >3 </parameter>
+    <parameter name="PDG" type = "int" >0 </parameter>
     <parameter name="InputCollectionName" type="string" lcioInType="MCParticle"> MCParticle  </parameter>
     <parameter name="OutputCollectionName" type="string" lcioInType="MCParticle"> MCParticle </parameter>
   </processor>

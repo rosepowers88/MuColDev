@@ -27,10 +27,18 @@ public:
   virtual void book_pfo_histograms();
   virtual void book_cluster_histograms();
   virtual void book_track_histograms();
+  virtual void book_trkzero_histograms();
+  virtual void book_tau_histograms();
+
+  virtual void zeroTrackAna(LCCollection* inputCol);
+  virtual std::vector<std::vector<int>> getSimTrackerHitIDs(LCCollection* trackhitCol);
 
   virtual void fill_pfo_histograms(LCCollection* inputCol);
+  virtual void fill_tau_histograms(LCCollection* inputCol);
   virtual void fill_cluster_histograms(LCCollection* inputCol);
-  virtual void fill_track_histograms(LCCollection* inputCol);
+  virtual void fill_track_histograms(LCCollection* inputCol, LCCollection* MCCol, LCCollection* TrkCol);
+
+
   
   virtual void init() ;
 
@@ -51,17 +59,21 @@ public:
 
 private:
   //! Input Collection
+  std::string _inputCollectionSimHits {};
+  std::string _inputCollectionNameMCP {};
   std::string _inputCollectionNameR {};
   std::string _inputCollectionNameC {};
   std::string _inputCollectionNameT {};
+  std::string _TauCollection {};
 
-  
+  //bool _has_valid_pt=false;
 
   //! Output Collection
   //std::string _outputCollectionName {};
 
   //! Minimum pT for particle filter
-  float _minPt = 1;
+  float _minPt = 5;
+  float _minTheta = 0.35; //rad
 
   //! Output histogram
   // declare all histograms
@@ -91,7 +103,21 @@ private:
   TH1 *_h_lamtrk = nullptr;
   TH1 *_h_dEdxtrk = nullptr;
   TH1 *_h_Ntrk     = nullptr;
+  TH1 *_h_trkpdg = nullptr;
 
+  //zerotrk MC histograms
+  TH1 *_h_p0 = nullptr;
+  TH1 *_h_pt0 = nullptr;
+  TH1 *_h_E0 = nullptr;
+  TH1 *_h_pdg0 = nullptr;
+  TH1 *_h_NMCP = nullptr;
+
+  //tau histograms
+  TH1 *_h_ptTau = nullptr;
+  TH1 *_h_pTau = nullptr;
+  TH1 *_h_ETau = nullptr;
+  TH1 *_h_pdgTau = nullptr;
+  TH1 *_h_NTau = nullptr;
   
 
 };

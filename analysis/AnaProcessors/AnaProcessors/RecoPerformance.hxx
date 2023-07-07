@@ -22,10 +22,14 @@ public:
 
   /** Called for every run.
    */
+
+  virtual std::vector<std::vector<int>> getSimTrackerHitIDs(LCCollection* trackhitCol);
+  virtual double anaPiEff(const LCObject *inputTrk, LCCollection* trkHitCol);
   virtual void processRunHeader( LCRunHeader* run ) ;
 
   /** Called for every event - the working horse.
    */
+
   virtual void processEvent( LCEvent * evt ) ; 
 
   virtual void check( LCEvent * evt ) ; 
@@ -40,12 +44,16 @@ private:
   std::string _inputCollectionNameC {};
   std::string _inputCollectionNameT {};
   std::string _inputCollectionNameMCP {};
+  std::string _inputCollectionSimHits {};
 
   //! Output Collection
   //std::string _outputCollectionName {};
 
   //! PDG selection
   int _PDG {};
+
+  float _minPt {};
+  float _minTheta {};
 
   //! Output histogram
   // declare all histograms
@@ -59,10 +67,6 @@ private:
   TH1 *_h_effPFO_n = nullptr;
   TH1 *_h_effPFO_gam = nullptr;
 
-  //declare graphs
-  TGraph *_gr_PFO_Eff = nullptr;
-  TGraph *_gr_Cl_Eff = nullptr;
-  TGraph *_gr_Trk_Eff = nullptr;
-  
+
 
 };

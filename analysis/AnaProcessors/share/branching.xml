@@ -61,8 +61,8 @@
   <processor name="Branching" type="BranchingProcessor" >
     <!--=========== pdg code of the particles you want to examine. If you want to look at all, put 0 =====-->
     <parameter name="PDG" type = "int" >0 </parameter>
-    <parameter name="InputCollectionName" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs  </parameter>
-    <parameter name="OutputCollectionName" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
+    <parameter name="InputCollectionName" type="string" lcioInType="MCParticle"> MCParticle  </parameter>
+    <parameter name="OutputCollectionName" type="string" lcioInType="MCParticle"> MCParticle </parameter>
   </processor>
 
 </marlin>

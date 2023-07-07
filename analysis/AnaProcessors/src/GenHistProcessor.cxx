@@ -71,7 +71,7 @@ void GenHistProcessor::processEvent( LCEvent * evt ) {
   // Loop over MCParticles
 
   //map from pdg entry to actual pdg number for submitting in batch mode
-  int pdgs[4]={0,15,211,111};
+  int pdgs[6]={0,11,13,15,211,111};
   
   LCCollection* inputCol = evt->getCollection(_inputCollectionName);
 
@@ -99,12 +99,12 @@ void GenHistProcessor::processEvent( LCEvent * evt ) {
     }
 
     //Get the parent ID if we are not examining taus only or all
-    if(pdgs[_PDG] != 15 && _PDG !=0){
+    if(pdgs[_PDG] != 13 && _PDG !=0){
       const EVENT::MCParticleVec parentvec = mcp -> getParents();
       int parentID = parentvec.back()->getPDG();
 
       //If not direct tau decay, skip
-      if(parentID != 15){
+      if(parentID != 13){
 	continue;
       }
       _h_MID->Fill(parentID);

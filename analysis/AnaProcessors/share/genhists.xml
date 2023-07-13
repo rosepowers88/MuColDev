@@ -60,6 +60,7 @@
 
   <processor name="GenHistMaker" type="GenHistProcessor" >
     <!--=========== mapping to pdg code of the particles you want to examine. If you want to look at all, put 0 =====-->
+    <!--========= check the processor code to find the mapping =======-->
     <parameter name="PDG" type = "int" >0 </parameter>
     <parameter name="InputCollectionName" type="string" lcioInType="MCParticle"> MCParticle  </parameter>
     <parameter name="OutputCollectionName" type="string" lcioInType="MCParticle"> MCParticle </parameter>

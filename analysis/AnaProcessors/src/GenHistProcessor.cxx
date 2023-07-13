@@ -21,7 +21,7 @@ GenHistProcessor::GenHistProcessor()
    * Rose Powers (2023)
    * Use this processor to:
    * - get information about a sample at the MC truth (gen) level
-   *
+   * - can restrict to a certain particle (i.e. taus, charged pions from taus, etc)
    *
    *
    *

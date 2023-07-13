@@ -38,7 +38,7 @@ public:
   virtual void fill_cluster_histograms(LCCollection* inputCol);
   virtual void fill_track_histograms(LCCollection* inputCol, LCCollection* MCCol, LCCollection* TrkCol);
 
-
+  virtual int findMode(std::vector<int> vec);
   
   virtual void init() ;
 
@@ -84,6 +84,8 @@ private:
   TH1 *_h_Npf = nullptr;
   TH1 *_h_pdgpf = nullptr;
   TH1 *_h_Epf = nullptr;
+  TH1 *_h_phipf = nullptr;
+  TH1 *_h_thetapf = nullptr;
 
   //cluster histograms
   TH1 *_h_Ecl = nullptr;

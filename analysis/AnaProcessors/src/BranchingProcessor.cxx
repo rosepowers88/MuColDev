@@ -23,6 +23,22 @@ BranchingProcessor::BranchingProcessor()
 
   // register steering parameters: name, description, class-variable, default value
 
+  /*********************************************************
+   * Rose Powers (2023)
+   * Use this processor to:
+   * - Find the branching rate for various decays of a simulated MC particle
+   * - Stream out to a text file that can then be analyzed with a quick python "pdgreader"
+   * - With a little modification, could use it for reco products as well
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *********************************************************/
 
   registerProcessorParameter("PDG",
 			     "PDG code of particle type",
@@ -203,6 +219,8 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
     
     
   }
+
+  //stream info out to files for further analysis
   std::fstream pdgFile;
   pdgFile.open("pdgFile.txt", std::ios::app);
   for(int i=0; i<pdglist.size()-1; i++){

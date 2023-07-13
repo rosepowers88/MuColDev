@@ -19,8 +19,21 @@ RecoPerformance aRecoPerformance ;
 
 RecoPerformance::RecoPerformance()
   : Processor("RecoPerformance") {
-  // modify processor description
-  _description = "RecoPerformance analyzes the efficiency of tracking, clustering, and PFO finding." ;
+  _description = "RecoPerformance analyzes the performance of tracking and PFO reco" ;
+  /******************************************
+   * Rose Powers (2023)
+   * Use this processor for:
+   * - Efficiency studies
+   * - Writing results to separate files
+   * - Getting track truth info w/o LCIO relations
+   * 
+   *
+   *
+   *
+   *
+   *
+   *
+   **************************************************/
 
   // register steering parameters: name, description, class-variable, default value
 
@@ -93,6 +106,7 @@ void RecoPerformance::init() {
 }
 
 std::vector<std::vector<int>> RecoPerformance::getSimTrackerHitIDs(LCCollection* trackhitCol){
+  //makes a reference of simhits against which we can check track hits to get trackTruth info
   std::vector<std::vector<int>> simhitIDs;
   const int nHits = trackhitCol->getNumberOfElements();
   for(int i=0; i<nHits; i++){
@@ -105,14 +119,17 @@ std::vector<std::vector<int>> RecoPerformance::getSimTrackerHitIDs(LCCollection*
     const double *mom = mcp->getMomentum();
     double pT = std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
     double p = std::sqrt(std::pow(pT,2)+std::pow(mom[2],2));
-    double phi = std::atan(mom[1]/mom[0]);
-    double theta = std::acos(mom[2]/p);
     const EVENT::MCParticleVec Mvec = mcp->getParents();
-    int MID = Mvec.back()->getPDG();
+    int MID=0;
+    if(Mvec.size()!=0){
+      MID = Mvec.back()->getPDG();
+    }
+    else{
+      MID = -1;
+    }
     ID_PDG.push_back(ID);
     ID_PDG.push_back(pdg);
-    //ID_PDG.push_back(pT);
-    ID_PDG.push_back(phi);
+    ID_PDG.push_back(pT);
     ID_PDG.push_back(MID);
     simhitIDs.push_back(ID_PDG);
     
@@ -122,9 +139,10 @@ std::vector<std::vector<int>> RecoPerformance::getSimTrackerHitIDs(LCCollection*
 double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHitCol){
   //find the efficiency for charged pion FROM TAU reconstruction
   //trk part
-  //first get the simhits and make a reference structure
-  std::vector<std::vector<int>> simHitRef = getSimTrackerHitIDs(trkHitCol);
+  //first get the simhits and make a reference
   
+  std::vector<std::vector<int>> simHitRef = getSimTrackerHitIDs(trkHitCol);
+
   int npi = 0; //how many pions
   bool isPion = false; //the bool determining whether a track came from a tau-generated charged pi
   std::vector<std::vector<int>> usedHits; //for de-doubling fake tracks
@@ -132,7 +150,6 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
 // get the track 
   const EVENT::Track *trk=static_cast<const EVENT::Track*>(inputTrk);
   double trkpT = 0;
-  double trkphi=0;
 
 // get the hit collection
   const EVENT::TrackerHitVec trkhits = trk->getTrackerHits();
@@ -141,10 +158,9 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
   const int ntrkhits = trkhits.size();
 // count how many of them came from a charged pion
   int pihits = 0;
-  //double ptavg = 0;
-  //double hitpT=0;
-  double phiavg=0;
-  double hitphi=0;
+  double ptavg = 0;
+  double hitpT=0;
+
   for(uint32_t t=0; t<ntrkhits; t++){
     const EVENT::TrackerHit* th =static_cast<const EVENT::TrackerHit*>( trkhits[t]);
     int ID=th->getCellID0();
@@ -154,7 +170,7 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
     for(uint32_t l=0; l<simHitRef.size(); l++){
       if(simHitRef[l][0]==ID){
 	hitPDG = simHitRef[l][1];
-	hitphi = simHitRef[l][2];
+	hitpT = simHitRef[l][2];
 	hitMID = simHitRef[l][3];
       }
     }
@@ -162,16 +178,18 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
     if(abs(hitPDG)==211 && abs(hitMID)==15){
       pihits++;
     }
-    phiavg+=hitphi;
+    ptavg+=hitpT;
   }
-  trkphi = phiavg/double(ntrkhits);
+  trkpT = double(ptavg)/ntrkhits;
+
   //now we want to see what fraction of the hits that make up the track are pion-like
+  //if over 50 percent, we have a pion
   double piFrac = double(pihits)/ntrkhits;
   if(piFrac >=0.5){
     isPion = true;
   }
   if(isPion==true){
-    return(trkphi);
+    return(trkpT);
   }
   else{
     return(-1000);
@@ -179,8 +197,7 @@ double RecoPerformance::anaPiEff( const LCObject * inputTrk, LCCollection* trkHi
 
 
 }
-//maybe we can de-double the tracks. Like maybe if they share the same hits? cuz that is a sure sign that they are fake doubles
-//basically, after isPion is declared true, loop over the rest of the hits and make sure we are not sharing hits
+
 
 
 void RecoPerformance::processRunHeader( LCRunHeader* /*run*/) {
@@ -200,22 +217,22 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
   const int nTrk = inputColTrk->getNumberOfElements();
   const int nMCP = inputColMC->getNumberOfElements();
   std::vector<double> ptvec;
-  std::vector<double> phivec;
   int nPiTrks=0;
-  
+
+  //get a vector of the pTs for charged pion tracks to do a pT efficiency study
   for(uint32_t i=0; i<nTrk; i++){
     const EVENT::Track *trk=static_cast<const EVENT::Track*>(inputColTrk->getElementAt(i));
-    double phi = anaPiEff(trk,inputSimHits );
-    if(phi==-1000){
+    double pT = anaPiEff(trk,inputSimHits );
+    if(pT==-1000){
       continue;
     }
     nPiTrks++;
-    phivec.push_back(phi);
+    ptvec.push_back(pT);
   }
 
+  //get a vector of truth pTs for charged pions to do a pT efficiency study
   int nPiMC=0;
   std::vector<double> MCptvec;
-  std::vector<double> MCphivec;
   for(uint32_t i=0; i<nMCP; i++){
     const EVENT::MCParticle *mcp=static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(i));
     int pdg = mcp->getPDG();
@@ -233,13 +250,20 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
     double mcphi = std::atan(mom[1]/mom[0]);
     double mctheta=std::acos(mom[2]/mcP);
     MCptvec.push_back(mcpt);
-    MCphivec.push_back(mcphi);
     nPiMC++;
   }
-    
-  
 
-  LCCollection* inputColTaus = evt->getCollection("TauRec_PFO");
+    
+  //just a lil fix so we don't get errors if we're running over a set with no reco'd taus
+  bool hastaus = true;
+  LCCollection* inputColTaus;
+  try{
+    inputColTaus = evt->getCollection("TauRec_PFO");
+  }
+  catch (Exception& e) {
+    hastaus=false;
+  }
+
   LCCollection* simTrkHits = evt->getCollection(_inputCollectionSimHits);
 
 
@@ -257,35 +281,36 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
   }
 
   //find how many particles in the event
-  //const int nMCP = inputColMC->getNumberOfElements();
   const int nPFO = inputColPFO->getNumberOfElements();
   const int nCl = inputColCl->getNumberOfElements();
-  //const int nTrk = inputColTrk->getNumberOfElements();
+  if(hastaus){
   const int nTau = inputColTaus->getNumberOfElements();
 
 
   double nMCTau=0;
-
+  double taupT;
   for(uint32_t i=0; i<nMCP; i++){
     const EVENT::MCParticle *tau=static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(i));
     int pdg = tau->getPDG();
     if(abs(pdg)!=15){
       continue;
     }
-    
-    nMCTau++;
-
-    //get pT of the tau
     const double* mom = tau->getMomentum();
     double pt = std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
-    //ptvec.push_back(pt);
+    taupT=pt;
+    break; //if we got a tau, we're done bc there is only one per event
   }
+  int eff=0;
 
-  
+  if(nTau==0)eff=0;
+  else eff=1;
 
-  double tauEff = nTau/nMCTau;
-    
-  
+  //stream out the results for later analysis (see the python files)
+  std::fstream tauFile;
+  tauFile.open("tauEff.txt", std::ios::app);
+  tauFile << taupT <<' '<< eff << '\n';
+  tauFile.close(); 
+
 
   //basic efficiencies (not PDG specific)
   double PFO_eff = double(nPFO)/nMCP;
@@ -300,47 +325,41 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
   
 
 
-
-  int evtnum = evt->getEventNumber();
-  /* std::fstream EffFile;
-  EffFile.open("PTTrk.txt", std::ios::app);
-  for(int i=0; i<ptvec.size(); i++){
-    EffFile<<ptvec[i]<<',';
   }
-  EffFile.close();
-  std::fstream EffFile2;
-  EffFile2.open("PTMC.txt", std::ios::app);
-  for(int i=0; i<MCptvec.size(); i++){
-    EffFile2<<MCptvec[i]<<',';
-  }
+  int evtnum=evt->getEventNumber();
 
-  EffFile2.close();
-  if(ptvec.size()>MCptvec.size()){
-    std::cout<<"Track pTs: ";
-    for(int i=0; i<ptvec.size();i++){
-      std::cout<<ptvec[i]<<' ';
-    }
-    std::cout<<'\n'<<"MC pTs: ";
-    for(int i=0; i<MCptvec.size();i++){
-      std::cout<<ptvec[i]<<' ';
-    }
-    std::cout<<'\n';
-  }
-  */
-
+  //stream out the pi information for further analysis
   std::fstream MCFile;
-  MCFile.open("MCPhi.txt", std::ios::app);
-  for(int i=0; i<MCphivec.size(); i++){
-    MCFile<<MCphivec[i]<<',';
+  MCFile.open("MCpT_pi.txt", std::ios::app);
+  for(int i=0; i<MCptvec.size(); i++){
+    MCFile<<MCptvec[i]<<',';
   }
   MCFile.close();
   std::fstream TrkFile;
-  TrkFile.open("TrkPhi.txt",std::ios::app);
-  for(int i=0; i<phivec.size(); i++){
-    TrkFile<<phivec[i]<<',';
+  TrkFile.open("TrkpT_pi.txt",std::ios::app);
+  for(int i=0; i<ptvec.size(); i++){
+    TrkFile<<ptvec[i]<<',';
   }
   TrkFile.close();
   
+  //stream out the duplicate track candidates for further analysis (just comment out if you don't want to do this)
+  int run = evt->getRunNumber();
+  std::fstream dupefile;
+  dupefile.open("dupeTracks_new.txt", std::ios::app);
+  std::sort(ptvec.begin(),ptvec.end());
+  if(ptvec.size()>MCptvec.size()){
+  dupefile<<"=========="<<run<<":"<<evtnum<<"============"<<'\n';
+  dupefile<<"nMC: "<<MCptvec.size()<<" nTrk: "<<ptvec.size()<<'\n';
+  for(int i=0; i<ptvec.size(); i++){
+    for(int j=0; j<ptvec.size(); j++){
+      if(i<j && abs(ptvec[i]-ptvec[j])<=0.1){
+	dupefile<<ptvec[i]<<' '<<ptvec[j]<<'\n';
+      }
+    }
+  }
+  dupefile<<"============================"<<'\n';
+  dupefile.close();
+  }
   
 }
 void RecoPerformance::check( LCEvent * /*evt*/ )

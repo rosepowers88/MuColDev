@@ -17,6 +17,20 @@ GenHistProcessor::GenHistProcessor()
   // modify processor description
   _description = "GenHistProcessor makes histograms at the gen level." ;
 
+  /******************************************************
+   * Rose Powers (2023)
+   * Use this processor to:
+   * - get information about a sample at the MC truth (gen) level
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   ******************************************************/
+
   // register steering parameters: name, description, class-variable, default value
 
 

@@ -19,6 +19,21 @@ RecoHistProcessor::RecoHistProcessor()
   // modify processor description
   _description = "RecoHistProcessor makes histograms at the reco level, analyzing clusters, tracks, and reconstructed particles." ;
 
+
+  /***************************************************
+   * Rose Powers (2023)
+   * Use this processor to:
+   * - Make root histograms at the reconstruction level
+   * - Analyze clusters, PFOs, and tracks
+   * - Isolate a certain reco particle (taus here) to analyze
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   ***************************************************/
   // register steering parameters: name, description, class-variable, default value
   registerProcessorParameter("MinPt",
                              "Minimum particle pT.",
@@ -73,11 +88,13 @@ RecoHistProcessor::RecoHistProcessor()
 
 void RecoHistProcessor::book_pfo_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);  
-  _h_ptpf   = new TH1F("PFO_pT", ";pT [GeV]", 1000,0., 200);
-  _h_ppf    = new TH1F("PFO_p", ";p [GeV]", 1000, 0, 200);
+  _h_ptpf   = new TH1F("PFO_pT", ";pT [GeV]", 1000,0., 400);
+  _h_ppf    = new TH1F("PFO_p", ";p [GeV]", 1000, 0, 400);
   _h_pdgpf  = new TH1F("PFO_PDG_ID", ";PDG ID", 10000, -500, 2500);
   _h_Npf    = new TH1F("PFO_nObjectsFound", ";N", 50, 0, 10);
   _h_Epf    = new TH1F("PFO_Energy", ";E [GeV]", 1000,0,200);
+  _h_phipf  = new TH1F("PFO_phi", ";#phi [rad]", 100,-3, 3);
+  _h_thetapf= new TH1F("PFO_theta", ";#theta [rad]", 100,0,3.14);
 
 }
 void RecoHistProcessor::book_cluster_histograms(){
@@ -95,7 +112,7 @@ void RecoHistProcessor::book_cluster_histograms(){
 void RecoHistProcessor::book_track_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);
   _h_D0trk = new TH1F("Track Impact Parameter (r-phi)", ";D0 [mm]", 100,0,200);
-  _h_phitrk = new TH1F("Track Phi", ";#phi [rad]", 10,-3.2,3.2);
+  _h_phitrk = new TH1F("Track Phi", ";#phi [rad]", 100,-3.2,3.2);
   _h_omegatrk = new TH1F("Track Signed Curvature", ";#Omega [1/mm]", 1000,-200,200);
   _h_Z0trk = new TH1F("Track Impact Parameter (r-z)", ";Z0 [mm]", 100,0,200);
   _h_lamtrk =new TH1F("Track Dip Angle (r-z)", ";#lambda [rad]", 10,-3.2,3.2);
@@ -106,7 +123,7 @@ void RecoHistProcessor::book_track_histograms(){
 
 }
 
-void RecoHistProcessor::book_trkzero_histograms(){
+void RecoHistProcessor::book_trkzero_histograms(){ //to analyze events with no tracks
   marlin::AIDAProcessor::histogramFactory(this);
   _h_p0 = new TH1F("Momentum, 0trk",";p [GeV]", 100,0,200);
   _h_pt0 = new TH1F("pT, 0trk", ";pT [GeV]", 100, 0, 200);
@@ -141,6 +158,7 @@ bool _has_valid_pt=false;
 void RecoHistProcessor::processRunHeader( LCRunHeader* /*run*/) {
 }  
 
+//Get a reference vector of sim hits and their PDGS for PDG tagging of tracks 
 std::vector<std::vector<int>> RecoHistProcessor::getSimTrackerHitIDs(LCCollection* trackhitCol){
   std::vector<std::vector<int>> simhitIDs;
   const int nHits = trackhitCol->getNumberOfElements();
@@ -173,6 +191,8 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
     double E=pof->getEnergy();
     double pt=std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
     double p =std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2))+std::sqrt(std::pow(mom[2],2));
+    double phi = std::atan(mom[1]/mom[0]);
+    double theta = std::atan(mom[2]/p);
 
     //momentum check
     if(pt < _minPt){
@@ -180,8 +200,7 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
     }
 
     //theta check
-    double polar = std::acos(mom[2]/p);
-    if(polar < _minTheta){
+    if(theta < _minTheta){
       continue;
     }
 
@@ -189,6 +208,8 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
     _h_ppf->Fill(p);
     _h_ptpf->Fill(pt);
     _h_Epf->Fill(E);
+    _h_phipf->Fill(phi);
+    _h_thetapf->Fill(theta);
 
     //finally, get pdg
     int pdg = pof->getType();
@@ -340,15 +361,17 @@ void RecoHistProcessor::fill_track_histograms(LCCollection* inputCol, LCCollecti
     int trkpdg=0;
 
     TrackerHitVec hits = trk->getTrackerHits();
+    std::vector<int> hitpdgs;
     for(int l=0; l<hits.size(); l++){
       int ID = hits[l]->getCellID0();
       for(int t=0; t<ID_ref.size(); t++){
 	if(ID==ID_ref[t][0]){
 	  //find the pdg of the track based on the MCRelation
-	  trkpdg=ID_ref[t][1];
+	  hitpdgs.push_back(ID_ref[t][1]);
 	}
       }
     }
+    trkpdg = findMode(hitpdgs);
     _h_trkpdg->Fill(trkpdg);
   }
   
@@ -401,6 +424,42 @@ void RecoHistProcessor::processEvent( LCEvent * evt ) {
      refFile<<"ID: "<<ID_ref[z][0]<<" PDG: "<<ID_ref[z][1]<<'\n';
    }
    refFile.close();
+}
+
+//function that just finds the mode of a vector or tells you if it is multimodal
+int RecoHistProcessor::findMode(std::vector<int> vec){
+  std::vector<int> elements;
+  std::vector<int> modes;
+  for(int i=0; i<vec.size(); i++){
+    if( std::find(elements.begin(), elements.end(), vec[i])== elements.end()){
+      elements.push_back(vec[i]);
+    }
+    else continue;
+  }
+  for(int i=0; i<elements.size(); i++){
+    int modeCounter=0;
+    for(int j=0; j<vec.size(); j++){
+      if(vec[j]==elements[i]){
+	modeCounter++;
+      }
+    }
+    modes.push_back(modeCounter);
+  }
+  int mode = elements[0];
+  bool split = false;
+  for(int t=1; t<modes.size(); t++){
+    if(modes[t]>mode){
+      mode=modes[t];
+    }
+    else if(modes[t]==mode){
+      split=true;
+    }
+    else continue;
+  }
+  if(split) return(0);
+  else return(mode);
+
+  
 }
 
 void RecoHistProcessor::check( LCEvent * /*evt*/ )

@@ -14,13 +14,13 @@ SIM.enableG4GPS = False
 SIM.enableG4Gun = False
 SIM.enableGun = False
 ## InputFiles for simulation .stdhep, .slcio, .HEPEvt, .hepevt, .hepmc files are supported
-SIM.inputFiles = "taugenNew_100k.slcio"
+SIM.inputFiles = "LATEST.slcio" #generated from lcio_particle_gun.py
 ## Macro file to execute for runType 'run' or 'vis'
 SIM.macroFile = []
 ## number of events to simulate, used in batch mode
-SIM.numberOfEvents = 20000
+SIM.numberOfEvents = 100000
 ## Outputfile from the simulation,only lcio output is supported
-SIM.outputFile = "taugunNew_10.slcio"
+SIM.outputFile = "out.slcio"
 ## Verbosity use integers from 1(most) to 7(least) verbose
 ## or strings: VERBOSE, DEBUG, INFO, WARNING, ERROR, FATAL, ALWAYS
 SIM.printLevel = 3

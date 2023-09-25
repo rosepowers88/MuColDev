@@ -18,9 +18,9 @@ from g4units import deg
 from pyLCIO import UTIL, EVENT, IMPL, IO, IOIMPL
 
 #---- number of events per momentum bin -----
-nevt = 100
+nevt = 200
 
-outfile = "muSample_100k.slcio"
+outfile = "LATEST.slcio"
 
 #--------------------------------------------
 
@@ -36,26 +36,23 @@ random.seed()
 
 #momenta = [ 1. , 3., 5., 10., 15., 25., 50., 100. ]
 #momenta = [ 5. ]
-momenta = []
-for i in range(1000):
-    momenta.append(random.random()*170.+20.)
+
+#generate flat in pT
+pT = []
+for i in range(500):
+    pT.append(random.random()*300.+20)
 
 genstat  = 1
-pdg = 13
-#pdg = 211
-#mass = 0.105
-#mass =  1.77686 #tau mass
-mass = 0.105
+pdg = 15
+mass =  1.77686 #tau mass
 charge = -1.
-#theta = 85./180. * math.pi 
-#theta = 20./180. * math.pi 
 
 decayLen = 1.e22 
 #=================================================
 
 
 
-for p in momenta:
+for pt in pT:
     
     for j in range( 0, nevt ):
 
@@ -66,14 +63,14 @@ for p in momenta:
 
         evt.addCollection( col , "MCParticle" )
 
-        phi =  random.random() * math.pi * 2.
-        theta = math.acos(1-2*random.random()) * 10 * deg 
+        phi =  random.random() * math.pi * 2. #flat in phi
+        theta = math.acos(2*random.random()-1) #flat in eta
 
-        energy   = math.sqrt( mass*mass  + p * p ) 
-        
-        px = p * math.cos( phi ) * math.sin( theta ) 
-        py = p * math.sin( phi ) * math.sin( theta )
-        pz = p * math.cos( theta ) 
+        #energy   = math.sqrt( mass*mass  + p * p ) 
+                
+        px = pt * math.cos( phi )
+        py = pt * math.sin( phi )
+        pz = pt / math.tan( theta ) 
 
         momentum  = array('f',[ px, py, pz ] )  
 

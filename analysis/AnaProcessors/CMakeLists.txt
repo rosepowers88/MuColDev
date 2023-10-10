@@ -4,9 +4,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.15 FATAL_ERROR)
 ########################################################
 
-IF ( NOT DEFINED ILC_HOME )
-  INCLUDE("/opt/ilcsoft/muonc/ILCSoft.cmake")
-ENDIF()
 
 # project name
 PROJECT( AnaProcessors )

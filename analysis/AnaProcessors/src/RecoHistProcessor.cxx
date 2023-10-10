@@ -82,24 +82,29 @@ RecoHistProcessor::RecoHistProcessor()
 			  _inputCollectionNameT,
 			  _inputCollectionNameT
 			  ); 
+  registerProcessorParameter("PDG",
+			     "PDG for PFOs",
+			     _pfopdg,
+			     _pfopdg);
 
 }
 
 
 void RecoHistProcessor::book_pfo_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);  
-  _h_ptpf   = new TH1F("PFO_pT", ";pT [GeV]", 1000,0., 400);
-  _h_ppf    = new TH1F("PFO_p", ";p [GeV]", 1000, 0, 400);
+  _h_ptpf   = new TH1F("PFO_pT", ";pT [GeV]", 1000,0., 300);
+  _h_ppf    = new TH1F("PFO_p", ";p [GeV]", 1000, 0, 300);
   _h_pdgpf  = new TH1F("PFO_PDG_ID", ";PDG ID", 10000, -500, 2500);
   _h_Npf    = new TH1F("PFO_nObjectsFound", ";N", 50, 0, 10);
-  _h_Epf    = new TH1F("PFO_Energy", ";E [GeV]", 1000,0,200);
+  _h_Epf    = new TH1F("PFO_Energy", ";E [GeV]", 1000,0,300);
   _h_phipf  = new TH1F("PFO_phi", ";#phi [rad]", 100,-3, 3);
   _h_thetapf= new TH1F("PFO_theta", ";#theta [rad]", 100,0,3.14);
+  _h_nClusters = new TH1F("PFO_ncl", ";NCl", 50,0,10);
 
 }
 void RecoHistProcessor::book_cluster_histograms(){
   marlin::AIDAProcessor::histogramFactory(this);
-  _h_Ecl = new TH1F("Cluster Energy", ";E [GeV]", 1000,0,200);
+  _h_Ecl = new TH1F("Cluster Energy", ";E [GeV]", 1000,0,300);
   _h_Xcl = new TH1F("Cluster X-position", ";x [mm]", 4000,-2000,2000);
   _h_Ycl = new TH1F("Cluster Y-position", ";y [mm]", 4000,-2000,2000);
   _h_Zcl = new TH1F("Cluster Z-position", ";z [mm]", 8000,-4000,4000);
@@ -119,7 +124,8 @@ void RecoHistProcessor::book_track_histograms(){
   _h_dEdxtrk=new TH1F("Track dEdx", ";dEdx [Gev/mm]",100,0,50);
   _h_Ntrk    = new TH1F("nTracksFound", ";N", 50, 0, 10);
   _h_trkpdg = new TH1F("pdg of Track", ";PDG ID", 10000, -500, 2500);
-
+  _h_ntrkhits = new TH1F("number of track hits", ";nhits", 100,0,50);
+  _h_deltaR= new TH1F("deltaR", ";#Delta r [mm]", 100,0,5000);
 
 }
 
@@ -179,12 +185,19 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
 
   //get number of elements
   const int nEl = inputCol->getNumberOfElements();
+  //if(nEl==0) std::cout<<"No PFO"<<std::endl;
   // _h_Npf->Fill(nEl);
   _has_valid_pt=false;
-
+  int nPF = 0;
   for(uint32_t i=0;i<nEl;i++) {
     const EVENT::ReconstructedParticle *pof=static_cast<const EVENT::ReconstructedParticle*>(inputCol->getElementAt(i));
-
+    // get pdg
+    int pdg = pof->getType();
+    if(abs(pdg) != 15){// && _pfopdg != 0){
+      continue;
+    }
+    nPF++;
+    _h_pdgpf->Fill(pdg);
     //get momentum and energy
     const double* mom = pof->getMomentum();
 
@@ -201,9 +214,11 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
 
     //theta check
     if(theta < _minTheta){
-      continue;
+      //continue;
     }
-
+    EVENT::ClusterVec clvec = pof->getClusters();
+    const int cl_in_pf = clvec.size();
+    _h_nClusters->Fill(cl_in_pf);
     _has_valid_pt=true;
     _h_ppf->Fill(p);
     _h_ptpf->Fill(pt);
@@ -211,12 +226,10 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
     _h_phipf->Fill(phi);
     _h_thetapf->Fill(theta);
 
-    //finally, get pdg
-    int pdg = pof->getType();
-    _h_pdgpf->Fill(pdg);
+
   }
   if(_has_valid_pt==true){
-    _h_Npf->Fill(nEl);
+    _h_Npf->Fill(nPF);
   }
 
       
@@ -325,13 +338,17 @@ void RecoHistProcessor::fill_track_histograms(LCCollection* inputCol, LCCollecti
   //get number of elements
   const int nEl = inputCol->getNumberOfElements();
   _h_Ntrk->Fill(nEl);
-  if(nEl==0){
+  /*if(nEl==0){
     zeroTrackAna(MCCol);
-  }
+    }*/
 
   for(uint32_t i=0;i<nEl;i++) {
     const EVENT::Track *trk=static_cast<const EVENT::Track*>(inputCol->getElementAt(i));
+    const EVENT::TrackerHitVec trkhits = trk->getTrackerHits();
+    int ntrkhits = trkhits.size();
 
+    _h_ntrkhits->Fill(ntrkhits);
+    
     //get D0
     double D0 = trk->getD0();
     _h_D0trk->Fill(D0);
@@ -357,6 +374,23 @@ void RecoHistProcessor::fill_track_histograms(LCCollection* inputCol, LCCollecti
     double dEdx = trk->getdEdx();
     _h_dEdxtrk->Fill(dEdx);
 
+    //get delta R
+    double rmin=1000000;
+    double rmax = -1;
+    double dRmax = -1;
+    double r_prev=0;
+    for(uint32_t n=0; n<trkhits.size(); n++){
+      const double * pos = trkhits[n]->getPosition();
+      double R = std::sqrt(std::pow(pos[0],2)+std::pow(pos[1],2)+std::pow(pos[2],2));
+      double dR=R-r_prev;
+      //if(R < rmin) rmin = R;
+      if(dR > dRmax) dRmax = dR;
+      r_prev=R;
+    }
+    //DeltaR=rmax-rmin;
+    _h_deltaR->Fill(dRmax);
+  }
+    /*
     std::vector<std::vector<int>> ID_ref=getSimTrackerHitIDs(trkCol);
     int trkpdg=0;
 
@@ -372,11 +406,10 @@ void RecoHistProcessor::fill_track_histograms(LCCollection* inputCol, LCCollecti
       }
     }
     trkpdg = findMode(hitpdgs);
-    _h_trkpdg->Fill(trkpdg);
+     _h_trkpdg->Fill(trkpdg);
   }
-  
+    */
 }
-
 
 
 
@@ -385,15 +418,26 @@ void RecoHistProcessor::processEvent( LCEvent * evt ) {
   // Get object required collections and create lists
   // to keep track of unsaved objects.
   LCCollection* MCCol = evt->getCollection(_inputCollectionNameMCP);
-  LCCollection* TrkCol = evt->getCollection(_inputCollectionSimHits);
-  LCCollection* tauCol = evt->getCollection(_TauCollection);
+  //LCCollection* TrkCol = evt->getCollection(_inputCollectionSimHits);
+  //LCCollection* tauCol = evt->getCollection(_TauCollection);
+
+  /* LCCollection *SiTracks = evt->getCollection("MySiTracks");
   if(_has_valid_pt==true){
-    fill_tau_histograms(tauCol);
+    fill_track_histograms(SiTracks);
+    }*/
+
+  if(_has_valid_pt==true){
+    //fill_tau_histograms(tauCol);
   }
   std::vector<std::string> inputnames {_inputCollectionNameR, _inputCollectionNameC, _inputCollectionNameT};
   for(int i=0; i<inputnames.size(); i++){
-  
-    LCCollection* inputCol = evt->getCollection(inputnames[i]);
+    LCCollection* inputCol;
+    try{
+      inputCol = evt->getCollection(inputnames[i]);
+    }
+    catch(Exception&e){
+      continue;
+    }
 
   
     if( inputCol->getTypeName() == lcio::LCIO::RECONSTRUCTEDPARTICLE ) {
@@ -404,17 +448,16 @@ void RecoHistProcessor::processEvent( LCEvent * evt ) {
       //fill the histograms for clusters
       fill_cluster_histograms(inputCol);
     }
-    else if( inputCol->getTypeName() == lcio::LCIO::TRACK && _has_valid_pt==true) {
+    else if( inputCol->getTypeName() == lcio::LCIO::TRACK ) {
       //fill the histograms for tracks
-
-      fill_track_histograms(inputCol,MCCol,TrkCol);
+      fill_track_histograms(inputCol,MCCol,nullptr);
     }
     else{
       //throw EVENT::Exception( "Invalid collection type: " + inputCol->getTypeName() ) ;
       continue;
     }
   }
-   std::vector<std::vector<int>> ID_ref=getSimTrackerHitIDs(TrkCol);
+  /*std::vector<std::vector<int>> ID_ref=getSimTrackerHitIDs(TrkCol);
    int evtnum=evt->getEventNumber();
    std::fstream refFile;
    refFile.open("ID_ref.txt", std::ios::app);
@@ -424,7 +467,8 @@ void RecoHistProcessor::processEvent( LCEvent * evt ) {
      refFile<<"ID: "<<ID_ref[z][0]<<" PDG: "<<ID_ref[z][1]<<'\n';
    }
    refFile.close();
-}
+  */}
+  
 
 //function that just finds the mode of a vector or tells you if it is multimodal
 int RecoHistProcessor::findMode(std::vector<int> vec){

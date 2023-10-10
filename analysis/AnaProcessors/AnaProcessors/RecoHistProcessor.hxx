@@ -74,6 +74,7 @@ private:
   //! Minimum pT for particle filter
   float _minPt = 5;
   float _minTheta = 0.35; //rad
+  int _pfopdg = 0;
 
   //! Output histogram
   // declare all histograms
@@ -86,6 +87,7 @@ private:
   TH1 *_h_Epf = nullptr;
   TH1 *_h_phipf = nullptr;
   TH1 *_h_thetapf = nullptr;
+  TH1 *_h_nClusters = nullptr;
 
   //cluster histograms
   TH1 *_h_Ecl = nullptr;
@@ -106,6 +108,8 @@ private:
   TH1 *_h_dEdxtrk = nullptr;
   TH1 *_h_Ntrk     = nullptr;
   TH1 *_h_trkpdg = nullptr;
+  TH1 *_h_ntrkhits = nullptr;
+  TH1 *_h_deltaR = nullptr;
 
   //zerotrk MC histograms
   TH1 *_h_p0 = nullptr;

@@ -28,7 +28,7 @@
       inputfile
     </parameter>
     <!-- Limit the number of processed records (run+evt): -->
-    <parameter name="MaxRecordNumber" value="1000" />
+    <parameter name="MaxRecordNumber" value="10000" />
     <parameter name="SkipNEvents" value="0" />
     <parameter name="SupressCheck" value="false" />  
     <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT">WARNING </parameter>
@@ -44,7 +44,7 @@
 
 
     <processor name="EventNumber" type = "Statusmonitor">
-    <parameter name="HowOften" type = "int">100</parameter>
+    <parameter name="HowOften" type = "int">1000</parameter>
     <parameter name = "Verbosity" type = "string"> MESSAGE </parameter>
   </processor>
   <processor name="MyAIDAProcessor" type="AIDAProcessor">
@@ -52,20 +52,21 @@
     <!-- compression of output file 0: false >0: true (default) -->
     <parameter name="Compress" type="int" value="1"/>
     <!-- filename without extension-->
-    <parameter name="FileName" type="string" value="newReco7.13_5k"/>
+    <parameter name="FileName" type="string" value="fedesample_50-250_deltaR"/>
     <!-- type of output file xml (default) or root ( only OpenScientist)-->
     <parameter name="FileType" type="string" value="root "/>
   </processor>
 
   <processor name="HistMaker" type="RecoHistProcessor" >
-    <parameter name="MinPt" type="double">20</parameter>
-    <parameter name="MinTheta" type = "double" > 0.35 </parameter>
+    <parameter name="MinPt" type="double">2</parameter>
+    <parameter name="MinTheta" type = "double" > -1000 </parameter>
+    <parameter name = "PFO" type = "int" > 15 </parameter>
     <parameter name="TauCollection" type="string" lcioInType="ReconstructedParticle" value = "TauRec_PFO"/>
-    <parameter name="InputCollectionSimHits" type="string" lcioInType="SimTrackerHit" value="AllSTH" />
+    <!--parameter name="InputCollectionSimHits" type="string" lcioInType="SimTrackerHit" value="AllSTH" /-->
     <parameter name="InputCollectionNameMCP" type="string" lcioInType="MCParticle" value="MCParticle" />
-    <parameter name="InputCollectionNameReco" type="string" lcioInType="ReconstructedParticle" value="AllPFOs" />
+    <parameter name="InputCollectionNameReco" type="string" lcioInType="ReconstructedParticle" value="PandoraPFOs" />
     <parameter name="InputCollectionNameCluster" type="string" lcioInType="Cluster" value = "PandoraClusters" />
-    <parameter name="InputCollectionNameTrack" type="string" lcioInType="Track" value = "AllTracks" />
+    <parameter name="InputCollectionNameTrack" type="string" lcioInType="Track" value = "SiTracks_Refitted" />
     <!--parameter name="OutputCollectionName" type="string" lcioOutType="ReconstructedParticle"> PandoraPFOs </parameter-->
   </processor>
 

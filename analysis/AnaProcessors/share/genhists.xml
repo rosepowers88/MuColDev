@@ -28,7 +28,7 @@
       inputfile
     </parameter>
     <!-- Limit the number of processed records (run+evt): -->
-    <parameter name="MaxRecordNumber" value="50" />
+    <parameter name="MaxRecordNumber" value="10000" />
     <parameter name="SkipNEvents" value="0" />
     <parameter name="SupressCheck" value="false" />  
     <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT">WARNING </parameter>
@@ -47,13 +47,13 @@
     <!-- compression of output file 0: false >0: true (default) -->
     <parameter name="Compress" type="int" value="1"/>
     <!-- filename without extension-->
-    <parameter name="FileName" type="string" value="pTTaus"/>
+    <parameter name="FileName" type="string" value="all_50_250_gen"/>
     <!-- type of output file xml (default) or root ( only OpenScientist)-->
     <parameter name="FileType" type="string" value="root "/>
   </processor>
 
   <processor name="EventNumber" type = "Statusmonitor">
-    <parameter name="HowOften" type = "int">1</parameter>
+    <parameter name="HowOften" type = "int">1000</parameter>
     <parameter name = "Verbosity" type = "string"> MESSAGE </parameter>
   </processor>
  

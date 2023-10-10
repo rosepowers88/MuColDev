@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+  <constants>
+    <!-- define constants here - use in steering file as ${ConstantName} --> 
+    <!--constant name="DetectorModel" value="ILD_l5_o1_v02" /-->
+  </constants>
+
+  <execute>
+    <processor name="MyAIDAProcessor" />
+    <processor name = "EventNumber" />
+
+    <processor name = "InitDD4hep"/>
+
+    <processor name ="RefitMyTrks"/>
+
+    <processor name="MyDDMarlinPandora"/>
+
+    <!--===========PFO=============-->
+    <!--group name = "MyPfoSelector"/-->
+
+    <!--===========VertexJet======-->
+    <processor name = "FastJetProcessor"/>
+
+    <!--==========TauSpecific======== -->
+    <!--processor name = "MyTauFinder"/-->
+    <processor name = "MyTestTauFinder"/>
+    <processor name = "MyMyTaJetClustering"/>
+
+    <!--=========OUTPUT=========-->
+    <processor name = "Output_REC" />
+    
+  </execute>
+
+  <global>
+    <parameter name= "LCIOInputFiles" > inmputfile </parameter>
+    <parameter name= "MaxRecordNumber" value = "100" />
+    <parameter name = "Verbosity" > WARNING </parameter>
+  </global>
+
+  <processor name = "InitDD4hep" type = "InitializeDD4hep">
+    <parameter name="DD4hepXMLFile" type = "string"> /work/rosep8/MuC-Tutorial/reconstruction/MuColl_v1/MuColl_mod.xml </parameter>
+    <parameter name = "EncondingStringParameterName" type="string"> GlobalTrackerReadoutID </parameter>
+    <parameter name= "Verbosity" type="string">ERROR </parameter>
+  </processor>
+
+  <processor name="Output_REC" type="LCIOOutputProcessor">
+    <!--   standard output: keep all collections -->
+    <parameter name="LCIOOutputFile" type="string"> trkDev_compare.slcio </parameter>
+    <parameter name="FullSubsetCollections" type="StringVec"> </parameter>
+    <parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
+    <!--<parameter name="SplitFileSizekB" type="int">996147 </parameter> we don't want to split-->
+    <parameter name="Verbosity" type="string">ERROR </parameter>
+    <parameter name="DropCollectionNames" type="StringVec">  </parameter>
+    <parameter name="DropCollectionTypes" type="StringVec">
+
+    </parameter>
+    <parameter name="KeepCollectionNames" type="StringVec">
+    </parameter>
+  </processor>
+
+  <processor name="Refit" type="RefitFinal">
+
+    <parameter name="EnergyLossOn" type="bool"> true </parameter>
+    <parameter name="DoCutsOnRedChi2Nhits" type="bool"> true </parameter>
+    <parameter name="ReducedChi2Cut" type="double"> 5. </parameter>
+    <parameter name="NHitsCuts" type="StringVec">
+      1,2 1
+      3,4 0
+      5,6 0
+    </parameter>
+
+
+    <!--Name of the input track to MCParticle relation collection-->
+    <parameter name="InputRelationCollectionName" type="string" lcioInType="LCRelation"> SiTrackRelations </parameter>
+    <!--Name of the input track collection-->
+    <parameter name="InputTrackCollectionName" type="string" lcioInType="Track"> SiTracks </parameter>
+    <parameter name="Max_Chi2_Incr" type="double"> 1.79769e+30 </parameter>
+    <parameter name="MultipleScatteringOn" type="bool"> true </parameter>
+    <parameter name="OutputRelationCollectionName" type="string" lcioOutType="LCRelation">
+      SiTracks_Refitted_Relation
+    </parameter>
+    <parameter name="OutputTrackCollectionName" type="string" lcioOutType="Track">
+      SiTracks_Refitted
+    </parameter>
+    <parameter name="ReferencePoint" type="int"> -1 </parameter>
+    <parameter name="SmoothOn" type="bool"> false </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
+    <parameter name="extrapolateForward" type="bool"> true </parameter>
+    <parameter name="MinClustersOnTrackAfterFit" type="int">1 </parameter>
+  </processor>
+
+    <processor name="RefitMyTrks" type="RefitFinal">
+
+    <parameter name="EnergyLossOn" type="bool"> true </parameter>
+    <parameter name="DoCutsOnRedChi2Nhits" type="bool"> true </parameter>
+    <parameter name="ReducedChi2Cut" type="double"> 5. </parameter>
+    <parameter name="NHitsCuts" type="StringVec">
+      1,2 1
+      3,4 0
+      5,6 0
+    </parameter>
+
+
+    <!--Name of the input track to MCParticle relation collection-->
+    <parameter name="InputRelationCollectionName" type="string" lcioInType="LCRelation"> MySiTrackRelations </parameter>
+    <!--Name of the input track collection-->
+    <parameter name="InputTrackCollectionName" type="string" lcioInType="Track"> MySiTracks </parameter>
+    <parameter name="Max_Chi2_Incr" type="double"> 1.79769e+30 </parameter>
+    <parameter name="MultipleScatteringOn" type="bool"> true </parameter>
+    <parameter name="OutputRelationCollectionName" type="string" lcioOutType="LCRelation">
+      MySiTracks_Refitted_Relation
+    </parameter>
+    <parameter name="OutputTrackCollectionName" type="string" lcioOutType="Track">
+      MySiTracks_Refitted
+    </parameter>
+    <parameter name="ReferencePoint" type="int"> -1 </parameter>
+    <parameter name="SmoothOn" type="bool"> false </parameter>
+    <parameter name="Verbosity" type="string"> ERROR </parameter>
+    <parameter name="extrapolateForward" type="bool"> true </parameter>
+    <parameter name="MinClustersOnTrackAfterFit" type="int">1 </parameter>
+    
+    </processor>
+    
+  <!-- =========================DDMARLIN PANDORA, MAKE PFO's FROM TRKS :  Make one for new and one for old====================-->
+
+  
+  <processor name="DDMarlinPandora" type="DDPandoraPFANewProcessor">
+    <parameter name="PandoraSettingsXmlFile" type="String"> PandoraSettings/PandoraSettingsDefault.xml </parameter>
+    <!-- CLIC specifict software compensation weights derived from K0L and neutrons -->
+    <parameter name="SoftwareCompensationWeights" type="FloatVec">1.61741 -0.00444385 2.29683e-05 -0.0731236 -0.00157099 -7.09546e-07 0.868443 1.0561 -0.0238574</parameter>
+    <parameter name="SoftwareCompensationEnergyDensityBins" type="FloatVec">0 2. 5. 7.5 9.5 13. 16. 20. 23.5 28. 33. 40. 50. 75. 100.</parameter>
+    <parameter name="FinalEnergyDensityBin" type="float">110.</parameter>
+    <parameter name="MaxClusterEnergyToApplySoftComp" type="float">2000.</parameter>
+    <!-- Collection names -->
+    <parameter name="TrackCollections" type="StringVec"> SiTracks_Refitted </parameter>
+    <parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+    <parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+    <parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+    <parameter name="MCParticleCollections" type="StringVec">goodMCs</parameter>
+    <parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit</parameter>
+    <parameter name="RelTrackCollections" type="StringVec"> SiTracks_Refitted_Relation </parameter>
+    <parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+    <parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+    <parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+    <parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+    <parameter name="ClusterCollectionName" type="String">PandoraClusters</parameter>
+    <parameter name="PFOCollectionName" type="String">PandoraPFOs</parameter>
+    <!-- Calibration constants -->
+    <parameter name="ECalToMipCalibration" type="float">181.818 </parameter>
+    <parameter name="HCalToMipCalibration" type="float">40.8163</parameter>
+    <parameter name="ECalMipThreshold" type="float">0.5</parameter>
+    <parameter name="HCalMipThreshold" type="float">0.3</parameter>
+    <parameter name="ECalToEMGeVCalibration" type="float">1.02373335516</parameter>
+    <parameter name="HCalToEMGeVCalibration" type="float">1.02373335516</parameter>
+    <parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.24223718397</parameter>
+    <parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.24223718397</parameter>
+    <parameter name="HCalToHadGeVCalibration" type="float">1.01799349172</parameter>
+    <parameter name="MuonToMipCalibration" type="float">19607.8</parameter>
+    <parameter name="DigitalMuonHits" type="int">0</parameter>
+    <parameter name="MaxHCalHitHadronicEnergy" type="float">1000000</parameter>
+    <!--Whether to calculate track states manually, rather than copy stored fitter values-->
+    <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+    <parameter name="NEventsToSkip" type="int">0</parameter>
+    <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> SILENT</parameter>
+    <!--Energy Corrections in Marlin Pandora-->
+    <!--parameter name="InputEnergyCorrectionPoints" type="FloatVec">InputEnergyCorrectionPoints_XXXX</parameter-->
+    <!--parameter name="OutputEnergyCorrectionPoints" type="FloatVec">OutputEnergyCorrectionPoints_XXXX</parameter-->
+
+    <!--Decides whether to create gaps in the geometry (ILD-specific)-->
+    <parameter name="CreateGaps" type="bool">false </parameter>
+
+    <!--Track quality settings: need to be optimized! More in processor-->
+    <!--Cut on fractional of expected number of BarrelTracker hits-->
+    <parameter name="MinBarrelTrackerHitFractionOfExpected" type="int">0.2 </parameter>
+    <!--Cut on minimum number of FTD hits of BarrelTracker hit fraction to be applied-->
+    <parameter name="MinFtdHitsForBarrelTrackerHitFraction" type="int">0 </parameter>
+    <!--Track quality cut: the minimum number of ftd track hits for ftd only tracks-->
+    <parameter name="MinFtdTrackHits" type="int">0 </parameter>
+    <!--Min track momentum required to perform final quality checks on number of hits-->
+    <parameter name="MinMomentumForTrackHitChecks" type="float">1 </parameter>
+    <!--Cut on fractional of expected number of TPC hits-->
+    <parameter name="MinTpcHitFractionOfExpected" type="float">0 </parameter>
+    <!--Sanity check on separation between ip and track projected ecal position-->
+    <parameter name="MinTrackECalDistanceFromIp" type="float">0 </parameter>
+    <!--Track quality cut: the minimum number of track hits-->
+    <parameter name="MinTrackHits" type="int">5 </parameter>
+
+    <!-- MORE TRACKING  CUTS -->
+    <!--Max distance from track to BarrelTracker r max to id whether track reaches ecal-->
+    <parameter name="ReachesECalBarrelTrackerOuterDistance" type="float">100 </parameter>
+    <!--Max distance from track to BarrelTracker z max to id whether track reaches ecal-->
+    <parameter name="ReachesECalBarrelTrackerZMaxDistance" type="float">50 </parameter>
+    <!--Max distance from track hit to ftd z position to identify ftd hits-->
+    <parameter name="ReachesECalFtdZMaxDistance" type="float">1 </parameter>
+    <!--Min FTD layer for track to be considered to have reached ecal-->
+    <parameter name="ReachesECalMinFtdLayer" type="int">0 </parameter>
+    <!--Minimum number of BarrelTracker hits to consider track as reaching ecal-->
+    <parameter name="ReachesECalNBarrelTrackerHits" type="int">11 </parameter>
+    <!--Minimum number of ftd hits to consider track as reaching ecal-->
+    <parameter name="ReachesECalNFtdHits" type="int">0 </parameter>
+    <!--Maximum energy for unmatched vertex track-->
+    <parameter name="UnmatchedVertexTrackMaxEnergy" type="float">5 </parameter>
+    <!--Whether can form pfos from tracks that don't start at vertex-->
+    <parameter name="UseNonVertexTracks" type="int">1 </parameter>
+    <!--Whether to calculate track states manually, rather than copy stored fitter values-->
+    <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+    <!--Whether can form pfos from unmatched tracks that don't start at vertex-->
+    <parameter name="UseUnmatchedNonVertexTracks" type="int">0 </parameter>
+    <!--Whether can form pfos from unmatched tracks that start at vertex-->
+    <parameter name="UseUnmatchedVertexTracks" type="int">1 </parameter>
+    <!--Track z0 cut used to determine whether track can be used to form pfo-->
+    <parameter name="Z0TrackCut" type="float">200 </parameter>
+    <!--z0 cut used to determine whether unmatched vertex track can form pfo-->
+    <parameter name="Z0UnmatchedVertexTrackCut" type="float">5 </parameter>
+    <!--Non vtx track z cut to determine whether track can be used to form pfo-->
+    <parameter name="ZCutForNonVertexTracks" type="float">250 </parameter>
+    <!--Track quality cut: the maximum number of track hits-->
+    <parameter name="MaxTrackHits" type="int">5000 </parameter>
+    <!--Cut on fractional track momentum error-->
+    <parameter name="MaxTrackSigmaPOverP" type="float">0.15 </parameter>
+    <!--Constant relating track curvature in b field to momentum-->
+    <parameter name="CurvatureToMomentumFactor" type="float">0.00015 </parameter>
+    <!--Track d0 cut used to determine whether track can be used to form pfo-->
+    <parameter name="D0TrackCut" type="float">200 </parameter>
+    <!--d0 cut used to determine whether unmatched vertex track can form pfo-->
+    <parameter name="D0UnmatchedVertexTrackCut" type="float">5 </parameter>
+
+    <!--The algorithm name for filling start vertex-->
+    <parameter name="StartVertexAlgorithmName" type="string">PandoraPFANew </parameter>
+    <!--Start Vertex Collection Name-->
+    <parameter name="StartVertexCollectionName" type="string" lcioOutType="Vertex"> PandoraStartVertices </parameter>
+
+    <!--Normal vector for the muon barrel sensitive layers in local coordinates-->
+    <parameter name="YokeBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+    <!--Normal vector for the HCal barrel sensitive layers in local coordinates-->
+    <parameter name="HCalBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+    <!--Normal vector for the ECal barrel sensitive layers in local coordinates-->
+    <parameter name="ECalBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+    <!--The bfield in the muon barrel, units Tesla-->
+    <parameter name="MuonBarrelBField" type="float">-1.34 </parameter>
+    <!--The bfield in the muon endcap, units Tesla-->
+    <parameter name="MuonEndCapBField" type="float">0.01 </parameter>
+
+    <!--The constant term for EM shower-->
+    <parameter name="EMConstantTerm" type="float">0.01 </parameter>
+    <!--The stochastic term for EM shower-->
+    <parameter name="EMStochasticTerm" type="float">0.17 </parameter>
+    <!--The constant term for Hadronic shower-->
+    <parameter name="HadConstantTerm" type="float">0.03 </parameter>
+    <!--The stochastic term for Hadronic shower-->
+    <parameter name="HadStochasticTerm" type="float">0.6 </parameter>
+
+    <!--The input energy points for hadronic energy correction-->
+    <parameter name="InputEnergyCorrectionPoints" type="FloatVec"> </parameter>
+
+    <!--Maximum number of layers from candidate outer layer hit to rear of detector-->
+    <parameter name="LayersFromEdgeMaxRearDistance" type="float">250 </parameter>
+    <!--Number of layers from edge for hit to be flagged as an outer layer hit-->
+    <parameter name="NOuterSamplingLayers" type="int">3 </parameter>
+    <!--Distance of possible second track state in the ECal Endcap to the ECal barrel inner radius-->
+    <parameter name="TrackStateTolerance" type="float">0 </parameter>
+
+    <!--Track cut on distance from BarrelTracker inner r to id whether track can form pfo-->
+    <parameter name="MaxBarrelTrackerInnerRDistance" type="float">200 </parameter>
+
+    <!--The minimum correction to on ecal hit in Pandora energy correction-->
+    <parameter name="MinCleanCorrectedHitEnergy" type="float">0.1 </parameter>
+    <!--The minimum hit energy to apply ecal correction in Pandora energy correction-->
+    <parameter name="MinCleanHitEnergy" type="float">0.5 </parameter>
+    <!--The minimum hit energy fraction to apply ecal correction in Pandora energy correction-->
+    <parameter name="MinCleanHitEnergyFraction" type="float">0.01 </parameter>
+
+    <!--The energy for a digital muon calorimeter hit, units GeV-->
+    <parameter name="MuonHitEnergy" type="float">0.5 </parameter>
+
+    <!--Whether to form pandora track relationships using v0 and kink info-->
+    <parameter name="ShouldFormTrackRelationships" type="int">1 </parameter>
+
+    <!--The name of the DDTrackCreator implementation-->
+    <parameter name="TrackCreatorName" type="string">DDTrackCreatorCLIC </parameter>
+    <!--Name of the track fitting system to be used (KalTest, DDKalTest, aidaTT, ... )-->
+    <parameter name="TrackSystemName" type="string">DDKalTest </parameter>
+    <!--The output energy points for hadronic energy correction-->
+    <parameter name="OutputEnergyCorrectionPoints" type="FloatVec"> </parameter>
+
+
+    <!--To use scintillator layers ~ hybrid ECAL, this should be true-->
+    <parameter name="UseEcalScLayers" type="int">0 </parameter>
+    <!--Threshold for creating calo hits in the Sc-layers of ECAL, units mip-->
+    <parameter name="ECalScMipThreshold" type="float">0 </parameter>
+    <!--The calibration from deposited Sc-layer energy to EM energy-->
+    <parameter name="ECalScToEMGeVCalibration" type="float">1 </parameter>
+    <!--The calibration from deposited Sc-layer energy to the barrel hadronic energy-->
+    <parameter name="ECalScToHadGeVCalibrationBarrel" type="float">1 </parameter>
+    <!--The calibration from deposited Sc-layer energy on the endcaps to hadronic energy-->
+    <parameter name="ECalScToHadGeVCalibrationEndCap" type="float">1 </parameter>
+    <!--The calibration from deposited Sc-layer energy to mip-->
+    <parameter name="ECalScToMipCalibration" type="float">1 </parameter>
+    <!--Threshold for creating calo hits in the Si-layers of ECAL, units mip-->
+    <parameter name="ECalSiMipThreshold" type="float">0 </parameter>
+    <!--The calibration from deposited Si-layer energy to EM energy-->
+    <parameter name="ECalSiToEMGeVCalibration" type="float">1 </parameter>
+    <!--The calibration from deposited Si-layer energy on the barrel to hadronic energy-->
+    <parameter name="ECalSiToHadGeVCalibrationBarrel" type="float">1 </parameter>
+    <!--The calibration from deposited Si-layer energy on the enecaps to hadronic energy-->
+    <parameter name="ECalSiToHadGeVCalibrationEndCap" type="float">1 </parameter>
+    <!--The calibration from deposited Si-layer energy to mip-->
+    <parameter name="ECalSiToMipCalibration" type="float">1 </parameter>
+    <!--To use strip splitting algorithm, this should be true-->
+    <parameter name="StripSplittingOn" type="int">0 </parameter>
+
+  </processor>
+
+ <processor name="MyDDMarlinPandora" type="DDPandoraPFANewProcessor">
+    <parameter name="PandoraSettingsXmlFile" type="String"> PandoraSettings/PandoraSettingsDefault.xml </parameter>
+    <!-- CLIC specifict software compensation weights derived from K0L and neutrons -->
+    <parameter name="SoftwareCompensationWeights" type="FloatVec">1.61741 -0.00444385 2.29683e-05 -0.0731236 -0.00157099 -7.09546e-07 0.868443 1.0561 -0.0238574</parameter>
+    <parameter name="SoftwareCompensationEnergyDensityBins" type="FloatVec">0 2. 5. 7.5 9.5 13. 16. 20. 23.5 28. 33. 40. 50. 75. 100.</parameter>
+    <parameter name="FinalEnergyDensityBin" type="float">110.</parameter>
+    <parameter name="MaxClusterEnergyToApplySoftComp" type="float">2000.</parameter>
+    <!-- Collection names -->
+    <parameter name="TrackCollections" type="StringVec"> MySiTracks_Refitted </parameter>
+    <parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+    <parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+    <parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+    <parameter name="MCParticleCollections" type="StringVec">goodMCs</parameter>
+    <parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit</parameter>
+    <parameter name="RelTrackCollections" type="StringVec"> MySiTracks_Refitted_Relation </parameter>
+    <parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+    <parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+    <parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+    <parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+    <parameter name="ClusterCollectionName" type="String">MyPandoraClusters</parameter>
+    <parameter name="PFOCollectionName" type="String">MyPandoraPFOs</parameter>
+    <!-- Calibration constants -->
+    <parameter name="ECalToMipCalibration" type="float">181.818 </parameter>
+    <parameter name="HCalToMipCalibration" type="float">40.8163</parameter>
+    <parameter name="ECalMipThreshold" type="float">0.5</parameter>
+    <parameter name="HCalMipThreshold" type="float">0.3</parameter>
+    <parameter name="ECalToEMGeVCalibration" type="float">1.02373335516</parameter>
+    <parameter name="HCalToEMGeVCalibration" type="float">1.02373335516</parameter>
+    <parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.24223718397</parameter>
+    <parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.24223718397</parameter>
+    <parameter name="HCalToHadGeVCalibration" type="float">1.01799349172</parameter>
+    <parameter name="MuonToMipCalibration" type="float">19607.8</parameter>
+    <parameter name="DigitalMuonHits" type="int">0</parameter>
+    <parameter name="MaxHCalHitHadronicEnergy" type="float">1000000</parameter>
+    <!--Whether to calculate track states manually, rather than copy stored fitter values-->
+    <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+    <parameter name="NEventsToSkip" type="int">0</parameter>
+    <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> SILENT</parameter>
+    <!--Energy Corrections in Marlin Pandora-->
+    <!--parameter name="InputEnergyCorrectionPoints" type="FloatVec">InputEnergyCorrectionPoints_XXXX</parameter-->
+    <!--parameter name="OutputEnergyCorrectionPoints" type="FloatVec">OutputEnergyCorrectionPoints_XXXX</parameter-->
+
+    <!--Decides whether to create gaps in the geometry (ILD-specific)-->
+    <parameter name="CreateGaps" type="bool">false </parameter>
+
+    <!--Track quality settings: need to be optimized! More in processor-->
+    <!--Cut on fractional of expected number of BarrelTracker hits-->
+    <parameter name="MinBarrelTrackerHitFractionOfExpected" type="int">0.2 </parameter>
+    <!--Cut on minimum number of FTD hits of BarrelTracker hit fraction to be applied-->
+    <parameter name="MinFtdHitsForBarrelTrackerHitFraction" type="int">0 </parameter>
+    <!--Track quality cut: the minimum number of ftd track hits for ftd only tracks-->
+    <parameter name="MinFtdTrackHits" type="int">0 </parameter>
+    <!--Min track momentum required to perform final quality checks on number of hits-->
+    <parameter name="MinMomentumForTrackHitChecks" type="float">1 </parameter>
+    <!--Cut on fractional of expected number of TPC hits-->
+    <parameter name="MinTpcHitFractionOfExpected" type="float">0 </parameter>
+    <!--Sanity check on separation between ip and track projected ecal position-->
+    <parameter name="MinTrackECalDistanceFromIp" type="float">0 </parameter>
+    <!--Track quality cut: the minimum number of track hits-->
+    <parameter name="MinTrackHits" type="int">5 </parameter>
+
+    <!-- MORE TRACKING  CUTS -->
+    <!--Max distance from track to BarrelTracker r max to id whether track reaches ecal-->
+    <parameter name="ReachesECalBarrelTrackerOuterDistance" type="float">100 </parameter>
+    <!--Max distance from track to BarrelTracker z max to id whether track reaches ecal-->
+    <parameter name="ReachesECalBarrelTrackerZMaxDistance" type="float">50 </parameter>
+    <!--Max distance from track hit to ftd z position to identify ftd hits-->
+    <parameter name="ReachesECalFtdZMaxDistance" type="float">1 </parameter>
+    <!--Min FTD layer for track to be considered to have reached ecal-->
+    <parameter name="ReachesECalMinFtdLayer" type="int">0 </parameter>
+    <!--Minimum number of BarrelTracker hits to consider track as reaching ecal-->
+    <parameter name="ReachesECalNBarrelTrackerHits" type="int">11 </parameter>
+    <!--Minimum number of ftd hits to consider track as reaching ecal-->
+    <parameter name="ReachesECalNFtdHits" type="int">0 </parameter>
+    <!--Maximum energy for unmatched vertex track-->
+    <parameter name="UnmatchedVertexTrackMaxEnergy" type="float">5 </parameter>
+    <!--Whether can form pfos from tracks that don't start at vertex-->
+    <parameter name="UseNonVertexTracks" type="int">1 </parameter>
+    <!--Whether to calculate track states manually, rather than copy stored fitter values-->
+    <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+    <!--Whether can form pfos from unmatched tracks that don't start at vertex-->
+    <parameter name="UseUnmatchedNonVertexTracks" type="int">0 </parameter>
+    <!--Whether can form pfos from unmatched tracks that start at vertex-->
+    <parameter name="UseUnmatchedVertexTracks" type="int">1 </parameter>
+    <!--Track z0 cut used to determine whether track can be used to form pfo-->
+    <parameter name="Z0TrackCut" type="float">200 </parameter>
+    <!--z0 cut used to determine whether unmatched vertex track can form pfo-->
+    <parameter name="Z0UnmatchedVertexTrackCut" type="float">5 </parameter>
+    <!--Non vtx track z cut to determine whether track can be used to form pfo-->
+    <parameter name="ZCutForNonVertexTracks" type="float">250 </parameter>
+    <!--Track quality cut: the maximum number of track hits-->
+    <parameter name="MaxTrackHits" type="int">5000 </parameter>
+    <!--Cut on fractional track momentum error-->
+    <parameter name="MaxTrackSigmaPOverP" type="float">0.15 </parameter>
+    <!--Constant relating track curvature in b field to momentum-->
+    <parameter name="CurvatureToMomentumFactor" type="float">0.00015 </parameter>
+    <!--Track d0 cut used to determine whether track can be used to form pfo-->
+    <parameter name="D0TrackCut" type="float">200 </parameter>
+    <!--d0 cut used to determine whether unmatched vertex track can form pfo-->
+    <parameter name="D0UnmatchedVertexTrackCut" type="float">5 </parameter>
+
+    <!--The algorithm name for filling start vertex-->
+    <parameter name="StartVertexAlgorithmName" type="string">PandoraPFANew </parameter>
+    <!--Start Vertex Collection Name-->
+    <parameter name="StartVertexCollectionName" type="string" lcioOutType="Vertex"> PandoraStartVertices </parameter>
+
+    <!--Normal vector for the muon barrel sensitive layers in local coordinates-->
+    <parameter name="YokeBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+    <!--Normal vector for the HCal barrel sensitive layers in local coordinates-->
+    <parameter name="HCalBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+    <!--Normal vector for the ECal barrel sensitive layers in local coordinates-->
+    <parameter name="ECalBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+    <!--The bfield in the muon barrel, units Tesla-->
+    <parameter name="MuonBarrelBField" type="float">-1.34 </parameter>
+    <!--The bfield in the muon endcap, units Tesla-->
+    <parameter name="MuonEndCapBField" type="float">0.01 </parameter>
+
+    <!--The constant term for EM shower-->
+    <parameter name="EMConstantTerm" type="float">0.01 </parameter>
+    <!--The stochastic term for EM shower-->
+    <parameter name="EMStochasticTerm" type="float">0.17 </parameter>
+    <!--The constant term for Hadronic shower-->
+    <parameter name="HadConstantTerm" type="float">0.03 </parameter>
+    <!--The stochastic term for Hadronic shower-->
+    <parameter name="HadStochasticTerm" type="float">0.6 </parameter>
+
+    <!--The input energy points for hadronic energy correction-->
+    <parameter name="InputEnergyCorrectionPoints" type="FloatVec"> </parameter>
+
+    <!--Maximum number of layers from candidate outer layer hit to rear of detector-->
+    <parameter name="LayersFromEdgeMaxRearDistance" type="float">250 </parameter>
+    <!--Number of layers from edge for hit to be flagged as an outer layer hit-->
+    <parameter name="NOuterSamplingLayers" type="int">3 </parameter>
+    <!--Distance of possible second track state in the ECal Endcap to the ECal barrel inner radius-->
+    <parameter name="TrackStateTolerance" type="float">0 </parameter>
+
+    <!--Track cut on distance from BarrelTracker inner r to id whether track can form pfo-->
+    <parameter name="MaxBarrelTrackerInnerRDistance" type="float">200 </parameter>
+
+    <!--The minimum correction to on ecal hit in Pandora energy correction-->
+    <parameter name="MinCleanCorrectedHitEnergy" type="float">0.1 </parameter>
+    <!--The minimum hit energy to apply ecal correction in Pandora energy correction-->
+    <parameter name="MinCleanHitEnergy" type="float">0.5 </parameter>
+    <!--The minimum hit energy fraction to apply ecal correction in Pandora energy correction-->
+    <parameter name="MinCleanHitEnergyFraction" type="float">0.01 </parameter>
+
+    <!--The energy for a digital muon calorimeter hit, units GeV-->
+    <parameter name="MuonHitEnergy" type="float">0.5 </parameter>
+
+    <!--Whether to form pandora track relationships using v0 and kink info-->
+    <parameter name="ShouldFormTrackRelationships" type="int">1 </parameter>
+
+    <!--The name of the DDTrackCreator implementation-->
+    <parameter name="TrackCreatorName" type="string">DDTrackCreatorCLIC </parameter>
+    <!--Name of the track fitting system to be used (KalTest, DDKalTest, aidaTT, ... )-->
+    <parameter name="TrackSystemName" type="string">DDKalTest </parameter>
+    <!--The output energy points for hadronic energy correction-->
+    <parameter name="OutputEnergyCorrectionPoints" type="FloatVec"> </parameter>
+
+
+    <!--To use scintillator layers ~ hybrid ECAL, this should be true-->
+    <parameter name="UseEcalScLayers" type="int">0 </parameter>
+    <!--Threshold for creating calo hits in the Sc-layers of ECAL, units mip-->
+    <parameter name="ECalScMipThreshold" type="float">0 </parameter>
+    <!--The calibration from deposited Sc-layer energy to EM energy-->
+    <parameter name="ECalScToEMGeVCalibration" type="float">1 </parameter>
+    <!--The calibration from deposited Sc-layer energy to the barrel hadronic energy-->
+    <parameter name="ECalScToHadGeVCalibrationBarrel" type="float">1 </parameter>
+    <!--The calibration from deposited Sc-layer energy on the endcaps to hadronic energy-->
+    <parameter name="ECalScToHadGeVCalibrationEndCap" type="float">1 </parameter>
+    <!--The calibration from deposited Sc-layer energy to mip-->
+    <parameter name="ECalScToMipCalibration" type="float">1 </parameter>
+    <!--Threshold for creating calo hits in the Si-layers of ECAL, units mip-->
+    <parameter name="ECalSiMipThreshold" type="float">0 </parameter>
+    <!--The calibration from deposited Si-layer energy to EM energy-->
+    <parameter name="ECalSiToEMGeVCalibration" type="float">1 </parameter>
+    <!--The calibration from deposited Si-layer energy on the barrel to hadronic energy-->
+    <parameter name="ECalSiToHadGeVCalibrationBarrel" type="float">1 </parameter>
+    <!--The calibration from deposited Si-layer energy on the enecaps to hadronic energy-->
+    <parameter name="ECalSiToHadGeVCalibrationEndCap" type="float">1 </parameter>
+    <!--The calibration from deposited Si-layer energy to mip-->
+    <parameter name="ECalSiToMipCalibration" type="float">1 </parameter>
+    <!--To use strip splitting algorithm, this should be true-->
+    <parameter name="StripSplittingOn" type="int">0 </parameter>
+
+  </processor>
+    
+    <processor name="FastJetProcessor" type="FastJetProcessor">
+    <parameter name="algorithm" type="StringVec">kt_algorithm 0.7</parameter>
+    <parameter name="clusteringMode" type="StringVec"> Inclusive 5</parameter>
+    <parameter name="jetOut" type="string" lcioOutType="ReconstructedParticle">MyJetOut </parameter>
+    <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> MyPandoraPFOs </parameter>
+    <parameter name="recombinationScheme" type="string">E_scheme </parameter>
+  </processor>
+  
+  <!--==========TAUS============-->
+  <processor name="TestTauFinder" type="RPTauFinder">
+
+  <parameter name="FileName_Signal" type="string">Taus.root </parameter>
+  <!--Collection of PFOs-->
+  <parameter name="PFOCollection" type="string" lcioInType="ReconstructedParticle">PandoraPFOs </parameter>
+  <!--Collection of Tau Candidates-->
+  <parameter name="TauRecCollection" type="string" lcioOutType="ReconstructedParticle">TauRec_PFO </parameter>
+  <!--Name of the Tau link to ReconstructedParticle collection-->
+  <parameter name="TauRecLinkCollectionName" type="string" lcioOutType="LCRelation">TauRecLink_PFO </parameter>
+  <!--Collection of Particles in Rest Group not in Tau Candidates-->
+  <parameter name="TauRecRestCollection" type="string" lcioOutType="ReconstructedParticle">TauRecRest_PFO </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <parameter name="Verbosity" type="string">DEBUG </parameter>
+  <!--Cut on cosT to suppress background-->
+  <parameter name="cosT_cut" type="float">0.99 </parameter>
+  <!--Upper limit on invariant mass of tau candidate-->
+  <parameter name="invariant_mass" type="float">2 </parameter>
+  <!--Outer isolation cone around search cone of tau jet in rad (relativ to cone angle)-->
+  <parameter name="isolationConeAngle" type="float">0.2 </parameter>
+  <!--Energy allowed within isolation cone region-->
+  <parameter name="isolationEnergy" type="float">5 </parameter>
+  <!--Cut on pt to suppress background-->
+  <parameter name="pt_cut" type="float">0.1 </parameter>
+  <!--Minimum tranverse momentum of tau seed-->
+  <parameter name="ptseed" type="float">2.0 </parameter>
+  <!--Opening angle of the search cone for tau jet in rad-->
+  <parameter name="searchConeAngle" type="float">0.05 </parameter>
+  </processor>
+
+  <processor name="MyTaJetClustering" type="TaJetClustering">
+  <!--Tau Jet Finding-->
+  <!--Low energy tracks can be accepted as either charged and neutral if true-->
+  <parameter name="AcceptFlexibleLowEnergyTrack" type="int">0 </parameter>
+  <!--Maximum cosine angle for cone-->
+  <parameter name="ConeMaxCosAngle" type="double">1 </parameter>
+  <!--Energy fraction of cone compared to central-->
+  <parameter name="ConeMaxEnergyFrac" type="double">0.1 </parameter>
+  <!--Minimum cosine angle for cone-->
+  <parameter name="ConeMinCosAngle" type="double">0.9 </parameter>
+  <!--Reject 3-prong taus if including neutral energy more than this number in GeV-->
+  <parameter name="MaximumNeutralEnergyIn3Prong" type="double">100 </parameter>
+  <!--Minimum jet energy to be accepted as taus-->
+  <parameter name="MinimumJetEnergy" type="double">1 </parameter>
+  <!--Minimum track energy to be accepted as taus-->
+  <parameter name="MinimumTrackEnergy" type="double">1 </parameter>
+  <!--Minimum track energy to be counted-->
+  <parameter name="MinimumTrackEnergyAssoc" type="double">1 </parameter>
+  <!--Neither primary nor cone cut at all if true. Only clustering.-->
+  <parameter name="NoSelection" type="int">0 </parameter>
+  <!--Tau output collection-->
+  <parameter name="OutputTauCollection" type="string" lcioOutType="ReconstructedParticle">TaJets </parameter>
+  <!--PandoraPFA PFO collection-->
+  <parameter name="PFOCollection" type="string" lcioInType="ReconstructedParticle">PandoraPFOs </parameter>
+  <!--Remained PFO collection-->
+  <parameter name="RemainPFOCollection" type="string" lcioOutType="ReconstructedParticle">RemainPFOs </parameter>
+  <!--Allowed cosine angle to be clustered-->
+  <parameter name="TauCosAngle" type="double">0.98 </parameter>
+  <!--Tau mass for tau clustering [GeV]-->
+  <parameter name="TauMass" type="double">2 </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <parameter name="Verbosity" type="string">ERROR </parameter>
+  </processor>
+
+   <processor name="MyTestTauFinder" type="RPTauFinder">
+
+  <parameter name="FileName_Signal" type="string">Taus.root </parameter>
+  <!--Collection of PFOs-->
+  <parameter name="PFOCollection" type="string" lcioInType="ReconstructedParticle">MyPandoraPFOs </parameter>
+  <!--Collection of Tau Candidates-->
+  <parameter name="TauRecCollection" type="string" lcioOutType="ReconstructedParticle">MyTauRec_PFO </parameter>
+  <!--Name of the Tau link to ReconstructedParticle collection-->
+  <parameter name="TauRecLinkCollectionName" type="string" lcioOutType="LCRelation">MyTauRecLink_PFO </parameter>
+  <!--Collection of Particles in Rest Group not in Tau Candidates-->
+  <parameter name="TauRecRestCollection" type="string" lcioOutType="ReconstructedParticle">MyTauRecRest_PFO </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <parameter name="Verbosity" type="string">DEBUG </parameter>
+  <!--Cut on cosT to suppress background-->
+  <parameter name="cosT_cut" type="float">0.99 </parameter>
+  <!--Upper limit on invariant mass of tau candidate-->
+  <parameter name="invariant_mass" type="float">2 </parameter>
+  <!--Outer isolation cone around search cone of tau jet in rad (relativ to cone angle)-->
+  <parameter name="isolationConeAngle" type="float">0.2 </parameter>
+  <!--Energy allowed within isolation cone region-->
+  <parameter name="isolationEnergy" type="float">5 </parameter>
+  <!--Cut on pt to suppress background-->
+  <parameter name="pt_cut" type="float">0.1 </parameter>
+  <!--Minimum tranverse momentum of tau seed-->
+  <parameter name="ptseed" type="float">2.0 </parameter>
+  <!--Opening angle of the search cone for tau jet in rad-->
+  <parameter name="searchConeAngle" type="float">0.05 </parameter>
+  </processor>
+
+  <processor name="MyMyTaJetClustering" type="TaJetClustering">
+  <!--Tau Jet Finding-->
+  <!--Low energy tracks can be accepted as either charged and neutral if true-->
+  <parameter name="AcceptFlexibleLowEnergyTrack" type="int">0 </parameter>
+  <!--Maximum cosine angle for cone-->
+  <parameter name="ConeMaxCosAngle" type="double">1 </parameter>
+  <!--Energy fraction of cone compared to central-->
+  <parameter name="ConeMaxEnergyFrac" type="double">0.1 </parameter>
+  <!--Minimum cosine angle for cone-->
+  <parameter name="ConeMinCosAngle" type="double">0.9 </parameter>
+  <!--Reject 3-prong taus if including neutral energy more than this number in GeV-->
+  <parameter name="MaximumNeutralEnergyIn3Prong" type="double">100 </parameter>
+  <!--Minimum jet energy to be accepted as taus-->
+  <parameter name="MinimumJetEnergy" type="double">1 </parameter>
+  <!--Minimum track energy to be accepted as taus-->
+  <parameter name="MinimumTrackEnergy" type="double">1 </parameter>
+  <!--Minimum track energy to be counted-->
+  <parameter name="MinimumTrackEnergyAssoc" type="double">1 </parameter>
+  <!--Neither primary nor cone cut at all if true. Only clustering.-->
+  <parameter name="NoSelection" type="int">0 </parameter>
+  <!--Tau output collection-->
+  <parameter name="OutputTauCollection" type="string" lcioOutType="ReconstructedParticle">TaJets </parameter>
+  <!--PandoraPFA PFO collection-->
+  <parameter name="PFOCollection" type="string" lcioInType="ReconstructedParticle">MyPandoraPFOs </parameter>
+  <!--Remained PFO collection-->
+  <parameter name="RemainPFOCollection" type="string" lcioOutType="ReconstructedParticle">RemainPFOs </parameter>
+  <!--Allowed cosine angle to be clustered-->
+  <parameter name="TauCosAngle" type="double">0.98 </parameter>
+  <!--Tau mass for tau clustering [GeV]-->
+  <parameter name="TauMass" type="double">2 </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <parameter name="Verbosity" type="string">ERROR </parameter>
+</processor>
+
+<!--=========AIDA========-->
+  <processor name="MyAIDAProcessor" type="AIDAProcessor">
+    <!--Processor that handles AIDA files. Creates on directory per processor.  Processors only need to create and fill the histograms, clouds and tuples. Needs to be the first ActiveProcessor-->
+    <!-- compression of output file 0: false >0: true (default) -->
+    <parameter name="Compress" type="int" value="1"/>
+    <!-- filename without extension-->
+    <parameter name="FileName" type="string" value="tauHists"/>
+    <!-- type of output file xml (default) or root ( only OpenScientist)-->
+    <parameter name="FileType" type="string" value="root "/>
+  </processor>
+  
+
+
+</marlin>
+

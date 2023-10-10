@@ -63,4 +63,7 @@ private:
   TH1 *_h_vertex = nullptr;
   TH1 *_h_MID = nullptr;
 
+  TH1 *_h_rmax = nullptr;
+  TH1 *_h_rmin = nullptr;
+
 };

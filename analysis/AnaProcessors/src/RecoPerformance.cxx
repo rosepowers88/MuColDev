@@ -9,6 +9,7 @@
 #include <EVENT/Track.h>
 #include <EVENT/SimTrackerHit.h>
 #include <EVENT/TrackerHit.h>
+#include <EVENT/Vertex.h>
 
 #include <marlin/AIDAProcessor.h>
 #include <marlin/Statusmonitor.h>
@@ -207,17 +208,135 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
   //
   // Get object required collections and create lists
   // to keep track of unsaved objects.
+  bool debug = false;
+  if(debug){
+    std::cout<<"Started processing event "<<evt->getEventNumber()<<std::endl;
+  }
 
   LCCollection* inputColMC = evt->getCollection(_inputCollectionNameMCP);
   LCCollection* inputColPFO = evt->getCollection(_inputCollectionNameR);
+  LCCollection* inputColPFONew = evt->getCollection("MyPandoraPFOs");
   LCCollection* inputColCl = evt->getCollection(_inputCollectionNameC);
   LCCollection* inputColTrk = evt->getCollection("SiTracks");
+  LCCollection* inputColTrkNew = evt->getCollection("MySiTracks");
   LCCollection* inputSimHits = evt->getCollection(_inputCollectionSimHits);
-  
+
   const int nTrk = inputColTrk->getNumberOfElements();
+  const int nNTrk = inputColTrkNew->getNumberOfElements();
   const int nMCP = inputColMC->getNumberOfElements();
   std::vector<double> ptvec;
+  std::vector<double> ptvecNew;
+  std::vector<int> nHitsVec;
   int nPiTrks=0;
+  int nPiTrksNew=0;
+  int nPiFromTau=0;
+  int evtnum = evt->getEventNumber();
+  std::vector<double> mcptvec_temp;
+  for(uint32_t i=0; i<nMCP; i++){
+    const EVENT::MCParticle *mcp = static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(i));
+    if(abs(mcp->getPDG())!=211) continue;
+    const EVENT::MCParticleVec mvec = mcp->getParents();
+    int MID = mvec.back()->getPDG();
+    if(MID != 15) continue;
+    const double* vert = mcp->getVertex();
+    double radius = std::sqrt(std::pow(vert[0],2)+std::pow(vert[1], 2)+std::pow(vert[2],2));
+    //std::cout<<radius<<std::endl;
+    nPiFromTau++;
+    const double* mom = mcp->getMomentum();
+    double pt = std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
+    mcptvec_temp.push_back(pt);
+  }
+  std::vector<float> effs;
+  std::vector<float> trkPTs;
+  int nPiPFO=0;
+  double pT=0;
+  double checker=0;
+  for(uint32_t i=0; i<inputColPFONew->getNumberOfElements(); i++){
+    const EVENT::ReconstructedParticle *pfo = static_cast<const EVENT::ReconstructedParticle*>(inputColPFONew->getElementAt(i));
+    if(abs(pfo->getType())!=211){ 
+      continue; }
+
+    //const float* pos = pfo->getReferencePoint();
+    //double radius = std::sqrt(std::pow(pos[0],2)+std::pow(pos[1], 2)+std::pow(pos[2],2));
+    //std::cout<<radius<<std::endl;
+    pT=0;
+    const double* mom = pfo->getMomentum();
+    pT = std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
+    const EVENT::TrackVec tracks = pfo->getTracks();
+    for(uint32_t j=0; j<tracks.size(); j++){
+      const EVENT::Track *trk = static_cast<const EVENT::Track*>(tracks[j]);
+      checker = anaPiEff(trk,inputSimHits);
+      if(checker<0) continue;
+    }
+    if(checker<0) continue;
+    nPiPFO++;
+    trkPTs.push_back(pT);
+    
+  }
+
+  // if(trkRadii.size()!=0){
+   
+  //}
+
+  //want to get the pT that is most accurate for each, if there are multiples
+  //so for each, make a candidate of which one it reconstructed and then minimize it
+  std::vector<double> ptreco;
+  std::vector<double> resolution;
+  double res;
+  if(trkPTs.size()==0&&nPiFromTau>0) effs.push_back(0);
+  for(int i=0; i<trkPTs.size(); i++){
+    double candidate=10000;
+    double thePT=0;
+    int erase=0;
+    if(mcptvec_temp.size()==0) continue;
+    for(int j=0; j<mcptvec_temp.size(); j++){
+      double diff = trkPTs[i]-mcptvec_temp[j];
+      if(abs(diff)<candidate){
+	candidate=abs(diff);
+	res=diff;
+	thePT=mcptvec_temp[j];
+	erase=j;
+      }
+    }
+    ptreco.push_back(thePT);
+    effs.push_back(1);
+    resolution.push_back(res);
+    mcptvec_temp.erase(mcptvec_temp.begin()+erase);
+  }
+
+  int iter = nPiFromTau-trkPTs.size();
+  if(iter<0){
+    std::cout<<"DUPLICATE: "<<evt->getEventNumber()<<std::endl;
+  }
+  else{
+  for(int i=0; i<iter; i++){
+    effs.push_back(0);
+    ptreco.push_back(mcptvec_temp[i]);
+  }
+  }
+  
+
+
+  std::fstream pfoFile;
+  pfoFile.open("piPFOs_new.txt", std::ios::app);
+  for(int i=0; i<ptreco.size(); i++){
+    pfoFile<<ptreco[i]<<' '<<effs[i]<<'\n';
+  }
+  pfoFile.close();
+
+  std::fstream resFile;
+  resFile.open("piRes_new.txt", std::ios::app);
+  for(int i=0; i<resolution.size(); i++){
+    resFile<<ptreco[i]<<' '<<resolution[i]<<'\n';
+  }
+  resFile.close();
+
+
+
+    
+    
+      
+  
 
   //get a vector of the pTs for charged pion tracks to do a pT efficiency study
   for(uint32_t i=0; i<nTrk; i++){
@@ -228,6 +347,18 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
     }
     nPiTrks++;
     ptvec.push_back(pT);
+    const EVENT::TrackerHitVec trkhits = trk->getTrackerHits();
+    nHitsVec.push_back(trkhits.size());
+  }
+
+  for(uint32_t i=0; i<nNTrk; i++){
+    const EVENT::Track *ntrk = static_cast<const EVENT::Track*>(inputColTrkNew->getElementAt(i));
+    double pT = anaPiEff(ntrk, inputSimHits);
+    if(pT==-1000){
+      continue;
+    }
+    nPiTrksNew++;
+    ptvecNew.push_back(pT);
   }
 
   //get a vector of truth pTs for charged pions to do a pT efficiency study
@@ -256,13 +387,22 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
     
   //just a lil fix so we don't get errors if we're running over a set with no reco'd taus
   bool hastaus = true;
-  LCCollection* inputColTaus;
+  bool _hastaus = true;
+  LCCollection* oldTaus;
+  LCCollection* newTaus;
   try{
-    inputColTaus = evt->getCollection("TauRec_PFO");
+    oldTaus = evt->getCollection("TauRec_PFO");
   }
   catch (Exception& e) {
     hastaus=false;
   }
+  try{
+    newTaus = evt->getCollection("MyTauRec_PFO");
+  }
+  catch (Exception& e){
+    _hastaus=false;
+  }
+  
 
   LCCollection* simTrkHits = evt->getCollection(_inputCollectionSimHits);
 
@@ -283,8 +423,13 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
   //find how many particles in the event
   const int nPFO = inputColPFO->getNumberOfElements();
   const int nCl = inputColCl->getNumberOfElements();
-  if(hastaus){
-  const int nTau = inputColTaus->getNumberOfElements();
+  if(hastaus&&_hastaus){
+  const int nOTau = oldTaus->getNumberOfElements();
+  const int nNTau = newTaus->getNumberOfElements();
+  if(nOTau!=nNTau){
+    std::cout<<"old: "<<nOTau<<std::endl;
+    std::cout<<"new: "<<nNTau<<std::endl;
+  }
 
 
   double nMCTau=0;
@@ -300,32 +445,41 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
     taupT=pt;
     break; //if we got a tau, we're done bc there is only one per event
   }
-  int eff=0;
+  int nEff=0;
+  int oEff=0;
 
-  if(nTau==0)eff=0;
-  else eff=1;
+  if(nOTau==0)oEff=0;
+  else oEff=1;
+  if(nNTau==0)nEff=0;
+  else nEff=1;
 
   //stream out the results for later analysis (see the python files)
-  std::fstream tauFile;
-  tauFile.open("tauEff.txt", std::ios::app);
-  tauFile << taupT <<' '<< eff << '\n';
-  tauFile.close(); 
+  std::fstream tauFileOld;
+  tauFileOld.open("tauEff_old_test.txt", std::ios::app);
+  tauFileOld << taupT <<' '<< oEff << '\n';
+  tauFileOld.close(); 
 
+  std::fstream tauFileNew;
+  tauFileNew.open("tauEff_new_test.txt", std::ios::app);
+  tauFileNew << taupT << ' '<<nEff << '\n';
+  tauFileNew.close();
+  
 
-  //basic efficiencies (not PDG specific)
+  /* //basic efficiencies (not PDG specific)
   double PFO_eff = double(nPFO)/nMCP;
   double Cl_eff = double(nCl)/nMCP;
   double Trk_eff = double(nTrk)/nMCP;
-
+  */
   
-
+  /*
   _h_effPFO->Fill(PFO_eff);
   _h_effCl->Fill(Cl_eff);
   _h_effTrk->Fill(Trk_eff);
-  
+  */
 
 
   }
+  /*
   int evtnum=evt->getEventNumber();
 
   //stream out the pi information for further analysis
@@ -335,32 +489,51 @@ void RecoPerformance::processEvent( LCEvent * evt ) {
     MCFile<<MCptvec[i]<<',';
   }
   MCFile.close();
+
   std::fstream TrkFile;
-  TrkFile.open("TrkpT_pi.txt",std::ios::app);
+  TrkFile.open("TrkpT_pi_old.txt",std::ios::app);
   for(int i=0; i<ptvec.size(); i++){
     TrkFile<<ptvec[i]<<',';
   }
   TrkFile.close();
+
+  std::fstream TrkFileNew;
+  TrkFileNew.open("TrkpT_pi_new.txt",std::ios::app);
+  for(int i=0; i<ptvecNew.size(); i++){
+    TrkFileNew<<ptvecNew[i]<<',';
+  }
+  TrkFileNew.close();
+  */
   
   //stream out the duplicate track candidates for further analysis (just comment out if you don't want to do this)
+  /*
   int run = evt->getRunNumber();
   std::fstream dupefile;
-  dupefile.open("dupeTracks_new.txt", std::ios::app);
+  dupefile.open("dupeTracks.txt", std::ios::app);
   std::sort(ptvec.begin(),ptvec.end());
   if(ptvec.size()>MCptvec.size()){
-  dupefile<<"=========="<<run<<":"<<evtnum<<"============"<<'\n';
-  dupefile<<"nMC: "<<MCptvec.size()<<" nTrk: "<<ptvec.size()<<'\n';
+    int ndupes=0;
+    dupefile<<"=========="<<run<<":"<<evtnum<<"============"<<'\n';
+    dupefile<<"nMC: "<<MCptvec.size()<<" nTrk: "<<ptvec.size()<<'\n';
   for(int i=0; i<ptvec.size(); i++){
     for(int j=0; j<ptvec.size(); j++){
       if(i<j && abs(ptvec[i]-ptvec[j])<=0.1){
 	dupefile<<ptvec[i]<<' '<<ptvec[j]<<'\n';
+	ndupes++;
+	if(nHitsVec[i]>=nHitsVec[j]){
+	  dupefile<<nHitsVec[j]<<',';
+	}
+	else{
+	  dupefile<<nHitsVec[i]<<','; //write the smallest number of hits
+	}
       }
     }
   }
-  dupefile<<"============================"<<'\n';
+  dupefile<<'\n';
   dupefile.close();
   }
-  
+  */
+ 
 }
 void RecoPerformance::check( LCEvent * /*evt*/ )
 { }

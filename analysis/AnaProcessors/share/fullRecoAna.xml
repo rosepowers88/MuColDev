@@ -12,11 +12,7 @@
 
   <execute>
     <processor name="MyAIDAProcessor"/>
-    <!--processor name="Performance"/-->
-    <!--processor name = "PFOAna"-->
-    <!--processor name = "CaloAna"/-->
-    <!--processor name = "AnaPions"/-->
-    <processor name = "eff"/>
+    <processor name="Performance"/>
     <processor name="EventNumber" />
   </execute>
 
@@ -32,7 +28,7 @@
       inputfile
     </parameter>
     <!-- Limit the number of processed records (run+evt): -->
-    <parameter name="MaxRecordNumber" value="1000" />
+    <parameter name="MaxRecordNumber" value="-1" />
     <parameter name="SkipNEvents" value="0" />
     <parameter name="SupressCheck" value="false" />  
     <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT">WARNING </parameter>
@@ -51,13 +47,13 @@
     <!-- compression of output file 0: false >0: true (default) -->
     <parameter name="Compress" type="int" value="10"/>
     <!-- filename without extension-->
-    <parameter name="FileName" type="string" value="taugun_pieff"/>
+    <parameter name="FileName" type="string" value="RecoPerformance"/>
     <!-- type of output file xml (default) or root ( only OpenScientist)-->
     <parameter name="FileType" type="string" value="root "/>
   </processor>
 
   <processor name="EventNumber" type = "Statusmonitor">
-    <parameter name="HowOften" type = "int">1000</parameter>
+    <parameter name="HowOften" type = "int">10</parameter>
     <parameter name = "Verbosity" type = "string"> MESSAGE </parameter>
   </processor>
   
@@ -66,30 +62,9 @@
     <parameter name="MinPt" type="double">2</parameter>
     <parameter name="InputCollectionNameReco" type="string" lcioInType="ReconstructedParticle" value="PandoraPFOs" />
     <parameter name="InputCollectionNameCluster" type="string" lcioInType="Cluster" value = "PandoraClusters" />
-    <parameter name="InputCollectionNameTrack" type="string" lcioInType="Track" value = "SiTracks" />
+    <parameter name="InputCollectionNameTrack" type="string" lcioInType="Track" value = "SiTracks_Refitted" />
     <parameter name="InputCollectionNameMCP" type="string" lcioInType="MCParticle" value = "MCParticle" />
     <parameter name="InputCollectionSimHits" type="string" lcioInType="SimTrackerHit" value = "AllSTH" />
-  </processor>
-
-  <processor name="PFOAna" type = "AnaPFOs" >
-    <parameter name = "MinPt" type = "double" > 1 </parameter>
-    <parameter name = "PFOInput" type = "string" lcioInType = "ReconstructedParticle" value = "PandoraPFOs" />
-    <parameter name = "MCInput" type = "string" lcioInType = "MCParticle" value = "MCParticle" />
-  </processor>
-
-  <processor name = "CaloAna" type = "CalAna" >
-    <parameter name = "PFOInput" type = "string" lcioInType = "ReconstructedParticle" value = "PandoraPFOs" />
-    <parameter name = "MCInput" type = "string" lcioInType = "MCParticle" value = "MCParticle" />
-  </processor>
-
-    <processor name = "AnaPions" type = "PiAna" >
-    <parameter name = "PFOInput" type = "string" lcioInType = "ReconstructedParticle" value = "PandoraPFOs" />
-    <parameter name = "MCInput" type = "string" lcioInType = "MCParticle" value = "MCParticle" />
-  </processor>
-
-  <processor name = "eff" type = "EfficiencyProcessor" >
-    <parameter name = "InputCollectionNameReco" type = "string" lcioInType = "ReconstructedParticle" value = "PandoraPFOs" />
-    <parameter name = "InputCollectionNameMCP" type = "string" lcioInType = "MCParticle" value = "MCParticle" />
   </processor>
 
 </marlin>

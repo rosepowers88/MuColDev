@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!--
+?xml-stylesheet type="text/xsl"
+href="http://ilcsoft.desy.de/marlin/marlin.xsl"?
+-->
+<!-- ?xml-stylesheet type="text/xsl" href="marlin.xsl"? -->
+
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == List of processors to execute                                                                      == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <execute>
+    <!-- ========== setup  ========== -->
+    <processor name="MyAIDAProcessor"/>
+    <processor name="EventNumber" />
+    <processor name="Config" />
+
+    <!-- ==========  Geometry initialization  ========== -->
+    <processor name="InitDD4hep"/>
+
+    <!-- ==========  Overlay  ========== -->
+    <if condition="Config.OverlayBIB">
+      <!--processor name="OverlayBIB"/-->
+    </if>
+
+    <if condition="Config.OverlayFalse">
+      <!--processor name="OverlayFalse"/-->
+    </if>
+
+    <!-- ===============  The more misterious processors  ================= -->
+    <processor name="DDMarlinPandora" />
+    <processor name="FastJetProcessor"/>
+
+    <!-- ==========  Output  ========== -->
+    <processor name="Output_REC"/>
+
+  </execute>
+
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == Global setup                                                                                       == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <processor name="Config" type="CLICRecoConfig" >
+    <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT"> DEBUG7  </parameter>
+    <!--Which option to use for Overlay: False, BIB. Then use, e.g., Config.OverlayFalse in the condition-->
+    <parameter name="Overlay" type="string">BIB</parameter>
+    <!--Possible values and conditions for option Overlay-->
+    <parameter name="OverlayChoices" type="StringVec">False BIB</parameter>
+    <!--Which option to use for Tracking: Truth, ConformalPlusExtrapolator, Conformal. Then use, e.g., Config.TrackingTruth in the condition-->
+    <parameter name="Tracking" type="string">Truth</parameter>
+    <!--Possible values and conditions for option Tracking-->
+    <parameter name="TrackingChoices" type="StringVec">Truth Conformal</parameter>
+    <!--Which option to use for VertexUnconstrained: ON, OFF. Then use, e.g., Config.VertexUnconstrainedOFF in the condition-->
+    <parameter name="VertexUnconstrained" type="string">OFF </parameter>
+    <!--Possible values and conditions for option Tracking-->
+    <parameter name="VertexUnconstrainedChoices" type="StringVec">ON OFF  </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE  </parameter> 
+  </processor>
+
+ <processor name="InitDD4hep" type="InitializeDD4hep">
+    <!--InitializeDD4hep reads a compact xml file and initializes the dd4hep::Detector object-->
+    <!--Name of the DD4hep compact xml file to load-->
+    <parameter name="DD4hepXMLFile" type="string">
+     /opt/detector-simulation/geometries/MuColl_10TeV_v0A/MuColl_10TeV_v0A.xml
+    </parameter>
+    <!--parameter name="DD4hepXMLFile" type="string">    
+    /code/detector-simulation/geometries/MuColl_10TeV_v0A/MuColl_10TeV_v0A.xml
+    /opt/ilcsoft/muonc/detector-simulation/geometries/MuColl_v1/MuColl_v1.xml
+    </parameter-->
+    <!--Alternate name for EncodingStringParameterName-->
+    <!--If given, the Compact File parameter of that name will be used as argument to LCTrackerCellID::set_encoding_string()-->
+    <parameter name="EncodingStringParameterName" type="string"> GlobalTrackerReadoutID  </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+  </processor>
+
+  <processor name="EventNumber" type="Statusmonitor">
+    <parameter name="HowOften" type="int">100 </parameter>
+    <parameter name="Verbosity" type="string"> MESSAGE </parameter>
+  </processor>
+
+ <processor name="MyAIDAProcessor" type="AIDAProcessor">
+    <parameter name="FileName" type="string">
+      lctuple_TYPEEVENT_actsseededckf_INFILENAME
+    </parameter>
+    <parameter name="FileType" type="string">root</parameter>
+  </processor>
+
+  <global>
+    <parameter name="LCIOInputFiles">
+      tauGun_pT_50_250_reco_100.slcio    tauGun_pT_50_250_reco_18900.slcio  tauGun_pT_50_250_reco_27800.slcio  tauGun_pT_50_250_reco_36700.slcio
+tauGun_pT_50_250_reco_1000.slcio   tauGun_pT_50_250_reco_1900.slcio   tauGun_pT_50_250_reco_27900.slcio  tauGun_pT_50_250_reco_36800.slcio
+tauGun_pT_50_250_reco_10000.slcio  tauGun_pT_50_250_reco_19000.slcio  tauGun_pT_50_250_reco_2800.slcio	 tauGun_pT_50_250_reco_36900.slcio
+tauGun_pT_50_250_reco_10100.slcio  tauGun_pT_50_250_reco_19100.slcio  tauGun_pT_50_250_reco_28000.slcio  tauGun_pT_50_250_reco_3700.slcio
+tauGun_pT_50_250_reco_10200.slcio  tauGun_pT_50_250_reco_19200.slcio  tauGun_pT_50_250_reco_28100.slcio  tauGun_pT_50_250_reco_37000.slcio
+tauGun_pT_50_250_reco_10300.slcio  tauGun_pT_50_250_reco_19300.slcio  tauGun_pT_50_250_reco_28200.slcio  tauGun_pT_50_250_reco_37100.slcio
+tauGun_pT_50_250_reco_10400.slcio  tauGun_pT_50_250_reco_19400.slcio  tauGun_pT_50_250_reco_28300.slcio  tauGun_pT_50_250_reco_37200.slcio
+tauGun_pT_50_250_reco_10500.slcio  tauGun_pT_50_250_reco_19500.slcio  tauGun_pT_50_250_reco_28400.slcio  tauGun_pT_50_250_reco_37300.slcio
+tauGun_pT_50_250_reco_10600.slcio  tauGun_pT_50_250_reco_19600.slcio  tauGun_pT_50_250_reco_28500.slcio  tauGun_pT_50_250_reco_37400.slcio
+tauGun_pT_50_250_reco_10700.slcio  tauGun_pT_50_250_reco_19700.slcio  tauGun_pT_50_250_reco_28600.slcio  tauGun_pT_50_250_reco_37500.slcio
+tauGun_pT_50_250_reco_10800.slcio  tauGun_pT_50_250_reco_19800.slcio  tauGun_pT_50_250_reco_28700.slcio  tauGun_pT_50_250_reco_37600.slcio
+tauGun_pT_50_250_reco_10900.slcio  tauGun_pT_50_250_reco_19900.slcio  tauGun_pT_50_250_reco_28800.slcio  tauGun_pT_50_250_reco_37700.slcio
+tauGun_pT_50_250_reco_1100.slcio   tauGun_pT_50_250_reco_200.slcio    tauGun_pT_50_250_reco_28900.slcio  tauGun_pT_50_250_reco_37800.slcio
+tauGun_pT_50_250_reco_11000.slcio  tauGun_pT_50_250_reco_2000.slcio   tauGun_pT_50_250_reco_2900.slcio	 tauGun_pT_50_250_reco_37900.slcio
+tauGun_pT_50_250_reco_11100.slcio  tauGun_pT_50_250_reco_20000.slcio  tauGun_pT_50_250_reco_29000.slcio  tauGun_pT_50_250_reco_3800.slcio
+tauGun_pT_50_250_reco_11200.slcio  tauGun_pT_50_250_reco_20100.slcio  tauGun_pT_50_250_reco_29100.slcio  tauGun_pT_50_250_reco_38000.slcio
+tauGun_pT_50_250_reco_11300.slcio  tauGun_pT_50_250_reco_20200.slcio  tauGun_pT_50_250_reco_29200.slcio  tauGun_pT_50_250_reco_38100.slcio
+tauGun_pT_50_250_reco_11400.slcio  tauGun_pT_50_250_reco_20300.slcio  tauGun_pT_50_250_reco_29300.slcio  tauGun_pT_50_250_reco_38200.slcio
+tauGun_pT_50_250_reco_11500.slcio  tauGun_pT_50_250_reco_20400.slcio  tauGun_pT_50_250_reco_29400.slcio  tauGun_pT_50_250_reco_38300.slcio
+tauGun_pT_50_250_reco_11600.slcio  tauGun_pT_50_250_reco_20500.slcio  tauGun_pT_50_250_reco_29500.slcio  tauGun_pT_50_250_reco_38400.slcio
+tauGun_pT_50_250_reco_11700.slcio  tauGun_pT_50_250_reco_20600.slcio  tauGun_pT_50_250_reco_29600.slcio  tauGun_pT_50_250_reco_38500.slcio
+tauGun_pT_50_250_reco_11800.slcio  tauGun_pT_50_250_reco_20700.slcio  tauGun_pT_50_250_reco_29700.slcio  tauGun_pT_50_250_reco_38600.slcio
+tauGun_pT_50_250_reco_11900.slcio  tauGun_pT_50_250_reco_20800.slcio  tauGun_pT_50_250_reco_29800.slcio  tauGun_pT_50_250_reco_38700.slcio
+tauGun_pT_50_250_reco_1200.slcio   tauGun_pT_50_250_reco_20900.slcio  tauGun_pT_50_250_reco_29900.slcio  tauGun_pT_50_250_reco_38800.slcio
+tauGun_pT_50_250_reco_12000.slcio  tauGun_pT_50_250_reco_2100.slcio   tauGun_pT_50_250_reco_300.slcio	 tauGun_pT_50_250_reco_38900.slcio
+tauGun_pT_50_250_reco_12100.slcio  tauGun_pT_50_250_reco_21000.slcio  tauGun_pT_50_250_reco_3000.slcio	 tauGun_pT_50_250_reco_3900.slcio
+tauGun_pT_50_250_reco_12200.slcio  tauGun_pT_50_250_reco_21100.slcio  tauGun_pT_50_250_reco_30000.slcio  tauGun_pT_50_250_reco_39000.slcio
+tauGun_pT_50_250_reco_12300.slcio  tauGun_pT_50_250_reco_21200.slcio  tauGun_pT_50_250_reco_30100.slcio  tauGun_pT_50_250_reco_39100.slcio
+tauGun_pT_50_250_reco_12400.slcio  tauGun_pT_50_250_reco_21300.slcio  tauGun_pT_50_250_reco_30200.slcio  tauGun_pT_50_250_reco_39200.slcio
+tauGun_pT_50_250_reco_12500.slcio  tauGun_pT_50_250_reco_21400.slcio  tauGun_pT_50_250_reco_30300.slcio  tauGun_pT_50_250_reco_39300.slcio
+tauGun_pT_50_250_reco_12600.slcio  tauGun_pT_50_250_reco_21500.slcio  tauGun_pT_50_250_reco_30400.slcio  tauGun_pT_50_250_reco_39400.slcio
+tauGun_pT_50_250_reco_12700.slcio  tauGun_pT_50_250_reco_21600.slcio  tauGun_pT_50_250_reco_30500.slcio  tauGun_pT_50_250_reco_39500.slcio
+tauGun_pT_50_250_reco_12800.slcio  tauGun_pT_50_250_reco_21700.slcio  tauGun_pT_50_250_reco_30600.slcio  tauGun_pT_50_250_reco_39600.slcio
+tauGun_pT_50_250_reco_12900.slcio  tauGun_pT_50_250_reco_21800.slcio  tauGun_pT_50_250_reco_30700.slcio  tauGun_pT_50_250_reco_39700.slcio
+tauGun_pT_50_250_reco_1300.slcio   tauGun_pT_50_250_reco_21900.slcio  tauGun_pT_50_250_reco_30800.slcio  tauGun_pT_50_250_reco_39800.slcio
+tauGun_pT_50_250_reco_13000.slcio  tauGun_pT_50_250_reco_2200.slcio   tauGun_pT_50_250_reco_30900.slcio  tauGun_pT_50_250_reco_39900.slcio
+tauGun_pT_50_250_reco_13100.slcio
+    </parameter>
+    <!-- parameter name="MaxRecordNumber" value="-1" /-->
+    <parameter name="MaxRecordNumber" value="1000" />
+    <parameter name="SkipNEvents" value="0" />
+    <parameter name="SupressCheck" value="false" />
+    <parameter name="Verbosity"	options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT">MESSAGE0</parameter>
+  </global>
+
+
+<processor name="Output_REC" type="LCIOOutputProcessor">
+    <!--   standard output: full reconstruction keep all collections -->
+    <parameter name="LCIOOutputFile" type="string">pfotest.slcio </parameter>
+    <parameter name="FullSubsetCollections" type="StringVec"> EfficientMCParticles InefficientMCParticles </parameter>
+    <parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
+    <!-- <parameter name="SplitFileSizekB" type="int">996147 </parameter> -->
+    <parameter name="Verbosity" type="string">WARNING </parameter>
+    <parameter name="DropCollectionNames" type="StringVec"></parameter>
+    <parameter name="DropCollectionTypes" type="StringVec">SimCalorimeterHit SimTrackerHit</parameter>
+    <parameter name="KeepCollectionNames" type="StringVec">MCParticle_SiTracks_Refitted</parameter>
+
+  </processor>
+
+<processor name="DDMarlinPandora" type="DDPandoraPFANewProcessor">
+  <parameter name="PandoraSettingsXmlFile" type="String"> subconfigs/PandoraSettingsDefault.xml </parameter>
+  <!-- CLIC specifict software compensation weights derived from K0L and neutrons -->
+  <parameter name="SoftwareCompensationWeights" type="FloatVec">1.61741 -0.00444385 2.29683e-05 -0.0731236 -0.00157099 -7.09546e-07 0.868443 1.0561 -0.0238574</parameter>
+  <parameter name="SoftwareCompensationEnergyDensityBins" type="FloatVec">0 2. 5. 7.5 9.5 13. 16. 20. 23.5 28. 33. 40. 50. 75. 100.</parameter>
+  <parameter name="FinalEnergyDensityBin" type="float">110.</parameter>
+  <parameter name="MaxClusterEnergyToApplySoftComp" type="float">2000.</parameter>
+  <!-- Collection names -->
+  <parameter name="TrackCollections" type="StringVec"> SiTracks_Refitted </parameter>
+  <parameter name="ECalCaloHitCollections" type="StringVec">EcalBarrelCollectionSel EcalEndcapCollectionSel</parameter>
+  <parameter name="HCalCaloHitCollections" type="StringVec">HcalBarrelCollectionSel HcalEndcapCollectionSel</parameter>
+  <parameter name="MuonCaloHitCollections" type="StringVec"></parameter>
+  <parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
+  <parameter name="RelCaloHitCollections" type="StringVec">EcalBarrelRelationsSimSel EcalEndcapRelationsSimSel HcalBarrelRelationsSimSel HcalEndcapRelationsSimSel</parameter>
+  <parameter name="RelTrackCollections" type="StringVec"> SiTracks_Refitted_Relation </parameter>
+  <parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+  <parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+  <parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+  <parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+  <parameter name="ClusterCollectionName" type="String">PandoraClusters</parameter>
+  <parameter name="PFOCollectionName" type="String">PandoraPFOs</parameter>
+  <!-- Calibration constants -->
+  <parameter name="ECalToMipCalibration" type="float">181.818 </parameter>
+  <parameter name="HCalToMipCalibration" type="float">40.8163</parameter>
+  <parameter name="ECalMipThreshold" type="float">0.5</parameter>
+  <parameter name="HCalMipThreshold" type="float">0.3</parameter>
+  <parameter name="ECalToEMGeVCalibration" type="float">1.02373335516</parameter>
+  <parameter name="HCalToEMGeVCalibration" type="float">1.02373335516</parameter>
+  <parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.24223718397</parameter>
+  <parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.24223718397</parameter>
+  <parameter name="HCalToHadGeVCalibration" type="float">1.01799349172</parameter>
+  <parameter name="MuonToMipCalibration" type="float">19607.8</parameter>
+  <parameter name="DigitalMuonHits" type="int">0</parameter>
+  <parameter name="MaxHCalHitHadronicEnergy" type="float">1000000</parameter>
+  <!--Whether to calculate track states manually, rather than copy stored fitter values-->
+  <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+  <parameter name="NEventsToSkip" type="int">0</parameter>
+  <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> WARNING</parameter>
+  <!--Energy Corrections in Marlin Pandora-->
+  <!--parameter name="InputEnergyCorrectionPoints" type="FloatVec">InputEnergyCorrectionPoints_XXXX</parameter-->
+  <!--parameter name="OutputEnergyCorrectionPoints" type="FloatVec">OutputEnergyCorrectionPoints_XXXX</parameter-->
+
+  <!--Decides whether to create gaps in the geometry (ILD-specific)-->
+  <parameter name="CreateGaps" type="bool">false </parameter>
+
+  <!--Track quality settings: need to be optimized! More in processor-->
+  <!--Cut on fractional of expected number of BarrelTracker hits-->
+  <parameter name="MinBarrelTrackerHitFractionOfExpected" type="int">0 </parameter>
+  <!--Cut on minimum number of FTD hits of BarrelTracker hit fraction to be applied-->
+  <parameter name="MinFtdHitsForBarrelTrackerHitFraction" type="int">0 </parameter>
+  <!--Track quality cut: the minimum number of ftd track hits for ftd only tracks-->
+  <parameter name="MinFtdTrackHits" type="int">0 </parameter>
+  <!--Min track momentum required to perform final quality checks on number of hits-->
+  <parameter name="MinMomentumForTrackHitChecks" type="float">0 </parameter>
+  <!--Cut on fractional of expected number of TPC hits-->
+  <parameter name="MinTpcHitFractionOfExpected" type="float">0 </parameter>
+  <!--Sanity check on separation between ip and track projected ecal position-->
+  <parameter name="MinTrackECalDistanceFromIp" type="float">0 </parameter>
+  <!--Track quality cut: the minimum number of track hits-->
+  <parameter name="MinTrackHits" type="int">0 </parameter>
+
+  <!-- MORE TRACKING  CUTS -->
+  <!--Max distance from track to BarrelTracker r max to id whether track reaches ecal-->
+  <parameter name="ReachesECalBarrelTrackerOuterDistance" type="float">-100 </parameter>
+  <!--Max distance from track to BarrelTracker z max to id whether track reaches ecal-->
+  <parameter name="ReachesECalBarrelTrackerZMaxDistance" type="float">-50 </parameter>
+  <!--Max distance from track hit to ftd z position to identify ftd hits-->
+  <parameter name="ReachesECalFtdZMaxDistance" type="float">1 </parameter>
+  <!--Min FTD layer for track to be considered to have reached ecal-->
+  <parameter name="ReachesECalMinFtdLayer" type="int">0 </parameter>
+  <!--Minimum number of BarrelTracker hits to consider track as reaching ecal-->
+  <parameter name="ReachesECalNBarrelTrackerHits" type="int">0 </parameter>
+  <!--Minimum number of ftd hits to consider track as reaching ecal-->
+  <parameter name="ReachesECalNFtdHits" type="int">0 </parameter>
+  <!--Maximum energy for unmatched vertex track-->
+  <parameter name="UnmatchedVertexTrackMaxEnergy" type="float">5 </parameter>
+  <!--Whether can form pfos from tracks that don't start at vertex-->
+  <parameter name="UseNonVertexTracks" type="int">1 </parameter>
+  <!--Whether to calculate track states manually, rather than copy stored fitter values-->
+  <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+  <!--Whether can form pfos from unmatched tracks that don't start at vertex-->
+  <parameter name="UseUnmatchedNonVertexTracks" type="int">0 </parameter>
+  <!--Whether can form pfos from unmatched tracks that start at vertex-->
+  <parameter name="UseUnmatchedVertexTracks" type="int">1 </parameter>
+  <!--Track z0 cut used to determine whether track can be used to form pfo-->
+  <parameter name="Z0TrackCut" type="float">200 </parameter>
+  <!--z0 cut used to determine whether unmatched vertex track can form pfo-->
+  <parameter name="Z0UnmatchedVertexTrackCut" type="float">5 </parameter>
+  <!--Non vtx track z cut to determine whether track can be used to form pfo-->
+  <parameter name="ZCutForNonVertexTracks" type="float">250 </parameter>
+  <!--Track quality cut: the maximum number of track hits-->
+  <parameter name="MaxTrackHits" type="int">5000 </parameter>
+  <!--Cut on fractional track momentum error-->
+  <parameter name="MaxTrackSigmaPOverP" type="float">0.15 </parameter>
+  <!--Constant relating track curvature in b field to momentum-->
+  <parameter name="CurvatureToMomentumFactor" type="float">0.00015 </parameter>
+  <!--Track d0 cut used to determine whether track can be used to form pfo-->
+  <parameter name="D0TrackCut" type="float">200 </parameter>
+  <!--d0 cut used to determine whether unmatched vertex track can form pfo-->
+  <parameter name="D0UnmatchedVertexTrackCut" type="float">5 </parameter>
+
+  <!--The algorithm name for filling start vertex-->
+  <parameter name="StartVertexAlgorithmName" type="string">PandoraPFANew </parameter>
+  <!--Start Vertex Collection Name-->
+  <parameter name="StartVertexCollectionName" type="string" lcioOutType="Vertex"> PandoraStartVertices </parameter>
+
+  <!--Normal vector for the muon barrel sensitive layers in local coordinates-->
+  <parameter name="YokeBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+  <!--Normal vector for the HCal barrel sensitive layers in local coordinates-->
+  <parameter name="HCalBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+  <!--Normal vector for the ECal barrel sensitive layers in local coordinates-->
+  <parameter name="ECalBarrelNormalVector" type="FloatVec">0 0 1  </parameter>
+  <!--The bfield in the muon barrel, units Tesla-->
+  <parameter name="MuonBarrelBField" type="float">-1.34 </parameter>
+  <!--The bfield in the muon endcap, units Tesla-->
+  <parameter name="MuonEndCapBField" type="float">0.01 </parameter>
+
+  <!--The constant term for EM shower-->
+  <parameter name="EMConstantTerm" type="float">0.01 </parameter>
+  <!--The stochastic term for EM shower-->
+  <parameter name="EMStochasticTerm" type="float">0.17 </parameter>
+  <!--The constant term for Hadronic shower-->
+  <parameter name="HadConstantTerm" type="float">0.03 </parameter>
+  <!--The stochastic term for Hadronic shower-->
+  <parameter name="HadStochasticTerm" type="float">0.6 </parameter>
+
+  <!--The input energy points for hadronic energy correction-->
+  <parameter name="InputEnergyCorrectionPoints" type="FloatVec"> </parameter>
+
+  <!--Maximum number of layers from candidate outer layer hit to rear of detector-->
+  <parameter name="LayersFromEdgeMaxRearDistance" type="float">250 </parameter>
+  <!--Number of layers from edge for hit to be flagged as an outer layer hit-->
+  <parameter name="NOuterSamplingLayers" type="int">3 </parameter>
+  <!--Distance of possible second track state in the ECal Endcap to the ECal barrel inner radius-->
+  <parameter name="TrackStateTolerance" type="float">0 </parameter>
+
+  <!--Track cut on distance from BarrelTracker inner r to id whether track can form pfo-->
+  <parameter name="MaxBarrelTrackerInnerRDistance" type="float">200 </parameter>
+
+  <!--The minimum correction to on ecal hit in Pandora energy correction-->
+  <parameter name="MinCleanCorrectedHitEnergy" type="float">0.1 </parameter>
+  <!--The minimum hit energy to apply ecal correction in Pandora energy correction-->
+  <parameter name="MinCleanHitEnergy" type="float">0.5 </parameter>
+  <!--The minimum hit energy fraction to apply ecal correction in Pandora energy correction-->
+  <parameter name="MinCleanHitEnergyFraction" type="float">0.01 </parameter>
+
+  <!--The energy for a digital muon calorimeter hit, units GeV-->
+  <parameter name="MuonHitEnergy" type="float">0.5 </parameter>
+
+  <!--Whether to form pandora track relationships using v0 and kink info-->
+  <parameter name="ShouldFormTrackRelationships" type="int">1 </parameter>
+
+  <!--The name of the DDTrackCreator implementation-->
+  <parameter name="TrackCreatorName" type="string">DDTrackCreatorCLIC </parameter>
+  <!--Name of the track fitting system to be used (KalTest, DDKalTest, aidaTT, ... )-->
+  <parameter name="TrackSystemName" type="string">DDKalTest </parameter>
+  <!--The output energy points for hadronic energy correction-->
+  <parameter name="OutputEnergyCorrectionPoints" type="FloatVec"> </parameter>
+
+
+  <!--To use scintillator layers ~ hybrid ECAL, this should be true-->
+  <parameter name="UseEcalScLayers" type="int">0 </parameter>
+  <!--Threshold for creating calo hits in the Sc-layers of ECAL, units mip-->
+  <parameter name="ECalScMipThreshold" type="float">0 </parameter>
+  <!--The calibration from deposited Sc-layer energy to EM energy-->
+  <parameter name="ECalScToEMGeVCalibration" type="float">1 </parameter>
+  <!--The calibration from deposited Sc-layer energy to the barrel hadronic energy-->
+  <parameter name="ECalScToHadGeVCalibrationBarrel" type="float">1 </parameter>
+  <!--The calibration from deposited Sc-layer energy on the endcaps to hadronic energy-->
+  <parameter name="ECalScToHadGeVCalibrationEndCap" type="float">1 </parameter>
+  <!--The calibration from deposited Sc-layer energy to mip-->
+  <parameter name="ECalScToMipCalibration" type="float">1 </parameter>
+  <!--Threshold for creating calo hits in the Si-layers of ECAL, units mip-->
+  <parameter name="ECalSiMipThreshold" type="float">0 </parameter>
+  <!--The calibration from deposited Si-layer energy to EM energy-->
+  <parameter name="ECalSiToEMGeVCalibration" type="float">1 </parameter>
+  <!--The calibration from deposited Si-layer energy on the barrel to hadronic energy-->
+  <parameter name="ECalSiToHadGeVCalibrationBarrel" type="float">1 </parameter>
+  <!--The calibration from deposited Si-layer energy on the enecaps to hadronic energy-->
+  <parameter name="ECalSiToHadGeVCalibrationEndCap" type="float">1 </parameter>
+  <!--The calibration from deposited Si-layer energy to mip-->
+  <parameter name="ECalSiToMipCalibration" type="float">1 </parameter>
+  <!--To use strip splitting algorithm, this should be true-->
+  <parameter name="StripSplittingOn" type="int">0 </parameter>
+
+</processor>
+
+	<processor name="FastJetProcessor" type="FastJetProcessor">
+		<parameter name="algorithm" type="StringVec">antikt_algorithm 0.4</parameter>
+		<parameter name="clusteringMode" type="StringVec"> Inclusive 5</parameter>
+		<parameter name="jetOut" type="string" lcioOutType="ReconstructedParticle">JetOut </parameter>
+		<parameter name="recParticleIn" type="string" lcioInType="CalorimeterHit"> PandoraPFOs</parameter>
+		<parameter name="recombinationScheme" type="string">E_scheme </parameter>
+	</processor>
+
+</marlin>

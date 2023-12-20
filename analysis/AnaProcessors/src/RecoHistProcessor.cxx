@@ -100,6 +100,11 @@ void RecoHistProcessor::book_pfo_histograms(){
   _h_phipf  = new TH1F("PFO_phi", ";#phi [rad]", 100,-3, 3);
   _h_thetapf= new TH1F("PFO_theta", ";#theta [rad]", 100,0,3.14);
   _h_nClusters = new TH1F("PFO_ncl", ";NCl", 50,0,10);
+ _h_inv_E = new TH1F("Invariant Energy - Set Energy", ";#Delta E [GeV]", 200,-500.,500.);
+  _h_inv_msqr = new TH1F("Invariant Mass Squared", ";m^2 [GeV^2]", 200,-100000,50.);
+  _h_mass = new TH1F("Set Mass", ";m [GeV]", 100,0,10);
+  _h_inv_p = new TH1F("Invariant Momentum - Set Momentum", ";#Delta p [GeV]", 200,-500,100);
+  _h_cl_res = new TH1F("Cluster Energy - PFO Energy", ";#Delta E [GeV]", 100,-500,500);
 
 }
 void RecoHistProcessor::book_cluster_histograms(){
@@ -109,9 +114,15 @@ void RecoHistProcessor::book_cluster_histograms(){
   _h_Ycl = new TH1F("Cluster Y-position", ";y [mm]", 4000,-2000,2000);
   _h_Zcl = new TH1F("Cluster Z-position", ";z [mm]", 8000,-4000,4000);
   _h_iPhicl=new TH1F("Cluster Intrinsic Phi", ";#phi [rad]", 10,-3.2,3.2);
-  _h_iThetacl=new TH1F("Cluster Intrinsic Theta", ";#theta [rad]",10,0,3.2);
+  _h_iThetacl=new TH1F("Cluster Intrinsic Theta", ";#theta [rad]",100,-6.4,6.4);
   _h_PIDcl = new TH1F("Cluster Most Likely PID", "; PID", 10000, -300, 2500);
   _h_Ncl    = new TH1F("nClustersFound", ";N", 50, 0, 10);
+  _h_CLpdg = new TH1F("PDG of clust", ";PDG ID", 5000,-1000,2500);
+  _h_Eres = new TH1F("Energy Resolution", "; (E_{truth}-E_{clust})/E_{truth}", 1000,-50,50);
+  _h_nhits = new TH1F("NHits per cluster", ";NHits", 100,0,100);
+  _h_nHcalHits = new TH1F("NHCal hits per event", ";NHCalHits", 500,0,1000);
+  _h_nEcalHits = new TH1F("NECal hits per event", ";NECalHits", 500,0,1000);
+  _h_E_v_theta = new TH2F("E against Theta", "E [GeV];#theta [rad]", 50,0,300, 50,-6.4,6.4);
 
 }
 void RecoHistProcessor::book_track_histograms(){
@@ -186,16 +197,17 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
   //get number of elements
   const int nEl = inputCol->getNumberOfElements();
   //if(nEl==0) std::cout<<"No PFO"<<std::endl;
-  // _h_Npf->Fill(nEl);
+  _h_Npf->Fill(nEl);
   _has_valid_pt=false;
   int nPF = 0;
   for(uint32_t i=0;i<nEl;i++) {
     const EVENT::ReconstructedParticle *pof=static_cast<const EVENT::ReconstructedParticle*>(inputCol->getElementAt(i));
     // get pdg
     int pdg = pof->getType();
-    if(abs(pdg) != 15){// && _pfopdg != 0){
-      continue;
-    }
+    if(abs(pdg)!=211) continue;
+    // if(abs(pdg) != 15){// && _pfopdg != 0){
+    //continue;
+    //}
     nPF++;
     _h_pdgpf->Fill(pdg);
     //get momentum and energy
@@ -203,9 +215,31 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
 
     double E=pof->getEnergy();
     double pt=std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2));
-    double p =std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2))+std::sqrt(std::pow(mom[2],2));
+    double p =std::sqrt(std::pow(mom[0],2)+std::pow(mom[1],2)+std::pow(mom[2],2));
     double phi = std::atan(mom[1]/mom[0]);
     double theta = std::atan(mom[2]/p);
+    double mass = pof->getMass();
+    _h_mass->Fill(mass);
+ double inv_E = std::sqrt(std::pow(p,2)+std::pow(mass,2));
+    _h_inv_E->Fill(inv_E-E);
+
+    double inv_p = std::sqrt(std::pow(E,2)-std::pow(mass,2));
+    _h_inv_p->Fill(inv_p-p);
+    
+    double invm = (std::pow(E,2)-std::pow(p,2));
+    _h_inv_msqr->Fill(invm);
+    //std::cout<<invm<<std::endl;
+    double Eclust = 0;
+    const EVENT::ClusterVec clusts = pof->getClusters();
+    if(clusts.size()>0){
+      for(int cl_iter = 0; cl_iter < clusts.size(); cl_iter++){
+	const EVENT::Cluster* cl = static_cast<const EVENT::Cluster*>(clusts[cl_iter]);
+	Eclust+=cl->getEnergy();
+      }
+      _h_cl_res->Fill(Eclust-E);
+    }
+    
+    
 
     //momentum check
     if(pt < _minPt){
@@ -229,7 +263,7 @@ void RecoHistProcessor::fill_pfo_histograms(LCCollection* inputCol){
 
   }
   if(_has_valid_pt==true){
-    _h_Npf->Fill(nPF);
+    //_h_Npf->Fill(nPF);
   }
 
       
@@ -275,14 +309,63 @@ void RecoHistProcessor::fill_tau_histograms(LCCollection* inputCol){
       
 }
   
-void RecoHistProcessor::fill_cluster_histograms(LCCollection* inputCol){
+void RecoHistProcessor::fill_cluster_histograms(LCCollection* inputCol, LCEvent *evt){
 
   //get number of elements
   const int nEl = inputCol->getNumberOfElements();
   _h_Ncl->Fill(nEl);
+  if(nEl!=0){
+    LCCollection *ecb;
+    LCCollection *ece;
+    LCCollection *hcb;
+    LCCollection *hce;
+    int nhcalhits = 0;
+    int necalhits = 0;
+    bool hasECB = true;
+    bool hasECE = true;
+    bool hasHCB = true;
+    bool hasHCE = true;
+    try{
+      ecb = evt->getCollection("EcalBarrelCollectionRec");
+    }
+    catch(Exception& e){
+      hasECB = false;
+    }
+    try{
+      ece = evt->getCollection("EcalEndcapCollectionRec");
+    }
+    catch(Exception& e){
+      hasECE = false;
+    }
+    try{
+      hcb = evt->getCollection("HcalBarrelsCollectionRec");
+    }
+    catch(Exception& e){
+      hasHCB = false;
+    }
+    try{
+      hce = evt->getCollection("HcalEndcapsCollectionRec");
+    }
+    catch(Exception& e){
+      hasHCE = false;
+    }
+    if(hasECB) necalhits += ecb->getNumberOfElements();
+    if(hasECE) necalhits += ece->getNumberOfElements();
+    if(hasHCB){
+      nhcalhits += hcb->getNumberOfElements();
+    }
+    if(hasHCE) nhcalhits += hce->getNumberOfElements();
+    //if(!nhcalhits) std::cout<<necalhits<<std::endl;
+
+    _h_nEcalHits->Fill(necalhits);
+    _h_nHcalHits->Fill(nhcalhits);
+  }
 
   for(uint32_t i=0;i<nEl;i++) {
     const EVENT::Cluster *cl=static_cast<const EVENT::Cluster*>(inputCol->getElementAt(i));
+    //get nhits
+    const EVENT::CalorimeterHitVec hits = cl->getCalorimeterHits();
+    _h_nhits->Fill(hits.size());
     //get energy and position
     double E = cl->getEnergy();
     _h_Ecl->Fill(E);
@@ -290,7 +373,8 @@ void RecoHistProcessor::fill_cluster_histograms(LCCollection* inputCol){
     double x = pos[0];
     double y = pos[1];
     double z = pos[2];
-    _h_Xcl->Fill(x);
+    double rad = std::sqrt(x*x + y*y + z*z);
+    _h_Xcl->Fill(rad);
     _h_Ycl->Fill(y);
     _h_Zcl->Fill(z);
 
@@ -300,12 +384,18 @@ void RecoHistProcessor::fill_cluster_histograms(LCCollection* inputCol){
     double theta = cl->getITheta();
     _h_iThetacl->Fill(theta);
 
+    _h_E_v_theta->Fill(E,theta);
+
     //Get most likely particle ID
     const ParticleIDVec& PID = cl->getParticleIDs();
     if(PID.size()!=0){
       double pid_pdg = PID[0]->getPDG();
+      std::cout<<pid_pdg<<std::endl;
       _h_PIDcl->Fill(pid_pdg);
     }
+
+    //looks like getting the mcp will be rather difficult
+    //maybe do a separate matching thing in the efficiency module like we have done
 
 
 
@@ -346,6 +436,7 @@ void RecoHistProcessor::fill_track_histograms(LCCollection* inputCol, LCCollecti
     const EVENT::Track *trk=static_cast<const EVENT::Track*>(inputCol->getElementAt(i));
     const EVENT::TrackerHitVec trkhits = trk->getTrackerHits();
     int ntrkhits = trkhits.size();
+
 
     _h_ntrkhits->Fill(ntrkhits);
     
@@ -444,13 +535,13 @@ void RecoHistProcessor::processEvent( LCEvent * evt ) {
       //fill the histograms for PFOs
       fill_pfo_histograms(inputCol);
     }
-    else if( inputCol->getTypeName() == lcio::LCIO::CLUSTER && _has_valid_pt==true) {
+    else if( inputCol->getTypeName() == lcio::LCIO::CLUSTER) {
       //fill the histograms for clusters
-      fill_cluster_histograms(inputCol);
+      fill_cluster_histograms(inputCol,evt);
     }
     else if( inputCol->getTypeName() == lcio::LCIO::TRACK ) {
       //fill the histograms for tracks
-      fill_track_histograms(inputCol,MCCol,nullptr);
+      // fill_track_histograms(inputCol,MCCol,nullptr);
     }
     else{
       //throw EVENT::Exception( "Invalid collection type: " + inputCol->getTypeName() ) ;

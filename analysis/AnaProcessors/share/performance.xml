@@ -17,6 +17,8 @@
     <!--processor name = "CaloAna"/-->
     <!--processor name = "AnaPions"/-->
     <processor name = "eff"/>
+    <!--processor name = "MyTrackPerf" /-->
+    <!--processor name = "TestCandRecovery"/-->
     <processor name="EventNumber" />
   </execute>
 
@@ -29,10 +31,37 @@
 
   <global>
     <parameter name="LCIOInputFiles">
-      inputfile
+     tauGun_pT_50_250_reco_40000.slcio  tauGun_pT_50_250_reco_42400.slcio  tauGun_pT_50_250_reco_45000.slcio  tauGun_pT_50_250_reco_47500.slcio
+tauGun_pT_50_250_reco_4000.slcio   tauGun_pT_50_250_reco_42500.slcio  tauGun_pT_50_250_reco_4500.slcio	 tauGun_pT_50_250_reco_47600.slcio
+tauGun_pT_50_250_reco_400.slcio    tauGun_pT_50_250_reco_42600.slcio  tauGun_pT_50_250_reco_45100.slcio  tauGun_pT_50_250_reco_47700.slcio
+tauGun_pT_50_250_reco_40100.slcio  tauGun_pT_50_250_reco_42700.slcio  tauGun_pT_50_250_reco_45200.slcio  tauGun_pT_50_250_reco_47800.slcio
+tauGun_pT_50_250_reco_40200.slcio  tauGun_pT_50_250_reco_42800.slcio  tauGun_pT_50_250_reco_45300.slcio  tauGun_pT_50_250_reco_47900.slcio
+tauGun_pT_50_250_reco_40300.slcio  tauGun_pT_50_250_reco_42900.slcio  tauGun_pT_50_250_reco_45400.slcio  tauGun_pT_50_250_reco_48000.slcio
+tauGun_pT_50_250_reco_40400.slcio  tauGun_pT_50_250_reco_43000.slcio  tauGun_pT_50_250_reco_45500.slcio  tauGun_pT_50_250_reco_4800.slcio
+tauGun_pT_50_250_reco_40500.slcio  tauGun_pT_50_250_reco_4300.slcio   tauGun_pT_50_250_reco_45600.slcio  tauGun_pT_50_250_reco_48100.slcio
+tauGun_pT_50_250_reco_40600.slcio  tauGun_pT_50_250_reco_43100.slcio  tauGun_pT_50_250_reco_45700.slcio  tauGun_pT_50_250_reco_48200.slcio
+tauGun_pT_50_250_reco_40700.slcio  tauGun_pT_50_250_reco_43200.slcio  tauGun_pT_50_250_reco_45800.slcio  tauGun_pT_50_250_reco_48300.slcio
+tauGun_pT_50_250_reco_40800.slcio  tauGun_pT_50_250_reco_43300.slcio  tauGun_pT_50_250_reco_45900.slcio  tauGun_pT_50_250_reco_48400.slcio
+tauGun_pT_50_250_reco_40900.slcio  tauGun_pT_50_250_reco_43400.slcio  tauGun_pT_50_250_reco_46000.slcio  tauGun_pT_50_250_reco_48500.slcio
+tauGun_pT_50_250_reco_41000.slcio  tauGun_pT_50_250_reco_43500.slcio  tauGun_pT_50_250_reco_4600.slcio	 tauGun_pT_50_250_reco_48600.slcio
+tauGun_pT_50_250_reco_4100.slcio   tauGun_pT_50_250_reco_43600.slcio  tauGun_pT_50_250_reco_46100.slcio  tauGun_pT_50_250_reco_48700.slcio
+tauGun_pT_50_250_reco_41100.slcio  tauGun_pT_50_250_reco_43700.slcio  tauGun_pT_50_250_reco_46200.slcio  tauGun_pT_50_250_reco_48800.slcio
+tauGun_pT_50_250_reco_41200.slcio  tauGun_pT_50_250_reco_43800.slcio  tauGun_pT_50_250_reco_46300.slcio  tauGun_pT_50_250_reco_48900.slcio
+tauGun_pT_50_250_reco_41300.slcio  tauGun_pT_50_250_reco_43900.slcio  tauGun_pT_50_250_reco_46400.slcio  tauGun_pT_50_250_reco_49000.slcio
+tauGun_pT_50_250_reco_41400.slcio  tauGun_pT_50_250_reco_44000.slcio  tauGun_pT_50_250_reco_46500.slcio  tauGun_pT_50_250_reco_4900.slcio
+tauGun_pT_50_250_reco_41500.slcio  tauGun_pT_50_250_reco_4400.slcio   tauGun_pT_50_250_reco_46600.slcio  tauGun_pT_50_250_reco_49100.slcio
+tauGun_pT_50_250_reco_41600.slcio  tauGun_pT_50_250_reco_44100.slcio  tauGun_pT_50_250_reco_46700.slcio  tauGun_pT_50_250_reco_49200.slcio
+tauGun_pT_50_250_reco_41700.slcio  tauGun_pT_50_250_reco_44200.slcio  tauGun_pT_50_250_reco_46800.slcio  tauGun_pT_50_250_reco_49300.slcio
+tauGun_pT_50_250_reco_41800.slcio  tauGun_pT_50_250_reco_44300.slcio  tauGun_pT_50_250_reco_46900.slcio  tauGun_pT_50_250_reco_49400.slcio
+tauGun_pT_50_250_reco_41900.slcio  tauGun_pT_50_250_reco_44400.slcio  tauGun_pT_50_250_reco_47000.slcio  tauGun_pT_50_250_reco_49500.slcio
+tauGun_pT_50_250_reco_42000.slcio  tauGun_pT_50_250_reco_44500.slcio  tauGun_pT_50_250_reco_4700.slcio	 tauGun_pT_50_250_reco_49600.slcio
+tauGun_pT_50_250_reco_4200.slcio   tauGun_pT_50_250_reco_44600.slcio  tauGun_pT_50_250_reco_47100.slcio  tauGun_pT_50_250_reco_49700.slcio
+tauGun_pT_50_250_reco_42100.slcio  tauGun_pT_50_250_reco_44700.slcio  tauGun_pT_50_250_reco_47200.slcio  tauGun_pT_50_250_reco_49800.slcio
+tauGun_pT_50_250_reco_42200.slcio  tauGun_pT_50_250_reco_44800.slcio  tauGun_pT_50_250_reco_47300.slcio  tauGun_pT_50_250_reco_49900.slcio
+tauGun_pT_50_250_reco_42300.slcio  tauGun_pT_50_250_reco_44900.slcio  tauGun_pT_50_250_reco_47400.slcio
     </parameter>
     <!-- Limit the number of processed records (run+evt): -->
-    <parameter name="MaxRecordNumber" value="1000" />
+    <parameter name="MaxRecordNumber" value="-1" />
     <parameter name="SkipNEvents" value="0" />
     <parameter name="SupressCheck" value="false" />  
     <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT">WARNING </parameter>
@@ -51,7 +80,7 @@
     <!-- compression of output file 0: false >0: true (default) -->
     <parameter name="Compress" type="int" value="10"/>
     <!-- filename without extension-->
-    <parameter name="FileName" type="string" value="taugun_pieff"/>
+    <parameter name="FileName" type="string" value="pftest"/>
     <!-- type of output file xml (default) or root ( only OpenScientist)-->
     <parameter name="FileType" type="string" value="root "/>
   </processor>
@@ -91,5 +120,17 @@
     <parameter name = "InputCollectionNameReco" type = "string" lcioInType = "ReconstructedParticle" value = "PandoraPFOs" />
     <parameter name = "InputCollectionNameMCP" type = "string" lcioInType = "MCParticle" value = "MCParticle" />
   </processor>
+
+  <processor name="MyTrackPerf" type="TrackPerfHistProc">
+    <!--Name of the MCParticle collection-->
+    <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle">MCParticle</parameter>
+    <!--Name of the Track collection-->
+    <parameter name="TrackCollection" type="string" lcioInType="Track">SiTracks_Refitted</parameter>
+    <!--Relations-->
+    <parameter name="MCTrackRelationCollection" type="string" lcioInType="LCRelation">MCParticle_SiTracks_Refitted</parameter>
+  </processor>
+
+<processor name = "TestCandRecovery" type = "TauCandRecovery" >
+</processor>
 
 </marlin>

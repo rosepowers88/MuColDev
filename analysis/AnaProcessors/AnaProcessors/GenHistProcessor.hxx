@@ -61,7 +61,19 @@ private:
   TH1 *_h_theta = nullptr;
   TH1 *_h_charge = nullptr;
   TH1 *_h_vertex = nullptr;
+  TH1 *_h_vert_x = nullptr;
+  TH1 *_h_vert_y = nullptr;
+  TH1 *_h_vert_z = nullptr;
+  TH1 *_h_endpoint = nullptr;
+  TH1 *_h_end_x = nullptr;
+  TH1 *_h_end_y = nullptr;
+  TH1 *_h_end_z = nullptr;
+  TH1 *_h_decaylength = nullptr;
   TH1 *_h_MID = nullptr;
+  TH1 *_h_inv_msqr = nullptr;
+  TH1 *_h_inv_E = nullptr;
+  TH1 *_h_mass = nullptr;
+  TH1 *_h_inv_p = nullptr;
 
   TH1 *_h_rmax = nullptr;
   TH1 *_h_rmin = nullptr;

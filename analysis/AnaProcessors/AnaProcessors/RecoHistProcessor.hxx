@@ -1,6 +1,7 @@
 #pragma once
 
 #include <TH1F.h>
+#include <TH2F.h>
 
 #include <marlin/Processor.h>
 
@@ -35,7 +36,7 @@ public:
 
   virtual void fill_pfo_histograms(LCCollection* inputCol);
   virtual void fill_tau_histograms(LCCollection* inputCol);
-  virtual void fill_cluster_histograms(LCCollection* inputCol);
+  virtual void fill_cluster_histograms(LCCollection* inputCol,LCEvent *evt);
   virtual void fill_track_histograms(LCCollection* inputCol, LCCollection* MCCol, LCCollection* TrkCol);
 
   virtual int findMode(std::vector<int> vec);
@@ -88,6 +89,12 @@ private:
   TH1 *_h_phipf = nullptr;
   TH1 *_h_thetapf = nullptr;
   TH1 *_h_nClusters = nullptr;
+  TH1 *_h_inv_E = nullptr;
+  TH1 *_h_inv_p = nullptr;
+  TH1 *_h_mass = nullptr;
+  TH1 *_h_inv_msqr = nullptr;
+  TH1 *_h_cl_res = nullptr;
+
 
   //cluster histograms
   TH1 *_h_Ecl = nullptr;
@@ -98,6 +105,12 @@ private:
   TH1 *_h_iThetacl = nullptr;
   TH1 *_h_PIDcl = nullptr;
   TH1 *_h_Ncl   = nullptr;
+  TH1 *_h_CLpdg = nullptr;
+  TH1 *_h_Eres = nullptr;
+  TH1 *_h_nhits = nullptr;
+  TH1 *_h_nHcalHits = nullptr;
+  TH1 *_h_nEcalHits = nullptr;
+  TH2 *_h_E_v_theta = nullptr;
 
   //track histograms
   TH1 *_h_D0trk = nullptr;

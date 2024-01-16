@@ -25,7 +25,6 @@ EfficiencyProcessor::EfficiencyProcessor()
    * Rose Powers (2023)
    * Use this processor for:
    * - Efficiency studies
-   * - Configured for taus but can change easily
    * - Writing out to a root file for plotmaking
    **************************************************/
 
@@ -83,9 +82,9 @@ void EfficiencyProcessor::processRunHeader( LCRunHeader* /*run*/) {
 }
 
 void EfficiencyProcessor::processEvent( LCEvent * evt ) {
-  //
+ 
       const double pi = std::acos(-1);
-
+      //begin tracking efficiency here
   LCCollection* inputColMC = evt->getCollection(_inputCollectionNameMCP);
   LCCollection* inputColPFO = evt->getCollection(_inputCollectionNameR);
   LCCollection* clusterCol = evt->getCollection("PandoraClusters");
@@ -143,6 +142,7 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
       
     }
     if(min_dR < 0.005){
+      //fill pass histograms (uncomment for track matching)
       //_h_pass_pT->Fill(pt);
       //_h_pass_theta->Fill(theta);
       // _h_pass_phi->Fill(phi);
@@ -150,10 +150,10 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
 
       }
     else {
-      // put here the quantities of the particles that DON't get tracked
+      // fill here histograms of quantities of the particles that DON't get tracked
     }
 
-    //fill "denominator" histograms
+    //fill "denominator" histograms (uncomment for track matching)
     //_h_all_pT->Fill(pt);
     //_h_all_theta->Fill(theta);
     ////_h_all_phi->Fill(phi);
@@ -161,9 +161,9 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
   }
 
  
-  //end of track matching section, everything below for TAU REC
+  //end of track matching section
 
-  
+  //Beginning of tau rec matching (only relevant if TauRecProcessor has been run)  
   const int nMCP = inputColMC->getNumberOfElements();
   std::vector<double> ptvec;
   int nPiTrks=0;
@@ -213,15 +213,15 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
     //_h_all_pT->Fill(taupT);
     //_h_all_theta->Fill(tautheta)
  
-  if(!clusterCol->getNumberOfElements()){
-  }
+  //end of tau rec matching 
   
 
+  //beginning of CLUSTER MATCHING
   //perform cluster efficiency by doing dR matching for clusters, measure against theta and energy
   LCCollection* clusts = evt->getCollection("PandoraClusters");
   for(uint32_t mcIter = 0; mcIter < inputColMC->getNumberOfElements(); mcIter++){
     const EVENT::MCParticle *mc = static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(mcIter));
-    if(abs(mc->getPDG()) != 211) continue;
+    if(abs(mc->getPDG()) != 211 && abs(mc->getPDG()) != 111) continue; // include neutral pions
     const double mcE = mc->getEnergy();
     const double * mcmom = mc->getMomentum();
     const double mcpt = std::sqrt(mcmom[0]*mcmom[0]+mcmom[1]*mcmom[1]);
@@ -241,7 +241,7 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
       }
 
     }
-    if(mindR < 0.05 ){
+    if(mindR < 0.1 ){
       _h_pass_pT->Fill(mcE);
       _h_pass_theta->Fill(mc_eta);
     }
@@ -250,10 +250,11 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
 
 
   }
+  //end of cluster matching
 
-
-  // LCCollection* newPFOs = evt->getCollection("PandoraPFOs_test");
-  LCCollection* PFOs = evt->getCollection("PandoraPFOs_test");
+  //beginning of PFO MATCHING
+  // LCCollection* newPFOs = evt->getCollection("PandoraPFOs_test_2"); //uncomment if comparing two PFO collections
+  LCCollection* PFOs = evt->getCollection("PandoraPFOs_test"); //modified PFO collection
   for(uint32_t mcIter = 0; mcIter < inputColMC->getNumberOfElements(); mcIter++){
     const EVENT::MCParticle *mc = static_cast<const EVENT::MCParticle*>(inputColMC->getElementAt(mcIter));
     if(abs(mc->getPDG()) != 211) continue;
@@ -290,18 +291,21 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
 
     }
     if(mindR < 0.1 ){
+      //fill pass hists, uncomment if doing PFO eff
       //  _h_pass_pT->Fill(mcpt);
       //_h_pass_theta->Fill(mc_eta);
     }
+    //fill denominator hists, uncomment if doing PFO eff
     //_h_all_pT->Fill(mcpt);
     //_h_all_theta->Fill(mc_eta);
 
-    _h_pt_vs_theta->Fill(mcpt,mc_theta);
+    // _h_pt_vs_theta->Fill(mcpt,mc_theta); //uncomment for 2d hist
   }
 }
 
 
 const double EfficiencyProcessor::eta(const double theta){
+  //function to extract pseudorapidity from polar angle theta
   return(-std::log(std::tan(theta/2)));
 
 }

@@ -111,6 +111,7 @@ private:
   TH1 *_h_nHcalHits = nullptr;
   TH1 *_h_nEcalHits = nullptr;
   TH2 *_h_E_v_theta = nullptr;
+  TH2 *_h_PDG_v_E = nullptr;
 
   //track histograms
   TH1 *_h_D0trk = nullptr;

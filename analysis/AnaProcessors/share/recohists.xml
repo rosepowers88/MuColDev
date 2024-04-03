@@ -60,7 +60,10 @@
   <processor name="HistMaker" type="RecoHistProcessor" >
     <parameter name="MinPt" type="double">2</parameter>
     <parameter name="MinTheta" type = "double" > -1000 </parameter>
-    <parameter name = "PFO" type = "int" > 15 </parameter>
+    <parameter name = "PFO" type = "int" > 0 </parameter>
+
+    <!--Input the name of the tau collection as TauFinder spits it out/-->
+
     <parameter name="TauCollection" type="string" lcioInType="ReconstructedParticle" value = "TauRec_PFO"/>
     <!--parameter name="InputCollectionSimHits" type="string" lcioInType="SimTrackerHit" value="AllSTH" /-->
     <parameter name="InputCollectionNameMCP" type="string" lcioInType="MCParticle" value="MCParticle" />

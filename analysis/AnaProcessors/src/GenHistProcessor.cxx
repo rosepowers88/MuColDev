@@ -67,7 +67,7 @@ void GenHistProcessor::init() {
   _h_p    = new TH1F("p", ";p [GeV]", 100, 0, 250);
   _h_pdg  = new TH1F("PDG_ID", ";PDG ID", 1000, -500, 2500);
   _h_N    = new TH1F("nParticles", ";N", 50, 0, 1000);
-  _h_E    = new TH1F("Energy", ";E [GeV]", 100,0,750000);
+  _h_E    = new TH1F("Energy", ";E [GeV]", 100,0,300);
   _h_inv_E = new TH1F("Invariant Energy - Set Energy", ";#Delta E [GeV]", 200,-500.,500.);
   _h_inv_msqr = new TH1F("Invariant Mass Squared", ";m^2 [GeV^2]", 200,-100000,50.);
   _h_mass = new TH1F("Set Mass", ";m [GeV]", 100,0,10);
@@ -126,7 +126,7 @@ void GenHistProcessor::processEvent( LCEvent * evt ) {
   */
   
   //map from pdg entry to actual pdg number for submitting in batch mode
-  int pdgs[7]={0,11,13,15,211,111,2112};
+  int pdgs[8]={0,11,13,15,211,111,2112,22};
   
   LCCollection* inputCol = evt->getCollection(_inputCollectionName);
 
@@ -153,6 +153,8 @@ void GenHistProcessor::processEvent( LCEvent * evt ) {
     if(abs(pdg) !=pdgs[_PDG] && _PDG !=0 ){
      continue;
     }
+    //std::cout<<pdgs[_PDG]<<std::endl;
+    //std::cout<<pdg<<std::endl;
 
     //Get the parent ID if we are not examining taus only or all
     if(pdgs[_PDG] != 15 && _PDG !=0){
@@ -161,10 +163,13 @@ void GenHistProcessor::processEvent( LCEvent * evt ) {
 
       //If not direct tau decay, skip
       if(parentID != 15){
-	continue;
+	//continue;
       }
       _h_MID->Fill(parentID);
     }
+    double E=mcp->getEnergy();
+    if(E<2) continue;
+    _h_E->Fill(E);
 
     //Fill charge and type
     int q = mcp->getCharge();
@@ -184,8 +189,7 @@ void GenHistProcessor::processEvent( LCEvent * evt ) {
     double mass = mcp->getMass();
     //std::cout<<mass<<std::endl;
     //fill energy
-    double E=mcp->getEnergy();
-    _h_E->Fill(E);
+
     //std::cout<<E<<std::endl;
 
     double inv_E = std::sqrt(mom[0]*mom[0]+mom[1]*mom[1]+mom[2]*mom[2]+mass*mass);

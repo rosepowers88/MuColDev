@@ -241,8 +241,8 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
       }
 
     }
-    if(mindR < 0.1 ){
-      _h_pass_pT->Fill(mcE);
+    if(mindR < 1 ){
+       _h_pass_pT->Fill(mcE);
       _h_pass_theta->Fill(mc_eta);
     }
     _h_all_pT->Fill(mcE);
@@ -270,7 +270,7 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
     double mindR = 1000;
     for(uint32_t pfIter= 0; pfIter <PFOs->getNumberOfElements(); pfIter++){
       const EVENT::ReconstructedParticle *pf_n = static_cast<const EVENT::ReconstructedParticle*>(PFOs->getElementAt(pfIter));
- if(abs(pf_n->getType()) != 211) continue;
+      if(abs(pf_n->getType()) != 211) continue;
       const EVENT::ClusterVec clv = pf_n->getClusters();
       double dE = 0;
       for(int i=0; i<clv.size(); i++){
@@ -290,14 +290,14 @@ void EfficiencyProcessor::processEvent( LCEvent * evt ) {
       }
 
     }
-    if(mindR < 0.1 ){
+    if(mindR < 0.25 ){
       //fill pass hists, uncomment if doing PFO eff
-      //  _h_pass_pT->Fill(mcpt);
+      // _h_pass_pT->Fill(mcpt);
       //_h_pass_theta->Fill(mc_eta);
     }
     //fill denominator hists, uncomment if doing PFO eff
     //_h_all_pT->Fill(mcpt);
-    //_h_all_theta->Fill(mc_eta);
+    // _h_all_theta->Fill(mc_eta);
 
     // _h_pt_vs_theta->Fill(mcpt,mc_theta); //uncomment for 2d hist
   }

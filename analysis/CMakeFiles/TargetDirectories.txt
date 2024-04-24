@@ -1,0 +1,3 @@
+/work/rosep8/TauRecoDev/analysis/CMakeFiles/AnaProcessors.dir
+/work/rosep8/TauRecoDev/analysis/CMakeFiles/edit_cache.dir
+/work/rosep8/TauRecoDev/analysis/CMakeFiles/rebuild_cache.dir

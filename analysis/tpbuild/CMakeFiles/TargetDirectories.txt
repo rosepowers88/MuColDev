@@ -1,0 +1,3 @@
+/work/rosep8/TauRecoDev/analysis/tpbuild/CMakeFiles/TrackPerf.dir
+/work/rosep8/TauRecoDev/analysis/tpbuild/CMakeFiles/edit_cache.dir
+/work/rosep8/TauRecoDev/analysis/tpbuild/CMakeFiles/rebuild_cache.dir

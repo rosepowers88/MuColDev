@@ -182,7 +182,7 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
 	
     
     //Get the parent ID
-    /*
+    
     const EVENT::MCParticleVec parentvec = mcp -> getParents();
     if(parentvec.size()==0){
       continue;
@@ -195,12 +195,12 @@ void BranchingProcessor::processEvent( LCEvent * evt ) {
     if(parentID != 15){
       continue;
       }
-    */
+    
 
     //Fill charge
     int q = mcp->getCharge();
     _h_q->Fill(q);
-    //_h_MID->Fill(parentID);
+    _h_MID->Fill(parentID);
     _h_pdg->Fill(pdg);
 
     //if pdg not already in list, add

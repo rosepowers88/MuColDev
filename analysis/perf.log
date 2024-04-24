@@ -1,0 +1,118 @@
+<!-- Loading shared library : /work/rosep8/TauRecoDev/analysis/build/libAnaProcessors.so (libAnaProcessors.so)-->
+<!-- steering file parameter: [ global.LCIOInputFiles ] will be OVERWRITTEN with value: ["/work/rosep8/TauRecoDev/reco/highP_100k.slcio"] -->
+
+[ VERBOSE "MyAIDAProcessor"] ---------------------------------- R A I D A ----------------------------------
+[ VERBOSE "MyAIDAProcessor"] ROOT Implementation of the Abstract Interfaces for Data Analysis (AIDA v3.2.1)
+[ VERBOSE "MyAIDAProcessor"] 
+[ VERBOSE "MyAIDAProcessor"] RAIDA Version: not supported by cvs2svn
+[ VERBOSE "MyAIDAProcessor"] 
+[ VERBOSE "MyAIDAProcessor"] RAIDA only creates simple ROOT histograms
+[ VERBOSE "MyAIDAProcessor"] Used ROOT Release: 6.22/06
+[ VERBOSE "MyAIDAProcessor"] -------------------------------------------------------------------------------
+[ VERBOSE "MyAIDAProcessor"] 
+[ MESSAGE "EventNumber"] 
+[ MESSAGE "EventNumber"] ---- EventNumber -  parameters: 
+[ MESSAGE "EventNumber"] 	HowOften:  1000
+[ MESSAGE "EventNumber"] 	Verbosity:  MESSAGE
+[ MESSAGE "EventNumber"] -------------------------------------------------
+[ MESSAGE "EventNumber"]  ===== Run  :       1  Event:       0
+[ MESSAGE "EventNumber"]  ===== Run  :       1  Event:    1000
+[ MESSAGE "EventNumber"]  ===== Run  :       1  Event:    2000
+[ MESSAGE "EventNumber"]  ===== Run  :       1  Event:    3000
+[ MESSAGE "EventNumber"]  ===== Run  :       1  Event:    4000
+[ MESSAGE "EventNumber"]  ===== Run  :       2  Event:    5000
+[ MESSAGE "EventNumber"]  ===== Run  :       2  Event:    6000
+[ MESSAGE "EventNumber"]  ===== Run  :       2  Event:    7000
+[ MESSAGE "EventNumber"]  ===== Run  :       2  Event:    8000
+[ MESSAGE "EventNumber"]  ===== Run  :       2  Event:    9000
+[ MESSAGE "EventNumber"]  ===== Run  :       3  Event:   10000
+[ MESSAGE "EventNumber"]  ===== Run  :       3  Event:   11000
+[ MESSAGE "EventNumber"]  ===== Run  :       3  Event:   12000
+[ MESSAGE "EventNumber"]  ===== Run  :       3  Event:   13000
+[ MESSAGE "EventNumber"]  ===== Run  :       3  Event:   14000
+[ MESSAGE "EventNumber"]  ===== Run  :       4  Event:   15000
+[ MESSAGE "EventNumber"]  ===== Run  :       4  Event:   16000
+[ MESSAGE "EventNumber"]  ===== Run  :       4  Event:   17000
+[ MESSAGE "EventNumber"]  ===== Run  :       4  Event:   18000
+[ MESSAGE "EventNumber"]  ===== Run  :       4  Event:   19000
+[ MESSAGE "EventNumber"]  ===== Run  :       5  Event:   20000
+[ MESSAGE "EventNumber"]  ===== Run  :       5  Event:   21000
+[ MESSAGE "EventNumber"]  ===== Run  :       5  Event:   22000
+[ MESSAGE "EventNumber"]  ===== Run  :       5  Event:   23000
+[ MESSAGE "EventNumber"]  ===== Run  :       5  Event:   24000
+[ MESSAGE "EventNumber"]  ===== Run  :       6  Event:   25000
+[ MESSAGE "EventNumber"]  ===== Run  :       6  Event:   26000
+[ MESSAGE "EventNumber"]  ===== Run  :       6  Event:   27000
+[ MESSAGE "EventNumber"]  ===== Run  :       6  Event:   28000
+[ MESSAGE "EventNumber"]  ===== Run  :       6  Event:   29000
+[ MESSAGE "EventNumber"]  ===== Run  :       7  Event:   30000
+[ MESSAGE "EventNumber"]  ===== Run  :       7  Event:   31000
+[ MESSAGE "EventNumber"]  ===== Run  :       7  Event:   32000
+[ MESSAGE "EventNumber"]  ===== Run  :       7  Event:   33000
+[ MESSAGE "EventNumber"]  ===== Run  :       7  Event:   34000
+[ MESSAGE "EventNumber"]  ===== Run  :       8  Event:   35000
+[ MESSAGE "EventNumber"]  ===== Run  :       8  Event:   36000
+[ MESSAGE "EventNumber"]  ===== Run  :       8  Event:   37000
+[ MESSAGE "EventNumber"]  ===== Run  :       8  Event:   38000
+[ MESSAGE "EventNumber"]  ===== Run  :       8  Event:   39000
+[ MESSAGE "EventNumber"]  ===== Run  :       9  Event:   40000
+[ MESSAGE "EventNumber"]  ===== Run  :       9  Event:   41000
+[ MESSAGE "EventNumber"]  ===== Run  :       9  Event:   42000
+[ MESSAGE "EventNumber"]  ===== Run  :       9  Event:   43000
+[ MESSAGE "EventNumber"]  ===== Run  :       9  Event:   44000
+[ MESSAGE "EventNumber"]  ===== Run  :      10  Event:   45000
+[ MESSAGE "EventNumber"]  ===== Run  :      10  Event:   46000
+[ MESSAGE "EventNumber"]  ===== Run  :      10  Event:   47000
+[ MESSAGE "EventNumber"]  ===== Run  :      10  Event:   48000
+[ MESSAGE "EventNumber"]  ===== Run  :      10  Event:   49000
+[ MESSAGE "EventNumber"]  ===== Run  :      11  Event:   50000
+[ MESSAGE "EventNumber"]  ===== Run  :      11  Event:   51000
+[ MESSAGE "EventNumber"]  ===== Run  :      11  Event:   52000
+[ MESSAGE "EventNumber"]  ===== Run  :      11  Event:   53000
+[ MESSAGE "EventNumber"]  ===== Run  :      11  Event:   54000
+[ MESSAGE "EventNumber"]  ===== Run  :      12  Event:   55000
+[ MESSAGE "EventNumber"]  ===== Run  :      12  Event:   56000
+[ MESSAGE "EventNumber"]  ===== Run  :      12  Event:   57000
+[ MESSAGE "EventNumber"]  ===== Run  :      12  Event:   58000
+[ MESSAGE "EventNumber"]  ===== Run  :      12  Event:   59000
+[ MESSAGE "EventNumber"]  ===== Run  :      13  Event:   60000
+[ MESSAGE "EventNumber"]  ===== Run  :      13  Event:   61000
+[ MESSAGE "EventNumber"]  ===== Run  :      13  Event:   62000
+[ MESSAGE "EventNumber"]  ===== Run  :      13  Event:   63000
+[ MESSAGE "EventNumber"]  ===== Run  :      13  Event:   64000
+[ MESSAGE "EventNumber"]  ===== Run  :      14  Event:   65000
+[ MESSAGE "EventNumber"]  ===== Run  :      14  Event:   66000
+[ MESSAGE "EventNumber"]  ===== Run  :      14  Event:   67000
+[ MESSAGE "EventNumber"]  ===== Run  :      14  Event:   68000
+[ MESSAGE "EventNumber"]  ===== Run  :      14  Event:   69000
+[ MESSAGE "EventNumber"]  ===== Run  :      15  Event:   70000
+[ MESSAGE "EventNumber"]  ===== Run  :      15  Event:   71000
+[ MESSAGE "EventNumber"]  ===== Run  :      15  Event:   72000
+[ MESSAGE "EventNumber"]  ===== Run  :      15  Event:   73000
+[ MESSAGE "EventNumber"]  ===== Run  :      15  Event:   74000
+[ MESSAGE "EventNumber"]  ===== Run  :      16  Event:   75000
+[ MESSAGE "EventNumber"]  ===== Run  :      16  Event:   76000
+[ MESSAGE "EventNumber"]  ===== Run  :      16  Event:   77000
+[ MESSAGE "EventNumber"]  ===== Run  :      16  Event:   78000
+[ MESSAGE "EventNumber"]  ===== Run  :      16  Event:   79000
+[ MESSAGE "EventNumber"]  ===== Run  :      17  Event:   80000
+[ MESSAGE "EventNumber"]  ===== Run  :      17  Event:   81000
+[ MESSAGE "EventNumber"]  ===== Run  :      17  Event:   82000
+[ MESSAGE "EventNumber"]  ===== Run  :      17  Event:   83000
+[ MESSAGE "EventNumber"]  ===== Run  :      17  Event:   84000
+[ MESSAGE "EventNumber"]  ===== Run  :      18  Event:   85000
+[ MESSAGE "EventNumber"]  ===== Run  :      18  Event:   86000
+[ MESSAGE "EventNumber"]  ===== Run  :      18  Event:   87000
+[ MESSAGE "EventNumber"]  ===== Run  :      18  Event:   88000
+[ MESSAGE "EventNumber"]  ===== Run  :      18  Event:   89000
+[ MESSAGE "EventNumber"]  ===== Run  :      19  Event:   90000
+[ MESSAGE "EventNumber"]  ===== Run  :      19  Event:   91000
+[ MESSAGE "EventNumber"]  ===== Run  :      19  Event:   92000
+[ MESSAGE "EventNumber"]  ===== Run  :      19  Event:   93000
+[ MESSAGE "EventNumber"]  ===== Run  :      19  Event:   94000
+[ MESSAGE "EventNumber"]  ===== Run  :      20  Event:   95000
+[ MESSAGE "EventNumber"]  ===== Run  :      20  Event:   96000
+[ MESSAGE "EventNumber"]  ===== Run  :      20  Event:   97000
+[ MESSAGE "EventNumber"]  ===== Run  :      20  Event:   98000
+[ MESSAGE "EventNumber"]  ===== Run  :      20  Event:   99000
+[ MESSAGE "EventNumber"] Statusmonitor::end()  EventNumber processed 100000 events in 20 runs 

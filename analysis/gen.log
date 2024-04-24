@@ -1,0 +1,242 @@
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinDD4hep/v00-06/lib/libMarlinDD4hep.so.0.6.0 (libMarlinDD4hep.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/DDMarlinPandora/v00-13-MC/lib/libDDMarlinPandora.so.0.13.0 (libDDMarlinPandora.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinReco/v01-31/lib/libMarlinReco.so.1.31.0 (libMarlinReco.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/PandoraAnalysis/v02-00-01/lib/libPandoraAnalysis.so.2.0.1 (libPandoraAnalysis.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCFIVertex/v00-08/lib/libLCFIVertexProcessors.so.0.8.0 (libLCFIVertexProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/CEDViewer/v01-18/lib/libCEDViewer.so.1.18.0 (libCEDViewer.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Overlay/v00-23-MC/lib/libOverlay.so.0.23.0 (libOverlay.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinFastJet/v00-05-02/lib/libMarlinFastJet.so.0.5.2 (libMarlinFastJet.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCTuple/v01-14-MC/lib/libLCTuple.so.1.14.0 (libLCTuple.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinKinfit/v00-06/lib/libMarlinKinfit.so.0.6.0 (libMarlinKinfit.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinTrkProcessors/v02-13-MC/lib/libMarlinTrkProcessors.so.2.13.0 (libMarlinTrkProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/MarlinKinfitProcessors/v00-04-02/lib/libMarlinKinfitProcessors.so.0.4.2 (libMarlinKinfitProcessors.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ILDPerformance/v01-08/lib/libILDPerformance.so.1.8.0 (libILDPerformance.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ClicPerformance/HEAD/lib/libClicPerformance.so.2.4.1 (libClicPerformance.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Clupatra/v01-03/lib/libClupatra.so.1.3.0 (libClupatra.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Physsim/v00-04-01/lib/libPhyssim.so.0.4.1 (libPhyssim.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LCFIPlus/v00-09/lib/libLCFIPlus.so.0.8.0 (libLCFIPlus.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/FCalClusterer/v01-00-01/lib/libFCalClusterer.so (libFCalClusterer.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ForwardTracking/v01-14-MC/lib/libForwardTracking.so.1.14.0 (libForwardTracking.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ConformalTracking/v01-12-MC/lib/libConformalTracking.so.1.12.0 (libConformalTracking.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/LICH/v00-01/lib/libLICH.so.0.1.0 (libLICH.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/Garlic/v03-01/lib/libGarlic.so.3.1.0 (libGarlic.so)-->
+<!-- Loading shared library : /opt/ilcsoft/muonc/ACTSTracking/v1.0.0/lib/libACTSTracking.so (libACTSTracking.so)-->
+<!-- Loading shared library : /work/rosep8/TauRecoDev/reco/build/libRecoDev.so (libRecoDev.so)-->
+<!-- Loading shared library : /work/rosep8/TauRecoDev/analysis/build/libAnaProcessors.so (libAnaProcessors.so)-->
+<!-- steering file parameter: [ global.LCIOInputFiles ] will be OVERWRITTEN with value: ["/work/rosep8/TauRecoDev/simulation/samples/pionGun_all.slcio"] -->
+
+[ VERBOSE "MyAIDAProcessor"] ---------------------------------- R A I D A ----------------------------------
+[ VERBOSE "MyAIDAProcessor"] ROOT Implementation of the Abstract Interfaces for Data Analysis (AIDA v3.2.1)
+[ VERBOSE "MyAIDAProcessor"] 
+[ VERBOSE "MyAIDAProcessor"] RAIDA Version: not supported by cvs2svn
+[ VERBOSE "MyAIDAProcessor"] 
+[ VERBOSE "MyAIDAProcessor"] RAIDA only creates simple ROOT histograms
+[ VERBOSE "MyAIDAProcessor"] Used ROOT Release: 6.22/06
+[ VERBOSE "MyAIDAProcessor"] -------------------------------------------------------------------------------
+[ VERBOSE "MyAIDAProcessor"] 
+[ MESSAGE "EventNumber"] 
+[ MESSAGE "EventNumber"] ---- EventNumber -  parameters: 
+[ MESSAGE "EventNumber"] 	HowOften:  5
+[ MESSAGE "EventNumber"] 	Verbosity:  MESSAGE
+[ MESSAGE "EventNumber"] -------------------------------------------------
+[ MESSAGE "EventNumber"]  ===== Run  :       1  Event:       0
+[ MESSAGE "EventNumber"]  ===== Run  :       1  Event:       5
+[ MESSAGE "EventNumber"]  ===== Run  :       3  Event:      10
+[ MESSAGE "EventNumber"]  ===== Run  :       3  Event:      15
+[ MESSAGE "EventNumber"]  ===== Run  :       4  Event:      20
+[ MESSAGE "EventNumber"]  ===== Run  :       4  Event:      25
+[ MESSAGE "EventNumber"]  ===== Run  :       5  Event:      30
+[ MESSAGE "EventNumber"]  ===== Run  :       5  Event:      35
+[ MESSAGE "EventNumber"]  ===== Run  :       6  Event:      40
+[ MESSAGE "EventNumber"]  ===== Run  :       6  Event:      45
+[ MESSAGE "EventNumber"]  ===== Run  :       7  Event:      50
+[ MESSAGE "EventNumber"]  ===== Run  :       7  Event:      55
+[ MESSAGE "EventNumber"]  ===== Run  :       8  Event:      60
+[ MESSAGE "EventNumber"]  ===== Run  :       8  Event:      65
+[ MESSAGE "EventNumber"]  ===== Run  :       9  Event:      70
+[ MESSAGE "EventNumber"]  ===== Run  :       9  Event:      75
+[ MESSAGE "EventNumber"]  ===== Run  :      10  Event:      80
+[ MESSAGE "EventNumber"]  ===== Run  :      10  Event:      85
+[ MESSAGE "EventNumber"]  ===== Run  :      11  Event:      90
+[ MESSAGE "EventNumber"]  ===== Run  :      11  Event:      95
+[ MESSAGE "EventNumber"]  ===== Run  :      12  Event:     100
+[ MESSAGE "EventNumber"]  ===== Run  :      12  Event:     105
+[ MESSAGE "EventNumber"]  ===== Run  :      13  Event:     110
+[ MESSAGE "EventNumber"]  ===== Run  :      13  Event:     115
+[ MESSAGE "EventNumber"]  ===== Run  :      14  Event:     120
+[ MESSAGE "EventNumber"]  ===== Run  :      14  Event:     125
+[ MESSAGE "EventNumber"]  ===== Run  :      15  Event:     130
+[ MESSAGE "EventNumber"]  ===== Run  :      15  Event:     135
+[ MESSAGE "EventNumber"]  ===== Run  :      16  Event:     140
+[ MESSAGE "EventNumber"]  ===== Run  :      16  Event:     145
+[ MESSAGE "EventNumber"]  ===== Run  :      17  Event:     150
+[ MESSAGE "EventNumber"]  ===== Run  :      17  Event:     155
+[ MESSAGE "EventNumber"]  ===== Run  :      18  Event:     160
+[ MESSAGE "EventNumber"]  ===== Run  :      18  Event:     165
+[ MESSAGE "EventNumber"]  ===== Run  :      19  Event:     170
+[ MESSAGE "EventNumber"]  ===== Run  :      19  Event:     175
+[ MESSAGE "EventNumber"]  ===== Run  :      20  Event:     180
+[ MESSAGE "EventNumber"]  ===== Run  :      20  Event:     185
+[ MESSAGE "EventNumber"]  ===== Run  :      21  Event:     190
+[ MESSAGE "EventNumber"]  ===== Run  :      21  Event:     195
+[ MESSAGE "EventNumber"]  ===== Run  :      22  Event:     200
+[ MESSAGE "EventNumber"]  ===== Run  :      22  Event:     205
+[ MESSAGE "EventNumber"]  ===== Run  :      23  Event:     210
+[ MESSAGE "EventNumber"]  ===== Run  :      23  Event:     215
+[ MESSAGE "EventNumber"]  ===== Run  :      24  Event:     220
+[ MESSAGE "EventNumber"]  ===== Run  :      24  Event:     225
+[ MESSAGE "EventNumber"]  ===== Run  :      25  Event:     230
+[ MESSAGE "EventNumber"]  ===== Run  :      25  Event:     235
+[ MESSAGE "EventNumber"]  ===== Run  :      26  Event:     240
+[ MESSAGE "EventNumber"]  ===== Run  :      26  Event:     245
+[ MESSAGE "EventNumber"]  ===== Run  :      27  Event:     250
+[ MESSAGE "EventNumber"]  ===== Run  :      27  Event:     255
+[ MESSAGE "EventNumber"]  ===== Run  :      28  Event:     260
+[ MESSAGE "EventNumber"]  ===== Run  :      28  Event:     265
+[ MESSAGE "EventNumber"]  ===== Run  :      29  Event:     270
+[ MESSAGE "EventNumber"]  ===== Run  :      29  Event:     275
+[ MESSAGE "EventNumber"]  ===== Run  :      30  Event:     280
+[ MESSAGE "EventNumber"]  ===== Run  :      30  Event:     285
+[ MESSAGE "EventNumber"]  ===== Run  :      31  Event:     290
+[ MESSAGE "EventNumber"]  ===== Run  :      31  Event:     295
+[ MESSAGE "EventNumber"]  ===== Run  :      32  Event:     300
+[ MESSAGE "EventNumber"]  ===== Run  :      32  Event:     305
+[ MESSAGE "EventNumber"]  ===== Run  :      33  Event:     310
+[ MESSAGE "EventNumber"]  ===== Run  :      33  Event:     315
+[ MESSAGE "EventNumber"]  ===== Run  :      34  Event:     320
+[ MESSAGE "EventNumber"]  ===== Run  :      34  Event:     325
+[ MESSAGE "EventNumber"]  ===== Run  :      35  Event:     330
+[ MESSAGE "EventNumber"]  ===== Run  :      35  Event:     335
+[ MESSAGE "EventNumber"]  ===== Run  :      36  Event:     340
+[ MESSAGE "EventNumber"]  ===== Run  :      36  Event:     345
+[ MESSAGE "EventNumber"]  ===== Run  :      37  Event:     350
+[ MESSAGE "EventNumber"]  ===== Run  :      37  Event:     355
+[ MESSAGE "EventNumber"]  ===== Run  :      38  Event:     360
+[ MESSAGE "EventNumber"]  ===== Run  :      38  Event:     365
+[ MESSAGE "EventNumber"]  ===== Run  :      39  Event:     370
+[ MESSAGE "EventNumber"]  ===== Run  :      39  Event:     375
+[ MESSAGE "EventNumber"]  ===== Run  :      40  Event:     380
+[ MESSAGE "EventNumber"]  ===== Run  :      40  Event:     385
+[ MESSAGE "EventNumber"]  ===== Run  :      41  Event:     390
+[ MESSAGE "EventNumber"]  ===== Run  :      41  Event:     395
+[ MESSAGE "EventNumber"]  ===== Run  :      42  Event:     400
+[ MESSAGE "EventNumber"]  ===== Run  :      42  Event:     405
+[ MESSAGE "EventNumber"]  ===== Run  :      43  Event:     410
+[ MESSAGE "EventNumber"]  ===== Run  :      43  Event:     415
+[ MESSAGE "EventNumber"]  ===== Run  :      44  Event:     420
+[ MESSAGE "EventNumber"]  ===== Run  :      44  Event:     425
+[ MESSAGE "EventNumber"]  ===== Run  :      45  Event:     430
+[ MESSAGE "EventNumber"]  ===== Run  :      45  Event:     435
+[ MESSAGE "EventNumber"]  ===== Run  :      46  Event:     440
+[ MESSAGE "EventNumber"]  ===== Run  :      46  Event:     445
+[ MESSAGE "EventNumber"]  ===== Run  :      47  Event:     450
+[ MESSAGE "EventNumber"]  ===== Run  :      47  Event:     455
+[ MESSAGE "EventNumber"]  ===== Run  :      48  Event:     460
+[ MESSAGE "EventNumber"]  ===== Run  :      48  Event:     465
+[ MESSAGE "EventNumber"]  ===== Run  :      49  Event:     470
+[ MESSAGE "EventNumber"]  ===== Run  :      49  Event:     475
+[ MESSAGE "EventNumber"]  ===== Run  :      50  Event:     480
+[ MESSAGE "EventNumber"]  ===== Run  :      50  Event:     485
+[ MESSAGE "EventNumber"]  ===== Run  :      51  Event:     490
+[ MESSAGE "EventNumber"]  ===== Run  :      51  Event:     495
+[ MESSAGE "EventNumber"]  ===== Run  :      52  Event:     500
+[ MESSAGE "EventNumber"]  ===== Run  :      52  Event:     505
+[ MESSAGE "EventNumber"]  ===== Run  :      53  Event:     510
+[ MESSAGE "EventNumber"]  ===== Run  :      53  Event:     515
+[ MESSAGE "EventNumber"]  ===== Run  :      54  Event:     520
+[ MESSAGE "EventNumber"]  ===== Run  :      54  Event:     525
+[ MESSAGE "EventNumber"]  ===== Run  :      55  Event:     530
+[ MESSAGE "EventNumber"]  ===== Run  :      55  Event:     535
+[ MESSAGE "EventNumber"]  ===== Run  :      56  Event:     540
+[ MESSAGE "EventNumber"]  ===== Run  :      56  Event:     545
+[ MESSAGE "EventNumber"]  ===== Run  :      57  Event:     550
+[ MESSAGE "EventNumber"]  ===== Run  :      57  Event:     555
+[ MESSAGE "EventNumber"]  ===== Run  :      58  Event:     560
+[ MESSAGE "EventNumber"]  ===== Run  :      58  Event:     565
+[ MESSAGE "EventNumber"]  ===== Run  :      59  Event:     570
+[ MESSAGE "EventNumber"]  ===== Run  :      59  Event:     575
+[ MESSAGE "EventNumber"]  ===== Run  :      60  Event:     580
+[ MESSAGE "EventNumber"]  ===== Run  :      60  Event:     585
+[ MESSAGE "EventNumber"]  ===== Run  :      61  Event:     590
+[ MESSAGE "EventNumber"]  ===== Run  :      61  Event:     595
+[ MESSAGE "EventNumber"]  ===== Run  :      62  Event:     600
+[ MESSAGE "EventNumber"]  ===== Run  :      62  Event:     605
+[ MESSAGE "EventNumber"]  ===== Run  :      63  Event:     610
+[ MESSAGE "EventNumber"]  ===== Run  :      63  Event:     615
+[ MESSAGE "EventNumber"]  ===== Run  :      64  Event:     620
+[ MESSAGE "EventNumber"]  ===== Run  :      64  Event:     625
+[ MESSAGE "EventNumber"]  ===== Run  :      65  Event:     630
+[ MESSAGE "EventNumber"]  ===== Run  :      65  Event:     635
+[ MESSAGE "EventNumber"]  ===== Run  :      66  Event:     640
+[ MESSAGE "EventNumber"]  ===== Run  :      66  Event:     645
+[ MESSAGE "EventNumber"]  ===== Run  :      67  Event:     650
+[ MESSAGE "EventNumber"]  ===== Run  :      67  Event:     655
+[ MESSAGE "EventNumber"]  ===== Run  :      68  Event:     660
+[ MESSAGE "EventNumber"]  ===== Run  :      68  Event:     665
+[ MESSAGE "EventNumber"]  ===== Run  :      69  Event:     670
+[ MESSAGE "EventNumber"]  ===== Run  :      69  Event:     675
+[ MESSAGE "EventNumber"]  ===== Run  :      70  Event:     680
+[ MESSAGE "EventNumber"]  ===== Run  :      70  Event:     685
+[ MESSAGE "EventNumber"]  ===== Run  :      71  Event:     690
+[ MESSAGE "EventNumber"]  ===== Run  :      71  Event:     695
+[ MESSAGE "EventNumber"]  ===== Run  :      72  Event:     700
+[ MESSAGE "EventNumber"]  ===== Run  :      72  Event:     705
+[ MESSAGE "EventNumber"]  ===== Run  :      73  Event:     710
+[ MESSAGE "EventNumber"]  ===== Run  :      73  Event:     715
+[ MESSAGE "EventNumber"]  ===== Run  :      74  Event:     720
+[ MESSAGE "EventNumber"]  ===== Run  :      74  Event:     725
+[ MESSAGE "EventNumber"]  ===== Run  :      75  Event:     730
+[ MESSAGE "EventNumber"]  ===== Run  :      75  Event:     735
+[ MESSAGE "EventNumber"]  ===== Run  :      76  Event:     740
+[ MESSAGE "EventNumber"]  ===== Run  :      76  Event:     745
+[ MESSAGE "EventNumber"]  ===== Run  :      77  Event:     750
+[ MESSAGE "EventNumber"]  ===== Run  :      77  Event:     755
+[ MESSAGE "EventNumber"]  ===== Run  :      78  Event:     760
+[ MESSAGE "EventNumber"]  ===== Run  :      78  Event:     765
+[ MESSAGE "EventNumber"]  ===== Run  :      79  Event:     770
+[ MESSAGE "EventNumber"]  ===== Run  :      79  Event:     775
+[ MESSAGE "EventNumber"]  ===== Run  :      80  Event:     780
+[ MESSAGE "EventNumber"]  ===== Run  :      80  Event:     785
+[ MESSAGE "EventNumber"]  ===== Run  :      81  Event:     790
+[ MESSAGE "EventNumber"]  ===== Run  :      81  Event:     795
+[ MESSAGE "EventNumber"]  ===== Run  :      82  Event:     800
+[ MESSAGE "EventNumber"]  ===== Run  :      82  Event:     805
+[ MESSAGE "EventNumber"]  ===== Run  :      83  Event:     810
+[ MESSAGE "EventNumber"]  ===== Run  :      83  Event:     815
+[ MESSAGE "EventNumber"]  ===== Run  :      84  Event:     820
+[ MESSAGE "EventNumber"]  ===== Run  :      84  Event:     825
+[ MESSAGE "EventNumber"]  ===== Run  :      85  Event:     830
+[ MESSAGE "EventNumber"]  ===== Run  :      85  Event:     835
+[ MESSAGE "EventNumber"]  ===== Run  :      86  Event:     840
+[ MESSAGE "EventNumber"]  ===== Run  :      86  Event:     845
+[ MESSAGE "EventNumber"]  ===== Run  :      87  Event:     850
+[ MESSAGE "EventNumber"]  ===== Run  :      87  Event:     855
+[ MESSAGE "EventNumber"]  ===== Run  :      88  Event:     860
+[ MESSAGE "EventNumber"]  ===== Run  :      88  Event:     865
+[ MESSAGE "EventNumber"]  ===== Run  :      89  Event:     870
+[ MESSAGE "EventNumber"]  ===== Run  :      89  Event:     875
+[ MESSAGE "EventNumber"]  ===== Run  :      90  Event:     880
+[ MESSAGE "EventNumber"]  ===== Run  :      90  Event:     885
+[ MESSAGE "EventNumber"]  ===== Run  :      91  Event:     890
+[ MESSAGE "EventNumber"]  ===== Run  :      91  Event:     895
+[ MESSAGE "EventNumber"]  ===== Run  :      92  Event:     900
+[ MESSAGE "EventNumber"]  ===== Run  :      92  Event:     905
+[ MESSAGE "EventNumber"]  ===== Run  :      93  Event:     910
+[ MESSAGE "EventNumber"]  ===== Run  :      93  Event:     915
+[ MESSAGE "EventNumber"]  ===== Run  :      94  Event:     920
+[ MESSAGE "EventNumber"]  ===== Run  :      94  Event:     925
+[ MESSAGE "EventNumber"]  ===== Run  :      95  Event:     930
+[ MESSAGE "EventNumber"]  ===== Run  :      95  Event:     935
+[ MESSAGE "EventNumber"]  ===== Run  :      96  Event:     940
+[ MESSAGE "EventNumber"]  ===== Run  :      96  Event:     945
+[ MESSAGE "EventNumber"]  ===== Run  :      97  Event:     950
+[ MESSAGE "EventNumber"]  ===== Run  :      97  Event:     955
+[ MESSAGE "EventNumber"]  ===== Run  :      98  Event:     960
+[ MESSAGE "EventNumber"]  ===== Run  :      98  Event:     965
+[ MESSAGE "EventNumber"]  ===== Run  :      99  Event:     970
+[ MESSAGE "EventNumber"]  ===== Run  :      99  Event:     975
+[ MESSAGE "EventNumber"]  ===== Run  :     100  Event:     980
+[ MESSAGE "EventNumber"]  ===== Run  :     100  Event:     985
+[ MESSAGE "EventNumber"]  ===== Run  :     101  Event:     990
+[ MESSAGE "EventNumber"]  ===== Run  :     101  Event:     995
+[ MESSAGE "EventNumber"] Statusmonitor::end()  EventNumber processed 1000 events in 101 runs 

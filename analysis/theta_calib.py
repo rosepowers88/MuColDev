@@ -16,6 +16,8 @@ import logging
 import itertools
 import fnmatch
 import csv
+import pandas as pd
+import mplhep as hep
 
 parser= OptionParser()
 parser.add_option("-m", "--inFile_0_50_10T", dest='inFile_0_50_10T',
@@ -32,6 +34,8 @@ fFile_0_50 = TFile(options.inFile_0_50_10T, "READ")
 fFile_50_250 = TFile(options.inFile_50_250_10T, "READ")
 fFile_250_1000 = TFile(options.inFile_250_1000_10T, "READ")
 
+
+#this is not really useful
 ######## ECAL dimensions #######
 zlim = 230.7 #cm
 R_inner_lim = 150.0 #cm
@@ -53,7 +57,7 @@ gStyle.SetPadTickY(1)
 EBins = array('d', (0., 50., 100., 150., 200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000.))
 
 #ThetaBins = array('d', (20.*TMath.Pi()/180, 30.*TMath.Pi()/180., 40.*TMath.Pi()/180., 50.*TMath.Pi()/180., 60.*TMath.Pi()/180., 70.*TMath.Pi()/180., 90.*TMath.Pi()/180., 110.*TMath.Pi()/180., 120.*TMath.Pi()/180., 130.*TMath.Pi()/180., 140.*TMath.Pi()/180., 150.*TMath.Pi()/180., 160*TMath.Pi()/180))
-ThetaBins = np.linspace(0.3,3.0,30)
+ThetaBins = np.linspace(0.175,2.96,30)
 
 # Declare response profiles and reso plots
 h_response_profile_E = TProfile('E_profile', 'E_profile', len(EBins)-1, EBins, 0,1000)
@@ -79,6 +83,7 @@ mu_err_arr = array('d')
 mu_arr_th = array('d')
 mu_arr_th_err = array('d')
 
+#none of the commented chunk below is used anymore
 '''
 #Define piecewise function for radlengths as fn of theta
 def NX_0(theta):
@@ -95,30 +100,6 @@ def corr_ratio(x,A):
     t = NX_0(x)
     return (2**t)*A
 
-#define corrected energy as a function of RECO energy and theta
-def E_corr(E, theta, A):
-    return E*corr_ratio(theta, A)
-
-#plot what the ratio ~should~ look like
-ths = np.linspace(0,TMath.Pi(),5000)
-ratios=[]
-ratios.clear()
-for th in ths:
-    ratios.append(corr_ratio(th,0.15))
-
-#ratio_plot=plt.scatter(ths, ratios, s=4, c='k')
-#plt.ylim(0,50)
-#plt.xlabel(r'$\theta$')
-#plt.ylabel("$E_{Truth}/E_{Reco}$")
-#plt.savefig('ratio_plot.pdf')
-#plt.show()
-#plt.close(ratio_plot)
-#corr_Es = array('d', (25, 75, 125, 175, 225, 275, 325, 375, 425, 475, 525, 575, 625, 675, 725, 775, 825, 875, 925))
-#corr_factors = array('d',(1.43e-1, 1.42e-1, 1.39e-1, 1.23e-1, 1.02e-1, 9.62e-2, 9.31e-2, 8.56e-2, 8.21e-2, 1.50e-2, 1.50e-2, 1.49e-2, 1.48e-2, 1.94e-2, 1.99e-2, 2.73e-2, 2.61e-2, 4.09e-2, 4.55e-2))
-#corr_plot = plt.scatter(corr_Es, corr_factors)
-#plt.xlabel("E [GeV]")
-#plt.ylabel("Correction factor")
-#plt.savefig('corr_plot.pdf')
 '''
 
 #get files
@@ -126,13 +107,14 @@ files = [fFile_0_50, fFile_50_250, fFile_250_1000]
 
 
 #####################################
-# BINNED CALIBRATION ATTEMPT        #
-# double for loop, simply take the  #
+# BINNED CALIBRATION                #
+# double for loop, take the         #
 # Etrue/Erec ratio for each theta/E #
 # slice and apply to the 2D bins.   #
 #####################################
 
 corr_matrix = [] #for each theta bin, a list of avgs for each E bin
+#uncomment the below to regenerate the calibration matrix
 '''
 for tbin in range(0, len(ThetaBins)-1):
     rmax = 0
@@ -144,55 +126,75 @@ for tbin in range(0, len(ThetaBins)-1):
         EMax = EBins[Ebin+1]
         ratios = []
         for file in files:
-            tree = file.Get("photon_tree")
+            #tree = file.Get("photon_tree")
+            tree = file.Get("jet_tree")
             for entry in tree:
-                E_truth = entry.E_truth
-                theta = entry.theta
-                E_reco = entry.E
+                E_truth = entry.photon_E
+                theta = entry.photon_theta_angle
+                E_reco = entry.jet_energy
+                theta_reco = entry.jet_theta
+                #get rid of weird theta values
+                if theta_reco < 0:
+                    continue
+                # get rid of negative energy values
+                if E_reco < 0:
+                    continue
+                #get rid of lower tail, file-specific
+                #if file == fFile_50_250 and E_reco < 35:
+                #    continue
+                #if file == fFile_250_1000 and E_reco < 100:
+                #    continue
+                #finally, dump the ratio into a list
                 if EMin <= E_truth and E_truth < EMax:
                     if ThMin <= theta and theta < ThMax:
                         ratios.append(E_truth/E_reco)
         if len(ratios) > 0:
-            if max(ratios) > rmax:
-                rmax = max(ratios)
-            #print(rmax)
-            #plt.hist(ratios,bins=50, log=True)
-            #plt.xlim(0,500)
-            #plt.ylim(1,7000)
-            #plt.xlabel('E_truth/E_reco')
-            #plt.show()
-            #plt.savefig('ratios_'+str(tbin)+'.pdf')
-            #plt.close()
-            #UNCOMMENT BELOW to remove outliers (exclusive correction matrix)
-            #for ratio in ratios:
-                #if ratio/np.average(ratios) > 10.0:
-                    #ratios.remove(ratio)
             avg_ratio = np.average(ratios)
         else:
             print("No entries in bin: ", Ebin, " Emin: ", EMin)
             avg_ratio = 0
         Elist.append(avg_ratio)
-    #plt.savefig('ratios_'+str(tbin)+'.pdf')
-    #plt.close()
     print("Theta slice ", tbin, " done")
     print("Starting theta slice ",tbin+1)
-    #print(Elist)
     corr_matrix.append(Elist)
 
 
 #write calibration map to a csv file
-with open('calibMap_unfiltered.csv', 'w', newline = '') as csvfile:
+with open('calibMap_jets', 'w', newline = '') as csvfile:
     mapwriter = csv.writer(csvfile)
     mapwriter.writerows(corr_matrix)
 
 #after initial calibrtion, read in the csv file and just pull values from there
-#uncomment below if reading in file: corr_matrix will be defined differently
+# have block below uncommented if reading in file: corr_matrix will be defined differently
 '''
-with open('calibMap_unfiltered.csv', 'r') as csvToRead:
+with open('calibMap_jets.csv', 'r') as csvToRead:
     calibmap=csv.reader(csvToRead)
     corr_matrix = list(calibmap)
 
 
+#plot the CalibMaps in both cases
+#convert the matrix back into floats
+corr_map = []
+for thetaSlice in corr_matrix:
+    corrfloats = []
+    for corr in thetaSlice:
+        corrfloats.append(float(corr))
+    corr_map.append(corrfloats)
+
+
+
+#plot with pcolormesh
+plt.pcolormesh(EBins, ThetaBins, corr_map, vmin=np.min(corr_map), vmax=np.max(corr_map))
+plt.colorbar()
+plt.xlabel("True E [GeV]")
+plt.ylabel("True Theta [rad]")
+#use mplhep for labels
+hep.cms.label(exp = "Muon Collider", data = False, rlabel = "MAIA Detector Concept", loc=0, italic=(1,0,0))
+plt.savefig('calibmap_jets.pdf')
+plt.close()
+
+
+################### RESOLUTION STUDY #################
 
 
 cx = TCanvas("", "", 800, 600)
@@ -203,243 +205,86 @@ for Ebin in range(0, len(EBins)-1):
     EMax = EBins[Ebin+1]
     proj_name = "E reso, "+str(EBins[Ebin])+"<E<"+str(EBins[Ebin+1])
     file_name = "Ereso"+str(Ebin)
-    
-    h_my_proj_2 = TH1D(proj_name, proj_name, 150, -1.5, 1.5)
-    
+    if  EMin < 750.:
+        h_my_proj_2 = TH1D(proj_name, proj_name, 150, -0.1, 0.1)
+    else:
+        h_my_proj_2 = TH1D(proj_name, proj_name, 150, -.05, .05)
+
+
     for file in files:
-        tree = file.Get("photon_tree")
+        tree = file.Get("jet_tree")
         for entry in tree:
-            E_truth = entry.E_truth
-            theta = entry.theta
-            E_reco = entry.E
-            E_corr = entry.E
-            #restrict to barrel region
-            #if theta < 1.01 or theta > 2.13:
-                #continue
+            E_truth = entry.photon_E
+            theta = entry.photon_theta_angle
+            E_reco = entry.jet_energy
+            E_corr = entry.jet_energy
+            theta_reco = entry.jet_theta
+            #get rid of weird theta values
+            if theta_reco < 0:
+                continue
+            # get rid of negative energy values
+            if E_reco < 0:
+                continue
             for tbin in range(0, len(ThetaBins)-1):
                 ThMin = ThetaBins[tbin]
                 ThMax = ThetaBins[tbin+1]
-                #print(ThMin, "< theta <", ThMax, ", ", EMin, "< E <", EMax)
                 #get corr factor from profile
                 corr = float(corr_matrix[tbin][Ebin])
-                #print(corr)
                 #if entry is in the 2d bin, correct energy
                 if EMin <= E_truth and E_truth < EMax:
-                    #print("in E Bin")
                     if ThMin <= theta and theta < ThMax:
-                        #print("in theta bin")
                         if corr > 0:
-                            E_corr = entry.E * corr
-                            #print("Corrected")
-                            #h_2d_resp_corr.Fill(theta, E_truth, E_truth/E_reco)
-                        if (E_corr - E_truth)/E_truth > -0.2 and (E_corr - E_truth)/E_truth < 0.2:
-                                #print("Passed last check")
-                                #print((E_reco-E_truth)/E_truth)
+                            E_corr = E_reco * corr
+                        #isolate the peak of the distribution so we can fit a Gaussian
+                        neg_lim = -0.1
+                        pos_lim = 0.1
+                        if EMin < 50:
+                            neg_lim = -0.08
+                            pos_lim = 0.08
+                        elif 50==EMin:
+                            neg_lim = -0.05
+                            pos_lim = 0.05
+                        elif 100 <= EMin:
+                            neg_lim = -0.02
+                            pos_lim = 0.02
+                        if (E_corr - E_truth)/E_truth > neg_lim and (E_corr - E_truth)/E_truth < pos_lim:
                             h_my_proj_2.Fill((E_corr - E_truth)/E_truth)
                             h_response_profile_E.Fill(E_truth, (E_truth)/E_corr)
                             h_response_profile_th.Fill(theta, (E_truth)/E_corr)
            
 
-
+    #now start fitting the gaussians
     lim = 0.0
     if EMin<3000.:
-        if EMin<100:
-            gaussFit = TF1("gaussfit", "gaus", -1.5, 1.5)
-        elif EMin<500 and EMin>550:
-            gaussFit = TF1("gaussfit", "gaus", -.5, 0.5)
+        if EMin<250:
+            gaussFit1 = TF1("gaussfit", "gaus", -0.5, 0.5)
+        elif EMin>700:
+            gaussFit1 = TF1("gaussfit", "gaus", -.02, 0.02)   
         else:
-            gaussFit = TF1("gaussfit", "gaus", -0.2, 0.2)
-        gaussFit.SetLineColor(kRed)
-        gaussFit.SetParameter(1, 0.)
-        gaussFit.SetParameter(2, h_my_proj_2.GetRMS())
-        h_my_proj_2.Fit(gaussFit, "E")
+            gaussFit1 = TF1("gaussfit", "gaus", -0.1, 0.1)
+        gaussFit1.SetLineColor(kRed)
+        gaussFit1.SetParameter(1, 0.)
+        gaussFit1.SetParameter(2, h_my_proj_2.GetRMS())
+        h_my_proj_2.Fit(gaussFit1, "E")
         gStyle.SetOptFit(0o111);
         h_my_proj_2.Draw("HIST")
-        gaussFit.Draw("LSAME")
+        gaussFit1.Draw("LSAME")
         cx.Update()
         cx.SaveAs("slices_corr_full"+file_name+".root")
-        sigma = gaussFit.GetParameter(2)
-        sigma_err = gaussFit.GetParError(2)
-        if Ebin > 0:
-            bincenter = (EMax-EMin)/2
-            e_arr.append(h_reso_E.GetBinCenter(Ebin+1))
-            e_err_arr.append(bincenter)
-            sigma_arr.append(sigma)
-            mu_arr.append(gaussFit.GetParameter(1))
-            mu_err_arr.append(gaussFit.GetParError(1))
-            print("SIGMA=",sigma)
-            #print(h1_reso_E.GetBinCenter(bin+1))
-            sigma_err_arr.append(sigma_err)
-        else:
-            gaussFit = TF1("gaussfit", "gaus", -0.15, 0.15)
-            gaussFit.SetLineColor(kRed)
-            gaussFit.SetParameter(1, 0.)
-            gaussFit.SetParameter(2, h_my_proj_2.GetRMS())
-            h_my_proj_2.Fit(gaussFit, "E")
-            h_my_proj_2.Draw("HIST")
-            gaussFit.Draw("LSAME")
-            cx.Update()
-            cx.SaveAs("slices_corr_full"+file_name+".root")
-            sigma = gaussFit.GetParameter(2)
-            sigma_err = gaussFit.GetParError(2)
-            if Ebin > 0:
-                e_arr.append(h1_reso_E.GetBinCenter(Ebin+1))
-                e_err_arr.append(EMax-EMin)
-                sigma_arr.append(sigma)
-                sigma_err_arr.append(sigma_err)
-    
+        sigma = gaussFit1.GetParameter(2)
+        sigma_err = gaussFit1.GetParError(2)
+        bincenter = (EMax-EMin)/2
+        e_arr.append(h_reso_E.GetBinCenter(Ebin+1))
+        e_err_arr.append(bincenter)
+        sigma_arr.append(sigma)
+        mu_arr.append(gaussFit1.GetParameter(1))
+        mu_err_arr.append(gaussFit1.GetParError(1))
+        print("SIGMA=",sigma)
+        #print(h1_reso_E.GetBinCenter(bin+1))
+        sigma_err_arr.append(sigma_err)
         
 
-'''
-#bool to turn energy calib on or off
-correctEnergy = True
-
-cx = TCanvas("", "", 800, 600)
-gStyle.SetOptStat(1)
-#start with energy
-#correction_factors=[]
-#const_factors=[]
-for bin in range(0,len(EBins)-1):
-    minE = EBins[bin]
-    maxE = EBins[bin+1]
-    
-    proj_name = "E reso, "+str(EBins[bin])+"<E<"+str(EBins[bin+1])
-    print(proj_name)
-    #adjust bin range so we don't underbin
-    binrange = 0
-    if EBins[bin]< 10.0:
-        binrange = 1.5
-    elif EBins[bin]<70.0:
-        binrange = 1.5
-    else:
-        binrange = 1.5
-    h_my_proj = TH1D(proj_name, proj_name, 150, -binrange+1.5, binrange+1.5)
-    h_resp_prof_binned=TProfile('Th_profile_b'+str(EBins[bin]), 'E_tru/E_rec, '+str(EBins[bin])+'<E<'+str(EBins[bin+1]), len(ThetaBins)-1, ThetaBins, 0, 1000)
-    
-    for file in files:
-        tree = file.Get("photon_tree")
-        for entry in tree:
-            E_truth = entry.E_truth
-            E_reco = entry.E
-            theta = entry.theta
-            #if correctEnergy: 
-                #E_reco = E_reco*corr_ratio(theta, 0.14053)
-            if theta >=0.8 and theta <= 2.4:
-                if EBins[bin] < E_truth and E_truth > EBins[bin]+50.:
-                    #h_response_profile_E.Fill(E_truth, E_truth/E_reco)
-                    h_resp_prof_binned.Fill(theta, E_truth/E_reco)
-
-    calib_fit=TF1("calibfit", "[0]*(2^(4.01/sin(x)))", 0.678, 2.46, 1)
-    calib_lin=TF1("calibconstfit", "[0]+[1]*x", 0.7, 2.2, 1)
-    calib_lin.SetLineColor(kRed)
-    calib_lin.SetParName(0, "Constant")
-    calib_lin.SetParName(1, "lin")
-    #calib_lin.SetParameter(0,3.)
-    calib_lin.FixParameter(1,0.)
-    calib_fit.SetLineColor(kBlue)
-    calib_fit.SetParName(0, "Constant")
-    calib_fit.SetParameter(0,0.15)
-    gStyle.SetOptFit(0)
-    if EBins[bin] < 0:
-        h_resp_prof_binned.Fit(calib_fit)
-        print("Fit: ", calib_fit.GetParameter(0))
-        correction_factor=calib_fit.GetParameter(0)
-        h_resp_prof_binned.Draw("HIST PE")
-        calib_fit.Draw("LSAME")
-    else:
-        bincounts=[]
-        for tbin in range(0, len(ThetaBins)-1):
-            if ThetaBins[tbin] >= 0.8 and ThetaBins[tbin] <= 2.4:
-                content=h_resp_prof_binned.GetBinContent(tbin)
-                bincounts.append(content)
-        const_factor=np.average(bincounts)
-        calib_lin.FixParameter(0,const_factor)
-        h_resp_prof_binned.Fit(calib_lin)
-        #print("Const: ", calib_lin.GetParameter(0))
-        #print("Lin: ", calib_lin.GetParameter(1))
-        h_resp_prof_binned.Draw("HIST PE")
-        calib_lin.Draw("LSAME")
-    h_resp_prof_binned.SaveAs("ThResp_"+str(EBins[bin])+".root")
-    
-    #if EBins[bin]<500:
-        #h_my_proj_2 = TH1D(proj_name, proj_name, 150, 0,2.)
-    #else:
-        #h_my_proj_2 = TH1D(proj_name, proj_name, 150, -0.8, 0)
-
-
-    h_my_proj_2 = TH1D(proj_name, proj_name, 150, -1., 0.2)
-    for file in files:
-        tree = file.Get("photon_tree")
-        for entry in tree:
-            E_truth = entry.E_truth
-            E_reco = entry.E
-            theta = entry.theta
-            if E_reco > 0:
-                #if(entry.theta > 0.65 and  entry.theta < 1.01) or (entry.theta > 2.13 and entry.theta <2.53): #if entry.theta < 0.612:
-                if theta >0.678 and theta < 2.46:
-                    if (E_truth > minE) and (E_truth < maxE):
-                        if correctEnergy:
-                            #if EBins[bin] >400:
-                            E_reco = E_reco * const_factor
-                                #print(const_factor, ", ", E_reco)
-                            #else:
-                                #E_reco = E_corr(E_reco, theta, correction_factor)
-                                #for tbin in range(0, len(ThetaBins)-1):
-                                    #if theta > ThetaBins[tbin] and theta <= ThetaBins[tbin+1]:
-                                        #E_reco = E_reco / bincounts[tbin]
-                        if (E_reco - E_truth)/E_truth > -0.9:
-                            #print("Passed last check")
-                            #print((E_reco-E_truth)/E_truth)
-                            h_my_proj_2.Fill((E_reco - E_truth)/E_truth)
-                            h_response_profile_E.Fill(E_truth, (E_truth-E_reco)/E_truth)
-                            h_response_profile_th.Fill(theta, (E_truth-E_reco)/E_truth)
-           
-
-
-    lim = 0.0
-    if minE<5000:
-        #if minE<500:
-            #gaussFit = TF1("gaussfit", "gaus", -0.5, 1.5)
-        #else:
-            #gaussFit = TF1("gaussfit", "gaus", -1., 0)
-        gaussFit = TF1("gaussfit", "gaus", -1., -0.2)
-        gaussFit.SetLineColor(kBlue)
-        gaussFit.SetParameter(1, 0.)
-        gaussFit.SetParameter(2, h_my_proj_2.GetRMS())
-        h_my_proj_2.Fit(gaussFit, "E")
-        gStyle.SetOptFit(0o111);
-        h_my_proj_2.Draw("HIST")
-        #gaussFit.Draw("LSAME")
-        cx.SaveAs("slices_ph/"+proj_name+".pdf")
-        sigma = gaussFit.GetParameter(2)
-        sigma_err = gaussFit.GetParError(2)
-        if bin > 0:
-            bincenter = (minE-maxE)/2
-            e_arr.append(h_reso_E.GetBinCenter(bin+1))
-            e_err_arr.append(bincenter)
-            sigma_arr.append(sigma)
-            mu_arr.append(gaussFit.GetParameter(1))
-            mu_err_arr.append(gaussFit.GetParError(1))
-            print("SIGMA=",sigma)
-            #print(h1_reso_E.GetBinCenter(bin+1))
-            sigma_err_arr.append(sigma_err)
-        else:
-            gaussFit = TF1("gaussfit", "gaus", -0.15, 0.15)
-            gaussFit.SetLineColor(kBlue)
-            gaussFit.SetParameter(1, 0.)
-            gaussFit.SetParameter(2, h_my_proj_2.GetRMS())
-            h_my_proj_2.Fit(gaussFit, "E")
-            h_my_proj_2.Draw("HIST")
-            gaussFit.Draw("LSAME")
-            cx.SaveAs("slices_ph/"+proj_name+".pdf")
-            sigma = gaussFit.GetParameter(2)
-            sigma_err = gaussFit.GetParError(2)
-            if bin > 0:
-                e_arr.append(h1_reso_E.GetBinCenter(bin+1))
-                e_err_arr.append(maxE-minE)
-                sigma_arr.append(sigma)
-                sigma_err_arr.append(sigma_err)
-'''
+#uncomment for theta resolution studies
 '''
 for bin in range(0,len(ThetaBins)-1):
     minTh = ThetaBins[bin]
@@ -522,6 +367,8 @@ for bin in range(0,len(ThetaBins)-1):
             mu_arr_th_err.append(gaussFit.GetParError(1))
             
 '''     
+
+#declare the graphs
 gr_reso_E = TGraphErrors(len(e_arr), e_arr, sigma_arr, e_err_arr, sigma_err_arr)
 #gr_reso_Th = TGraphErrors(len(th_arr), th_arr, sigma_arr_th,th_err_arr, sigma_err_arr_th)
 #gr_response_E = TGraphErrors(len(e_arr), e_arr, mu_arr, e_err_arr, mu_err_arr)
@@ -529,29 +376,21 @@ gr_reso_E = TGraphErrors(len(e_arr), e_arr, sigma_arr, e_err_arr, sigma_err_arr)
 
 
 
-
-#add the fits in later
-
-
-
-
-
 cE1=TCanvas("", "", 800, 600)
 gr_reso_E.SetTitle(" ")
-gr_reso_E.GetYaxis().SetTitle("Photon #sigma_{E}/E")
+gr_reso_E.GetYaxis().SetTitle("Jet #sigma_{E}/E")
 gr_reso_E.GetYaxis().SetTitleOffset(1.4)
 gr_reso_E.GetXaxis().SetTitleOffset(1.2)
-gr_reso_E.GetXaxis().SetTitle("True photon energy [GeV]")
+gr_reso_E.GetXaxis().SetTitle("True jet energy [GeV]")
 gr_reso_E.SetLineColor(kBlue)
 gr_reso_E.SetLineWidth(2)
 gr_reso_E.Draw("AP")
 cE1.Update()
-#cE1.SaveAs("Ereso.root")
 
 
+#ROOT fit
 
-resoFit = TF1(
-    "resofit", "sqrt([0]*[0]/x+[1]*[1]/(x*x)+[2]*[2])", 0., 1000., 3)
+resoFit = TF1(    "resofit", "sqrt([0]*[0]/x+[1]*[1]/(x*x)+[2]*[2])", 0., 1000., 3)
 resoFit.SetLineColor(kBlue)
 resoFit.SetParName(0, "Stochastic")
 resoFit.SetParName(1, "Noise")
@@ -562,11 +401,37 @@ resoFit.SetParameter(2, 0.)
 gStyle.SetOptFit(0)
 gr_reso_E.Fit(resoFit)
 #resoFit10.SetLineColor(kBlue)
-
+#resoFit.Write("ResoFit")
 gr_reso_E.Draw("AP")
 resoFit.Draw("LSAME")
+#gr_reso_E.SaveAs("Ereso_gr_EE.root")
+#resoFit.SaveAs("Ereso_fit_EE.root")
 cE1.Update()
-cE1.SaveAs("Ereso_matrixcorr_full.root")
+cE1.SaveAs("Ereso_matrixcorr_jets.root")
+
+
+#MAIA format python plots (!!)
+###############RESO PLOT IN PAPER GENERATED WITH THE BELOW####################
+
+#redefine the fit function
+def py_resofit(stoch, noise, const, E):
+    return np.sqrt((stoch**2)/E+(noise/E)**2+const**2)
+
+Epoints = np.linspace(25,1000,1000)
+resopoints=[]
+#grab the fit values from the ROOT fit
+for energy in Epoints:
+    resopoints.append(py_resofit(resoFit.GetParameter(0), resoFit.GetParameter(1), resoFit.GetParameter(2), energy))
+
+plt.errorbar(e_arr, sigma_arr, yerr = sigma_err_arr, xerr = e_err_arr, fmt=".", color='blue')
+plt.plot(Epoints, resopoints,'--', c='blue', label="Fit")
+plt.xlabel("True Photon Energy [GeV]")
+plt.ylabel("Photon Energy Resolution $\sigma/E$")
+hep.cms.label(exp = "Muon Collider", data = False, rlabel = "MAIA Detector Design", loc=0, italic=(1,0,0))
+plt.show()
+plt.savefig("Ereso_EE_maia.pdf")
+plt.close()
+
 
 
 cE2=TCanvas("", "", 800, 600)
@@ -574,20 +439,22 @@ cE2=TCanvas("", "", 800, 600)
 #gr_response_E.GetYaxis().SetTitle("Photon #mu_{E}/E")
 #gr_response_E.GetYaxis().SetTitleOffset(1.4)
 #gr_response_E.GetXaxis().SetTitleOffset(1.2)
-#gr_response_E.GetXaxis().SetTitle("True photon energy [GeV]")
+#gr_response_E.GetXaxis().SetTitle("True jet energy [GeV]")
 #gr_response_E.SetLineColor(kOrange)
 #gr_response_E.SetLineWidth(2)
 #gr_response_E.Draw("AP")
 h_response_profile_E.SetTitle("")
-h_response_profile_E.GetYaxis().SetTitle("Photon (E_{truth}/E_{reco}")
+h_response_profile_E.GetYaxis().SetTitle("Jet E_{true}/E_{reco}")
 h_response_profile_E.GetYaxis().SetTitleOffset(1.4)
 h_response_profile_E.GetXaxis().SetTitleOffset(1.2)
 h_response_profile_E.GetXaxis().SetTitle("True photon energy [GeV]")
-h_response_profile_E.SetLineColor(kViolet)
+h_response_profile_E.SetLineColor(kRed)
 h_response_profile_E.SetLineWidth(2)
 h_response_profile_E.Draw("HIST PE")
 cE2.Update()
-cE2.SaveAs("Eresp_corr.root")
+cE2.SaveAs("Eresp_corr_jets.root")
+
+
 
 '''
 cTh1=TCanvas("", "", 800, 600)
@@ -613,54 +480,13 @@ cTh2=TCanvas("", "", 800, 600)
 #gr_response_Th.SetLineWidth(2)
 #gr_response_Th.Draw("AP")
 h_response_profile_th.SetTitle("")
-h_response_profile_th.GetYaxis().SetTitle("Photon E_{true}/E_{reco}")
+h_response_profile_th.GetYaxis().SetTitle("Jet E_{true}/E_{reco}")
 h_response_profile_th.GetYaxis().SetTitleOffset(1.4)
 h_response_profile_th.GetXaxis().SetTitleOffset(1.2)
-h_response_profile_th.GetXaxis().SetTitle("True photon energy [GeV]")
-h_response_profile_th.SetLineColor(kViolet)
+h_response_profile_th.GetXaxis().SetTitle("True jet theta [rad]")
+h_response_profile_th.SetLineColor(kRed)
 h_response_profile_th.SetLineWidth(2)
 h_response_profile_th.Draw("HIST PE")
 cTh2.Update()
-cTh2.SaveAs("ThResp_corr.root")
+cTh2.SaveAs("ThResp_corr_jets.root")
 
-'''
-cThE=TCanvas("", "", 800, 600)
-h_2d_response.SetTitle("")
-h_2d_response.GetYaxis().SetTitle("Photon truth E [GeV]")
-h_2d_response.GetYaxis().SetTitleOffset(1.4)
-h_2d_response.GetXaxis().SetTitleOffset(1.2)
-h_2d_response.GetXaxis().SetTitle("Photon #theta [rad]")
-h_2d_response.Draw("COLZ")
-cThE.Update()
-cThE.SaveAs("ThE_2D_prof.root")
-'''
-'''
-cThE2=TCanvas("", "", 800, 600)
-h_2d_resp_corr.SetTitle("")
-h_2d_resp_corr.GetYaxis().SetTitle("Photon truth E [GeV]")
-h_2d_resp_corr.GetYaxis().SetTitleOffset(1.4)
-h_2d_resp_corr.GetXaxis().SetTitleOffset(1.2)
-h_2d_resp_corr.GetXaxis().SetTitle("Photon #theta [rad]")
-h_2d_resp_corr.Draw("COLZ")
-cThE2.Update()
-cThE2.SaveAs("ThE_2D_prof_corr.root")
-'''
-
-#fit the middle range to get the constant
-#then we can worry about edge effects later, but at least we can give Tova some decent Barrel plots
-'''
-calib_fit=TF1("calibfit", "[0]*(2^(4.01/sin(x)))", 0.678, 2.46, 1)
-calib_fit.SetLineColor(kBlue)
-calib_fit.SetParName(0, "Constant")
-calib_fit.FixParameter(0,0.15)
-gStyle.SetOptFit(0)
-h_response_profile_th.Fit(calib_fit)
-h_response_profile_th.Draw("HIST PE")
-calib_fit.Draw("LSAME")
-cTh2.Update()
-cTh2.SaveAs("ThResp_fitted.root")
-
-corr_factor=calib_fit.GetParameter(0)
-print("Correction factor: ",corr_factor)
-
-'''
